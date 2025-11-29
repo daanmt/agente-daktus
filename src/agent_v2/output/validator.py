@@ -30,7 +30,6 @@ class ResponseValidator:
         self.required_keys = [
             "clinical_extraction",
             "structural_analysis",
-            "clinical_alignment",
             "recommendations",
             "quality_scores",
             "metadata"
@@ -81,11 +80,6 @@ class ResponseValidator:
         clinical_errors = self._validate_clinical_extraction(clinical)
         errors.extend(clinical_errors)
         
-        # Validate clinical_alignment structure
-        alignment = response.get("clinical_alignment", {})
-        alignment_errors = self._validate_clinical_alignment(alignment)
-        errors.extend(alignment_errors)
-        
         # Validate quality_scores structure
         quality = response.get("quality_scores", {})
         quality_errors = self._validate_quality_scores(quality)
@@ -113,26 +107,6 @@ class ResponseValidator:
                 errors.append(f"clinical_extraction missing key: {key}")
             elif not isinstance(clinical[key], list):
                 errors.append(f"clinical_extraction.{key} must be a list")
-        
-        return errors
-    
-    def _validate_clinical_alignment(self, alignment: Dict) -> List[str]:
-        """Validate clinical_alignment structure."""
-        errors = []
-        
-        if not isinstance(alignment, dict):
-            errors.append("clinical_alignment must be a dictionary")
-            return errors
-        
-        # Check coverage_score exists and is numeric
-        if "coverage_score" not in alignment:
-            errors.append("clinical_alignment missing coverage_score")
-        else:
-            coverage = alignment["coverage_score"]
-            if not isinstance(coverage, (int, float)):
-                errors.append("clinical_alignment.coverage_score must be numeric")
-            elif not (0 <= coverage <= 100):
-                errors.append(f"clinical_alignment.coverage_score out of range (0-100): {coverage}")
         
         return errors
     
@@ -187,16 +161,6 @@ class ResponseValidator:
                     f"No clinical elements extracted from playbook ({playbook_size} chars). "
                     f"Playbook may lack clinical content or extraction failed."
                 )
-        
-        # Check coverage score is reasonable
-        alignment = response.get("clinical_alignment", {})
-        coverage = alignment.get("coverage_score", 0.0)
-        
-        if coverage < 20 and playbook_size > 100:
-            warnings.append(
-                f"Extremely low coverage score ({coverage}%). "
-                f"This may indicate extraction failure or playbook/protocol mismatch."
-            )
         
         return len(warnings) == 0, warnings
 

@@ -214,7 +214,6 @@ class SimplifiedQARunner:
             {
                 "clinical_extraction": {...},
                 "structural_analysis": {...},
-                "clinical_alignment": {...},
                 "recommendations": [...],
                 "quality_scores": {...},
                 "metadata": {...}

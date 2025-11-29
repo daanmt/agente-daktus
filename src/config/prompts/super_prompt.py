@@ -176,39 +176,6 @@ OUTPUT_SCHEMA = {
         "circular_references": ["string (node_ids)"],
         "missing_required_fields": ["string"]
     },
-    "clinical_alignment": {
-        "coverage_score": "number (0-100)",
-        "missing_in_protocol": [
-            {
-                "element": "string",
-                "type": "string (syndrome|exam|treatment|red_flag|other)",
-                "importance": "string (critical|high|medium|low)",
-                "source_reference": "string"
-            }
-        ],
-        "missing_in_playbook": [
-            {
-                "element": "string",
-                "type": "string",
-                "note": "string"
-            }
-        ],
-        "misalignments": [
-            {
-                "protocol_element": "string",
-                "playbook_element": "string",
-                "discrepancy": "string",
-                "severity": "string (critical|high|medium|low)"
-            }
-        ],
-        "safety_coverage": {
-            "red_flags_covered": "number",
-            "red_flags_total": "number",
-            "contraindications_covered": "number",
-            "contraindications_total": "number",
-            "safety_score": "number (0-100)"
-        }
-    },
     "recommendations": [
         {
             "priority": "string (critical|high|medium|low)",
@@ -287,19 +254,6 @@ OUTPUT_SCHEMA_JSON = """{
                 "reason": "string"
             }
         ]
-    },
-    "clinical_alignment": {
-        "coverage_score": 0.0,
-        "missing_in_protocol": [
-            {
-                "element": "string",
-                "type": "string",
-                "importance": "string"
-            }
-        ],
-        "safety_coverage": {
-            "safety_score": 0.0
-        }
     },
     "recommendations": [
         {
