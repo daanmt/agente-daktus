@@ -146,7 +146,7 @@ class LLMClient:
         
         logger.info(f"LLMClient initialized with model: {self.model} ({getattr(self, 'model_name', 'N/A')})")
     
-    def analyze(self, prompt: str, max_retries: int = 3) -> Dict:
+    def analyze(self, prompt: str | Dict, max_retries: int = 3) -> Dict:
         """
         Send analysis prompt to LLM and return parsed JSON response.
         
@@ -154,7 +154,11 @@ class LLMClient:
         NO medical validation, NO clinical interpretation.
         
         Args:
-            prompt: Complete analysis prompt
+            prompt: Complete analysis prompt (string) OR structured prompt dict with:
+                {
+                    "system": [{"type": "text", "text": "...", "cache_control": {...}}],
+                    "messages": [{"role": "user", "content": "..."}]
+                }
             max_retries: Maximum retry attempts on failure
             
         Returns:
@@ -181,13 +185,59 @@ class LLMClient:
         for attempt in range(max_retries):
             try:
                 # Call LLM API
-                response_text = self._call_api(prompt)
+                response_text, finish_reason, usage = self._call_api(prompt, attempt=attempt)
+                
+                # Check if response was truncated
+                if finish_reason == "length":
+                    logger.warning(
+                        f"LLM response truncated (attempt {attempt + 1}/{max_retries}). "
+                        f"Content length: {len(response_text)} chars. "
+                        f"Attempting to repair incomplete JSON..."
+                    )
+                    
+                    # Try to repair truncated JSON
+                    repaired_result = self._attempt_truncated_json_repair(response_text)
+                    if repaired_result:
+                        logger.info(f"Successfully repaired truncated JSON on attempt {attempt + 1}")
+                        latency_ms = int((time.time() - start_time) * 1000)
+                        logger.info(
+                            f"LLM analysis completed: request_id={request_id}, "
+                            f"latency_ms={latency_ms}, attempt={attempt + 1}"
+                        )
+                        return repaired_result
+                    
+                    # If repair failed and not last attempt, retry with higher max_tokens
+                    if attempt < max_retries - 1:
+                        wait_time = 2 ** attempt  # Exponential backoff
+                        logger.warning(
+                            f"Retrying with increased max_tokens after {wait_time}s "
+                            f"(attempt {attempt + 2}/{max_retries})"
+                        )
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        logger.error("Failed to repair truncated JSON after all retries")
+                        raise ValueError(
+                            f"LLM response was truncated and could not be repaired. "
+                            f"Response length: {len(response_text)} chars. "
+                            f"Consider using a model with larger context window or chunking strategy."
+                        )
                 
                 # Extract and parse JSON from response
                 analysis_result = self._extract_json_from_response(response_text)
                 
                 # Calculate latency
                 latency_ms = int((time.time() - start_time) * 1000)
+                
+                # Log cache usage if available
+                if usage:
+                    cache_read = usage.get("cache_read_input_tokens", 0)
+                    cache_creation = usage.get("cache_creation_input_tokens", 0)
+                    if cache_read > 0 or cache_creation > 0:
+                        logger.info(
+                            f"Prompt cache used: read={cache_read} tokens, "
+                            f"created={cache_creation} tokens"
+                        )
                 
                 logger.info(
                     f"LLM analysis completed: request_id={request_id}, "
@@ -220,11 +270,17 @@ class LLMClient:
             
             except (json.JSONDecodeError, ValueError) as e:
                 logger.error(f"Failed to parse JSON from LLM response: {e}")
-                # Attempt repair
+                # Attempt repair (response_text should be available from _call_api)
                 try:
+                    # response_text is available from the try block above
                     analysis_result = self._attempt_json_repair(response_text)
                     if analysis_result:
                         logger.info("Successfully repaired malformed JSON")
+                        latency_ms = int((time.time() - start_time) * 1000)
+                        logger.info(
+                            f"LLM analysis completed: request_id={request_id}, "
+                            f"latency_ms={latency_ms}, attempt={attempt + 1}"
+                        )
                         return analysis_result
                 except Exception as repair_error:
                     logger.debug(f"JSON repair attempt failed: {repair_error}")
@@ -252,11 +308,18 @@ class LLMClient:
                     "partial_result": None
                 }
     
-    def _call_api(self, prompt: str) -> str:
+    def _call_api(self, prompt: str | Dict, attempt: int = 0) -> tuple[str, str, Dict]:
         """
-        Make API call to OpenRouter - MVP: Direct call only.
+        Make API call to OpenRouter with support for prompt caching.
         
         Simple HTTP request - NO medical processing, NO legacy dependencies.
+        
+        Args:
+            prompt: String prompt OR structured dict with system/messages for caching
+            attempt: Retry attempt number (used to increase max_tokens on retry)
+            
+        Returns:
+            Tuple of (content, finish_reason, usage_dict)
         """
         if not _REQUESTS_AVAILABLE:
             raise ImportError("requests library not available. Install with: pip install requests")
@@ -268,19 +331,35 @@ class LLMClient:
             "X-Title": "Daktus QA Agent"
         }
         
-        payload = {
-            "model": self.model,
-            "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 32000,  # Increased for large JSON responses
-            "temperature": 0.1,
-            "response_format": {"type": "json_object"}  # Request JSON if supported
-        }
+        # Build payload based on prompt type
+        if isinstance(prompt, dict) and "system" in prompt:
+            # Structured prompt with caching support
+            payload = {
+                "model": self.model,
+                "system": prompt["system"],
+                "messages": prompt["messages"],
+                "max_tokens": min(32000 + (attempt * 8000), 128000),  # Increase on retry, max 128k
+                "temperature": 0.1,
+                "response_format": {"type": "json_object"}  # Request JSON if supported
+            }
+            logger.debug(f"Using structured prompt with caching support (attempt {attempt + 1})")
+        else:
+            # Legacy string prompt (no caching)
+            prompt_str = prompt if isinstance(prompt, str) else prompt.get("prompt", "")
+            payload = {
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt_str}],
+                "max_tokens": min(32000 + (attempt * 8000), 128000),  # Increase on retry
+                "temperature": 0.1,
+                "response_format": {"type": "json_object"}  # Request JSON if supported
+            }
+            logger.debug(f"Using string prompt (no caching, attempt {attempt + 1})")
         
         response = requests.post(
             self.base_url,
             headers=headers,
             json=payload,
-            timeout=30  # MVP: 30 seconds timeout
+            timeout=120  # Increased timeout for large responses
         )
         
         response.raise_for_status()
@@ -295,20 +374,13 @@ class LLMClient:
             f"LLM API response: finish_reason={finish_reason}, "
             f"prompt_tokens={usage.get('prompt_tokens', 0)}, "
             f"completion_tokens={usage.get('completion_tokens', 0)}, "
-            f"total_tokens={usage.get('total_tokens', 0)}"
+            f"total_tokens={usage.get('total_tokens', 0)}, "
+            f"max_tokens={payload.get('max_tokens', 'N/A')}"
         )
         
         content = choice.get("message", {}).get("content", "")
         
-        # Check if response was truncated
-        if finish_reason == "length":
-            logger.warning(
-                f"LLM response was truncated due to token limit. "
-                f"Content length: {len(content)} chars. "
-                f"Consider increasing max_tokens or using chunking."
-            )
-        
-        return content
+        return content, finish_reason, usage
     
     def _extract_json_from_response(self, response: str) -> Dict:
         """
@@ -484,4 +556,43 @@ class LLMClient:
             return json.loads(cleaned)
         except:
             return None
+    
+    def _attempt_truncated_json_repair(self, response: str) -> Optional[Dict]:
+        """
+        Attempt to repair truncated JSON by closing open structures.
+        
+        This is a best-effort repair for responses cut off mid-generation.
+        """
+        if not response.strip().startswith('{'):
+            return None
+        
+        # Try to extract complete JSON structures first
+        json_str = self._extract_json_by_braces(response)
+        if json_str:
+            try:
+                return json.loads(json_str)
+            except json.JSONDecodeError:
+                pass
+        
+        # If extraction failed, try to close incomplete JSON
+        # Count open braces and try to close them
+        brace_count = response.count('{') - response.count('}')
+        
+        if brace_count > 0:
+            # Try to close open structures
+            repaired = response.rstrip()
+            
+            # Remove trailing comma if present
+            if repaired.rstrip().endswith(','):
+                repaired = repaired.rstrip()[:-1]
+            
+            # Close all open braces
+            repaired += '\n' + ('}' * brace_count)
+            
+            try:
+                return json.loads(repaired)
+            except json.JSONDecodeError:
+                pass
+        
+        return None
 

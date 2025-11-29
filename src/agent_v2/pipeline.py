@@ -82,11 +82,13 @@ def analyze(protocol_path: str, playbook_path: Optional[str] = None, model: Opti
     else:
         logger.info("Step 2: No playbook provided - structural analysis only")
     
-    # Step 3: Build prompt
+    # Step 3: Build prompt (with caching support)
     logger.info("Step 3: Building analysis prompt")
     try:
         builder = PromptBuilder()
-        prompt = builder.build_analysis_prompt(playbook_content, protocol_json)
+        # Use caching if playbook is provided and substantial (>1000 chars)
+        use_cache = bool(playbook_path and len(playbook_content) > 1000)
+        prompt_structure = builder.build_analysis_prompt(playbook_content, protocol_json, use_cache=use_cache)
     except Exception as e:
         logger.error(f"Failed to build prompt: {e}")
         raise
@@ -95,7 +97,8 @@ def analyze(protocol_path: str, playbook_path: Optional[str] = None, model: Opti
     logger.info("Step 4: Calling LLM for analysis")
     try:
         client = LLMClient(model=model)
-        llm_result = client.analyze(prompt)
+        # Pass prompt structure (dict) or string depending on caching
+        llm_result = client.analyze(prompt_structure)
     except Exception as e:
         logger.error(f"LLM analysis failed: {e}")
         raise
