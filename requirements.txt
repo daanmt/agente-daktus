@@ -1,0 +1,15 @@
+# Daktus QA Agent - Dependências
+
+# Core
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# PDF parsing
+PyPDF2>=3.0.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Optional: Anthropic SDK (fallback se OpenRouter falhar)
+# anthropic>=0.18.0
