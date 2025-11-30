@@ -6,7 +6,6 @@ NO medical interpretation, NO clinical logic, NO content analysis.
 """
 
 import json
-import logging
 import time
 from datetime import datetime
 from typing import Dict
@@ -47,7 +46,7 @@ class SimplifiedQARunner:
         
         logger.info("SimplifiedQARunner initialized")
     
-    def run_analysis_from_content(self, playbook_content: str, protocol_json: dict, model: str = None) -> Dict:
+    def run_analysis_from_content(self, playbook_content: str, protocol_json: Dict, model: str = None) -> Dict:
         """
         Run analysis from in-memory content (for CLI integration).
         
@@ -87,17 +86,35 @@ class SimplifiedQARunner:
                     logger.error(f"Failed to reinitialize LLM client with model {model}: {e}", exc_info=True)
                     raise
             
-            # Step 1: Build prompt directly from content
+            # Step 1: Build prompt directly from content (with caching support)
             prompt_start = time.time()
             try:
-                prompt = self.prompt_builder.build_analysis_prompt(
+                # Use caching if playbook is substantial (>1000 chars)
+                use_cache = len(playbook_content) > 1000
+                prompt_structure = self.prompt_builder.build_analysis_prompt(
                     playbook_content,
-                    protocol_json
+                    protocol_json,
+                    use_cache=use_cache
                 )
                 prompt_time_ms = int((time.time() - prompt_start) * 1000)
                 
+                # Calculate prompt size for logging
+                if isinstance(prompt_structure, dict):
+                    if "prompt" in prompt_structure:
+                        prompt_size = len(prompt_structure["prompt"])
+                    elif "system" in prompt_structure:
+                        # Sum system and messages sizes
+                        system_size = sum(len(block.get("text", "")) for block in prompt_structure.get("system", []))
+                        messages_size = sum(len(msg.get("content", "")) for msg in prompt_structure.get("messages", []))
+                        prompt_size = system_size + messages_size
+                    else:
+                        prompt_size = 0
+                else:
+                    prompt_size = len(str(prompt_structure))
+                
                 logger.info(
-                    f"Prompt built: size={len(prompt)} chars, "
+                    f"Prompt built: size={prompt_size} chars, "
+                    f"caching={'enabled' if use_cache else 'disabled'}, "
                     f"build_time={prompt_time_ms}ms"
                 )
             except Exception as e:
@@ -107,7 +124,7 @@ class SimplifiedQARunner:
             # Step 2: LLM analysis (ALL clinical intelligence here)
             llm_start = time.time()
             try:
-                analysis_result = self.llm_client.analyze(prompt)
+                analysis_result = self.llm_client.analyze(prompt_structure)
                 llm_time_ms = int((time.time() - llm_start) * 1000)
                 
                 logger.info(
@@ -250,22 +267,40 @@ class SimplifiedQARunner:
                 f"load_time={load_time_ms}ms"
             )
             
-            # Step 2: Build prompt (template assembly only)
+            # Step 2: Build prompt (template assembly only, with caching support)
             prompt_start = time.time()
-            prompt = self.prompt_builder.build_analysis_prompt(
+            # Use caching if playbook is substantial (>1000 chars)
+            use_cache = len(playbook_content) > 1000
+            prompt_structure = self.prompt_builder.build_analysis_prompt(
                 playbook_content,
-                protocol_data
+                protocol_data,
+                use_cache=use_cache
             )
             prompt_time_ms = int((time.time() - prompt_start) * 1000)
             
+            # Calculate prompt size for logging
+            if isinstance(prompt_structure, dict):
+                if "prompt" in prompt_structure:
+                    prompt_size = len(prompt_structure["prompt"])
+                elif "system" in prompt_structure:
+                    # Sum system and messages sizes
+                    system_size = sum(len(block.get("text", "")) for block in prompt_structure.get("system", []))
+                    messages_size = sum(len(msg.get("content", "")) for msg in prompt_structure.get("messages", []))
+                    prompt_size = system_size + messages_size
+                else:
+                    prompt_size = 0
+            else:
+                prompt_size = len(str(prompt_structure))
+            
             logger.info(
-                f"Prompt built: size={len(prompt)} chars, "
+                f"Prompt built: size={prompt_size} chars, "
+                f"caching={'enabled' if use_cache else 'disabled'}, "
                 f"build_time={prompt_time_ms}ms"
             )
             
             # Step 3: LLM analysis (ALL clinical intelligence here)
             llm_start = time.time()
-            analysis_result = self.llm_client.analyze(prompt)
+            analysis_result = self.llm_client.analyze(prompt_structure)
             llm_time_ms = int((time.time() - llm_start) * 1000)
             
             logger.info(

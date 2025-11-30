@@ -11,7 +11,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Union, Tuple
 from datetime import datetime
 import time
 
@@ -49,17 +49,6 @@ except ImportError:
 
 # Logger - usar logger do agent_v2
 from .logger import logger
-
-
-def _load_env_file():
-    """
-    Load .env file from project root.
-    
-    NOTE: .env is already loaded at module level (top of file).
-    This function is kept for backward compatibility but is now a no-op.
-    """
-    # .env is already loaded at module import time, so this is a no-op
-    pass
 
 
 class LLMClient:
@@ -146,7 +135,7 @@ class LLMClient:
         
         logger.info(f"LLMClient initialized with model: {self.model} ({getattr(self, 'model_name', 'N/A')})")
     
-    def analyze(self, prompt: str | Dict, max_retries: int = 3) -> Dict:
+    def analyze(self, prompt: Union[str, Dict], max_retries: int = 3) -> Dict:
         """
         Send analysis prompt to LLM and return parsed JSON response.
         
@@ -308,7 +297,7 @@ class LLMClient:
                     "partial_result": None
                 }
     
-    def _call_api(self, prompt: str | Dict, attempt: int = 0) -> tuple[str, str, Dict]:
+    def _call_api(self, prompt: Union[str, Dict], attempt: int = 0) -> Tuple[str, str, Dict]:
         """
         Make API call to OpenRouter with support for prompt caching.
         

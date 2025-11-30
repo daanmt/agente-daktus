@@ -6,10 +6,9 @@ content into the template. NO medical interpretation, NO clinical logic.
 """
 
 import json
-import logging
 from typing import Dict
 
-from config.prompts.super_prompt import SUPER_PROMPT_TEMPLATE, OUTPUT_SCHEMA_JSON
+from config.prompts.super_prompt import OUTPUT_SCHEMA_JSON
 
 # Logger - usar logger do agent_v2
 from .logger import logger
@@ -24,9 +23,10 @@ class PromptBuilder:
     """
     
     def __init__(self):
-        """Initialize prompt builder with template."""
-        self.template = SUPER_PROMPT_TEMPLATE
-        logger.debug("PromptBuilder initialized with super prompt template")
+        """Initialize prompt builder."""
+        # Note: SUPER_PROMPT_TEMPLATE is no longer used directly
+        # Prompt is now built manually to support caching
+        logger.debug("PromptBuilder initialized")
     
     def build_analysis_prompt(self, playbook_content: str, protocol_json: Dict, use_cache: bool = True) -> Dict:
         """
