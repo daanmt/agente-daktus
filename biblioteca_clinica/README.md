@@ -1,21 +1,24 @@
 # 📚 Biblioteca Clínica
 
-Esta pasta contém referências clínicas (livros, guidelines) que o LLM pode consultar durante a análise de playbooks.
+Esta pasta pode conter referências clínicas (livros, guidelines) que podem ser usadas como playbooks durante a análise de protocolos.
 
-## Como usar
+## Formatos Suportados
 
-1. Adicione arquivos de texto (.txt) ou Markdown (.md) com conteúdo clínico relevante
-2. O `PlaybookAnalyzer` carregará automaticamente estes arquivos
-3. O LLM usará estas referências para melhorar a análise clínica
-
-## Formatos suportados
-
-- `.txt` - Texto plano
 - `.md` - Markdown
-- `.pdf` - PDF (suporte futuro)
+- `.txt` - Texto plano
+- `.pdf` - PDF
 
-## Exemplo
+## Como Usar
 
-- `harrison_internal_medicine.txt` - Referência clínica geral
-- `reumatologia_guidelines.md` - Guidelines específicas
+Adicione arquivos de referência clínica nesta pasta e utilize-os como playbooks ao executar o Agente Daktus QA.
 
+```bash
+python run_qa_cli.py
+# Selecione o protocolo e depois selecione o playbook desta pasta
+```
+
+## Exemplos
+
+- Guidelines de especialidades médicas
+- Protocolos clínicos de referência
+- Manuais de medicina baseada em evidências

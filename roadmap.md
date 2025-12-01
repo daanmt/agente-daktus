@@ -1,315 +1,367 @@
 # 🗺️ Roadmap - Agente Daktus QA
 
-**Last Updated**: 2025-11-29  
-**Status**: ✅ Agent V2 Complete - All Phases Implemented (Production Ready)
+**Última Atualização**: 2025-11-30  
+**Status Atual**: ✅ V2 Completa (Produção) | 🔥 V3 em Desenvolvimento Acelerado
 
 ---
 
-## 🎯 Product Vision
+## 🎯 Visão do Produto
 
-**Mission**: Provide automated, AI-powered validation of clinical protocols against evidence-based medical playbooks, ensuring clinical safety, completeness, and adherence to best practices.
+**Missão**: Validação e correção automatizadas de protocolos clínicos contra playbooks baseados em evidências.
 
-**Core Principles**:
-- **Zero clinical logic in code** - all clinical intelligence from LLM
-- **Specialty-agnostic** - same system for all medical specialties
-- **Evidence-based** - validation against authoritative playbooks
-- **Actionable insights** - specific, implementable improvement suggestions
+**Evolução**:
+- **V2 (Atual)**: Validação inteligente via LLM → ✅ **Produção**
+- **V3 (MVP - 2 Semanas)**: Correção automatizada de protocolos JSON → 🔥 **Transformacional**
 
-**Non-Goals**:
-- ❌ Not a protocol editor (read-only validation)
-- ❌ Not a clinical decision support system (validation only)
-- ❌ Not specialty-specific (agnostic design)
+**Transformação fundamental**: De **auditoria passiva** (identifica problemas) para **correção ativa** (resolve automaticamente).
 
 ---
 
-## ✅ Current Status (v2.2)
+## ✅ V2 - Status Atual (Resumo)
 
-### Implemented Features
+### O Que Funciona
+- ✅ Validação de protocolos JSON contra playbooks (MD/PDF)
+- ✅ Análise de gaps clínicos e sugestões de melhoria
+- ✅ Arquitetura LLM-first, agnóstica a especialidades
+- ✅ Performance: 60s latência, R$ 0,25-0,50/análise, 95% sucesso
+- ✅ Prompt caching funcional (reduz até 90% do custo)
 
-#### Core Functionality
-- ✅ Protocol JSON parsing and structural validation
-- ✅ Playbook extraction (Markdown/PDF) via LLM
-- ✅ Clinical gap analysis (protocol vs playbook)
-- ✅ Efficiency analysis (variable impact assessment)
-- ✅ Improvement suggestions (via LLM)
-- ✅ Report generation (text + JSON)
-
-#### Agent V2 (Simplified Architecture) - Phase 1 ✅
-- ✅ ContentLoader - raw file loading (no interpretation)
-- ✅ PromptBuilder - super prompt assembly
-- ✅ LLMClient - OpenRouter integration
-- ✅ SimplifiedQARunner - orchestration (zero clinical logic)
-- ✅ ResponseValidator - schema validation
-- ✅ LegacyAdapter - format conversion for compatibility
-- ✅ Feature flag system (`USE_SIMPLIFIED_AGENT`)
-- ✅ Shared logging infrastructure
-- ✅ Single LLM call for all analysis (including semantic)
-
-#### Infrastructure
-- ✅ CLI interface (`run_qa_cli.py`)
-- ✅ Structured logging (`logs/qa_analysis_*.log`)
-- ✅ Error handling and fail-fast logic
-- ✅ Model catalog (5 supported models)
-- ✅ OpenRouter API integration
-
-#### Testing
-- ✅ Unit tests (structure validation)
-- ✅ Integration tests (Agent V2 compatibility)
-- ✅ Compliance tests (12/12 criteria met)
-- ✅ Real protocol testing (ORL, AVC, Reumatologia)
+### Limitações Críticas (Resolvidas em V3)
+1. ⚠️ **Protocolos JSON massivos (3k-5k linhas)** - gargalo principal
+2. ⚠️ Correção manual (dias/semanas de implementação)
+3. ⚠️ Sem priorização por impacto real
+4. ⚠️ Sem aprendizado contínuo
+5. ⚠️ ROI difícil de quantificar
 
 ---
 
-## ✅ Phase 2: Integration and Schema Compatibility (✅ Complete)
+## 🔥 V3 - Correção Automatizada (MVP 2 Semanas)
 
-**Status Update (2025-11-29)**: ✅ Pipeline único funcionando, sistema limpo e consolidado. Phase 3 completada.
+### Ganhos Esperados
 
-### Goals
-- Make Agent V2 the default execution path
-- Ensure full compatibility with downstream components
-- Monitor production usage
-- Validate quality metrics
-
-### Tasks
-
-#### 2.1 Agent V2 as Default ✅ (Partially Complete)
-- ✅ Feature flag system implemented
-- ✅ Legacy fallback on Agent V2 failure
-- ⏳ **TODO**: Set `USE_SIMPLIFIED_AGENT=true` by default
-- ⏳ **TODO**: Monitor production metrics (success rate, latency, quality)
-
-#### 2.2 Schema Compatibility
-- ✅ LegacyAdapter converts Agent V2 output to legacy format
-- ✅ Compatible with `semantic_analyzer.py` (via adapter)
-- ✅ Compatible with `report_generator.py` (via adapter)
-- ⏳ **TODO**: Validate all edge cases
-- ⏳ **TODO**: Performance testing with large playbooks
-
-#### 2.3 Fallback Elimination
-- ✅ Fallbacks disabled when Agent V2 active
-- ✅ Structured errors instead of hardcoded clinical logic
-- ⏳ **TODO**: Remove hardcoded fallbacks from codebase (Phase 3)
-- ⏳ **TODO**: Document fallback behavior clearly
-
-#### 2.4 Observability
-- ✅ Structured logging implemented
-- ✅ Performance metrics (latency, tokens, costs)
-- ⏳ **TODO**: Dashboard for metrics visualization
-- ⏳ **TODO**: Alerting for failures
-
-**Target Completion**: 2025-11-29 ✅ **COMPLETED**
+| Métrica | V2 | V3 | Ganho |
+|---------|----|----|-------|
+| **Tempo de implementação** | Dias | Minutos | **-90%** |
+| **Limite de protocolo JSON** | Quebra >3k linhas | Ilimitado | **∞** |
+| **Precisão de sugestões** | ~80% | 90%+ (MVP) | **+10pp** |
+| **ROI** | Subjetivo | Quantificado (scores) | **Mensurável** |
+| **Prompt caching** | Parcial | Agressivo (100%) | **-50% custo** |
 
 ---
 
-## ✅ Phase 3: Complete Migration and Legacy Removal (✅ Complete)
+## 🚀 Fases de Desenvolvimento V3
 
-### Goals
-- Remove all legacy code
-- Agent V2 as only architecture
-- Clean codebase (remove hardcoded clinical logic)
-- Update downstream components to use new schema natively
+### **FASE 4: Compactação de Protocolos JSON (CRÍTICA)**
+**Prioridade**: 🔴 BLOQUEIO TÉCNICO #1 - CORE MVP
 
-### Tasks
+**Problema Real**: Protocolos JSON com 3k-5k linhas excedem janela de contexto, não playbooks.
 
-#### 3.1 Legacy Code Removal (✅ Complete)
-- ✅ Remove `semantic_protocol_analyzer.py` (hardcoded fallbacks) - **COMPLETO**
-- ✅ Remove `protocol_improvement_analyzer.py` - **COMPLETO**
-- ✅ Remove `LegacyAdapter` (no longer needed) - **COMPLETO**
-- ✅ Remove `SchemaAdapter` (no longer needed) - **COMPLETO**
-- ✅ Remove duplicate loaders (`loader.py` duplicado) - **COMPLETO**
-- ✅ Remove obsolete CLIs (`cli_interface.py`, `cli_interface_refactored.py`) - **COMPLETO**
-- ✅ Remove empty DDD folders (`presentation/`, `domain/`, `infrastructure/`, `use_cases/`, `analysis/`) - **COMPLETO**
-- ✅ Remove `qa_agent.py` legacy agent - **COMPLETO**
-- ✅ Remove semantic coverage feature (legacy) - **COMPLETO**
-- ✅ Clean up unused imports and dependencies - **COMPLETO**
-- ✅ Pipeline único funcionando: `agent_v2.pipeline.analyze()` - **COMPLETO**
-- ✅ Sistema 100% Agent V2, zero legacy - **COMPLETO**
+**Solução**:
+1. **JSONCompactor** - Reduz protocolo JSON ao essencial clínico
+   - Remove redundâncias, metadados desnecessários
+   - Mantém apenas: estrutura clínica, fluxos, variáveis, lógica de decisão
+   - Preserva integridade para reconstrução posterior
 
-#### 3.2 Schema Migration (✅ Complete)
-- ✅ Pipeline único com output simplificado (sem semantic_coverage)
-- ✅ Foco exclusivo em `improvement_suggestions` como core feature
-- ✅ Output format: `protocol_analysis`, `improvement_suggestions`, `metadata`
+2. **SmartChunking** (se JSON ainda for muito grande)
+   - Divide protocolo por seções lógicas (síndromes, fluxos, tratamentos)
+   - Processa incrementalmente
+   - Reconstrói protocolo completo no final
 
-#### 3.3 Documentation Cleanup (✅ Complete)
-- ✅ Obsolete documentation files removed
-- ✅ All references updated to new architecture
-- ✅ Documentation consolidated in master files (README, roadmap, dev_history)
+3. **MemoryManager**
+   - Mantém contexto essencial entre chunks
+   - Evita reprocessar conteúdo
+   - Raciocínio incremental
 
-**Target Completion**: 2025-11-29 ✅ **COMPLETED**
+**Entregas**:
+- ✅ Suporte a protocolos JSON ilimitados
+- ✅ Processamento eficiente sem perda de qualidade
+- ✅ Desbloqueia protocolos complexos (AVC, Sepse, Trauma, Onco)
+
+**Validação**: Testar com 5 protocolos >3k linhas no dia 1
 
 ---
 
-## 🎯 Future Features (Backlog)
+### **FASE 5: Auto-Apply de Melhorias (TRANSFORMACIONAL)**
+**Prioridade**: 🔴 MUDANÇA DE PARADIGMA - CORE ENGINE V3
 
-### High Priority
+**Problema**: Implementação manual de melhorias = gargalo, erro humano, escalabilidade zero.
 
-#### Chunking Strategy for Large Playbooks
-**Problem**: Playbooks >50 pages may exceed LLM context window  
-**Solution**: Implement chunking with synthesis step
-- Split playbook into chunks
-- Analyze each chunk separately
-- Synthesize results in final step
-**Status**: ⏳ Planned for Phase 2
+**Solução - Core Engine V3**:
 
-#### Prompt Optimization
-**Goal**: Improve LLM output quality and consistency
-- A/B testing different prompt templates
-- Specialty-specific prompt sections (configurable, not hardcoded)
-- Few-shot examples for better extraction
-**Status**: ⏳ Ongoing improvement
-
-#### Cost Tracking
-**Goal**: Track and optimize LLM costs
-- Per-analysis cost logging
-- Budget alerts
-- Cost optimization recommendations
-**Status**: ⏳ Planned
-
-### Medium Priority
-
-#### Web Interface
-**Goal**: User-friendly web UI for non-technical users
-- Streamlit dashboard
-- Drag-and-drop file upload
-- Interactive visualization of results
-- Export functionality
-**Status**: ⏳ Planned for Q1 2026
-
-#### Batch Processing
-**Goal**: Analyze multiple protocols at once
-- Directory scanning
-- Parallel processing
-- Summary reports
-**Status**: ⏳ Planned
-
-#### Version Comparison
-**Goal**: Compare protocol versions over time
-- Track changes between versions
-- Highlight improvements
-- Regression detection
-**Status**: ⏳ Planned
-
-### Low Priority
-
-#### API Server
-**Goal**: REST API for integration with other systems
-- FastAPI server
-- Authentication
-- Rate limiting
-**Status**: ⏳ Future consideration
-
-#### Automated Protocol Improvement
-**Goal**: Automatically apply simple improvements
-- Preview before applying
-- Rollback capability
-- Human approval workflow
-**Status**: ⏳ Future consideration (v3.0)
-
----
-
-## 🔄 Specialty-Agnostic Design
-
-### Current Approach
-
-**Agent V2** is fully specialty-agnostic:
-- Same code path for all specialties
-- No `if specialty == "ORL"` logic
-- Specialty knowledge comes from playbooks, not code
-
-### Configurable Prompts (Future)
-
-While code remains agnostic, prompts can be optimized per specialty:
-
-```yaml
-# config/prompts.yaml (future)
-base_qa_analysis:
-  clinical_extraction: "Extract all clinical elements..."
-  structural_analysis: "Analyze JSON structure..."
-
-specialty_overrides:
-  orl:
-    additional_focus: "Pay special attention to audiology patterns..."
-  avc:
-    additional_focus: "Emphasize timing of interventions..."
+```
+Relatório V2 (sugestões) + Protocolo JSON Original
+    ↓
+Claude Sonnet 4.5 (auto-apply engine)
+    ↓
+Protocolo JSON corrigido + Diff completo + Rastreabilidade
+    ↓
+ConfidenceScoring (0-100% por mudança)
+    ↓
+Alta confiança (>90%) = Auto-apply + notificação
+Média (70-90%) = Preview obrigatório
+Baixa (<70%) = Apenas sugestão manual
 ```
 
-**Note**: This is prompt configuration, not code logic. Code remains identical.
+**Entregas**:
+1. **ImprovementApplicator**
+   - Recebe sugestões + protocolo original
+   - Gera protocolo corrigido automaticamente via Sonnet 4.5
+   - Mantém rastreabilidade completa (diff + justificativa por mudança)
+
+2. **StructuralValidator**
+   - Valida integridade do JSON pós-correção
+   - Garante que estrutura não quebrou
+   - Testes automáticos de schema
+
+3. **ConfidenceScoring Básico**
+   - Score 0-100% por sugestão
+   - Threshold fixo para MVP (>90% = auto-apply)
+   - Refinamento futuro baseado em feedback
+
+4. **DiffGenerator**
+   - Mostra exatamente o que mudou
+   - Formato legível (antes/depois)
+   - Rastreabilidade clínica completa
+
+**Impacto**:
+- 🔥 Tempo de correção: Dias → Minutos (-90%)
+- 🔥 Elimina erro humano na transcrição
+- 🔥 Escala infinitamente (100+ protocolos/dia)
+- 🔥 **ROI explode** - implementação instantânea
+
+**Riscos e Mitigação**:
+- ❌ Auto-apply errado → ✅ Validação estrutural automática + aprovação humana para baixa confiança
+- ❌ Quebra de JSON → ✅ StructuralValidator obrigatório antes de salvar
+- ❌ Perda de contexto clínico → ✅ Rastreabilidade completa via DiffGenerator
+
+**Validação (DIA 1 - CRÍTICO)**:
+1. Pegar 5-10 protocolos reais
+2. Rodar V2 → gerar sugestões
+3. Enviar para Sonnet 4.5 → aplicar melhorias
+4. Medir: % sucesso, tipos de erro, tempo economizado
+5. **Se >80% sucesso → implementar imediatamente**
+6. **Se <80% sucesso → refinar prompt e repetir**
 
 ---
 
-## 📊 Success Metrics
+### **FASE 6: Prompt Caching Agressivo (CRÍTICA)**
+**Prioridade**: 🔴 ECONOMIA - CORE MVP
 
-### Quality Metrics
-- **Coverage accuracy**: ≥ 90% (vs manual validation)
-- **False positive rate**: ≤ 5%
-- **Suggestion relevance**: ≥ 80% implementable
+**Problema**: Custo de tokens pode explodir com protocolos grandes e múltiplas análises.
 
-### Performance Metrics
-- **Latency p95**: ≤ 60 seconds (Agent V2)
-- **Success rate**: ≥ 95%
-- **Cost per analysis**: ≤ $0.10 (with recommended model)
+**Solução - Prompt Caching 100%**:
 
-### Adoption Metrics
-- **Active users**: [Track when available]
-- **Protocols analyzed**: [Track when available]
-- **Improvements implemented**: [Track when available]
+1. **CacheStrategy**
+   - Playbook sempre em cache (não muda entre análises)
+   - Protocolo original em cache (base para comparações)
+   - Instruções de sistema em cache (fixas)
+   - Apenas sugestões e protocolo corrigido sem cache (únicos por análise)
 
----
+2. **CacheMonitor**
+   - Loga taxa de cache hit/miss
+   - Rastreia economia de tokens
+   - Alerta se cache não está funcionando
 
-## 🚨 Known Limitations
+**Entregas**:
+- ✅ Redução de 50-70% no custo por análise
+- ✅ Cache automático em todas as chamadas LLM
+- ✅ Monitoramento de eficiência
 
-### Current Limitations
-
-1. **Large Playbooks**
-   - Playbooks >50 pages may exceed context window
-   - **Mitigation**: Chunking strategy (planned for Phase 2)
-
-2. **LLM Dependency**
-   - System requires LLM API access
-   - **Mitigation**: Structured error responses when LLM unavailable
-
-3. **Cost**
-   - Each analysis costs ~$0.05-0.10
-   - **Mitigation**: Free tier models available (`grok-4.1-fast:free`)
-
-4. **Language**
-   - Currently optimized for Portuguese (Brazilian)
-   - **Mitigation**: Prompts can be adapted for other languages
+**Implementação**: Integrar em LLMClient, não módulo separado
 
 ---
 
-## 📅 Timeline Summary
+### **FASE 7: Priorização por Impacto (QUICK WIN)**
+**Prioridade**: 🟡 ROI QUANTIFICÁVEL - MVP VIA PROMPT
 
-| Phase | Status | Target | Key Deliverables |
-|-------|--------|--------|------------------|
-| **Phase 1** | ✅ Complete | 2025-11-29 | Agent V2 foundation, modules created, system functional |
-| **Phase 2** | ✅ Complete | 2025-11-29 | Agent V2 único pipeline, unified system, imports fixed |
-| **Phase 3** | ✅ Complete | 2025-11-29 | Legacy removal complete, semantic coverage removed, production ready |
+**Problema**: Sugestões sem ordem clara, cliente não sabe onde focar.
 
-**Conforme REVIEW_CLAUDE.txt:**
-- ✅ **Phase 1 (Foundation)**: COMPLETA - Agent V2 implementado e funcional
-- ✅ **Phase 2 (Integration)**: COMPLETA - Pipeline único, sistema unificado, 100% Agent V2
-- ✅ **Phase 3 (Legacy Removal)**: COMPLETA - Legacy removido, semantic coverage removido, sistema limpo e funcional
+**Solução - MVP via Prompt (1 Dia)**:
 
-| **Future** | ⏳ Backlog | TBD | Web UI, batch processing, API server |
+Ajustar prompt V2 para incluir scores em cada sugestão:
+- **Segurança do Paciente** (0-10) - risco de evento adverso se não corrigir
+- **Impacto Financeiro** (Baixo/Médio/Alto) - economia estimada
+- **Esforço de Implementação** (Baixo/Médio/Alto) - complexidade da correção
 
----
+**Entregas**:
+- ✅ Sugestões ranqueadas por impacto no relatório
+- ✅ Cliente sabe exatamente onde focar
+- ✅ ROI fica visível imediatamente
 
-## 🤝 Contributing to Roadmap
-
-**Process**:
-1. Discuss feature requests in issues
-2. Update this roadmap with approved features
-3. Add to appropriate phase/priority
-4. Update `dev_history.md` when implementing
-
-**Principles**:
-- Maintain specialty-agnostic design
-- No hardcoded clinical logic
-- All changes must align with Agent V2 architecture
+**Implementação**: Apenas ajuste de prompt, zero código novo
 
 ---
 
-**For development history, see [`dev_history.md`](dev_history.md)**  
-**For usage instructions, see [`readme.md`](readme.md)**
+### **POST-MVP: Fases Futuras**
 
+#### **FASE 8: Loop de Feedback (Vantagem Competitiva)**
+**Prioridade**: 🟢 POST-MVP
+
+- FeedbackCollector - rastreia aprovações/rejeições
+- LearningEngine - fine-tuning baseado em decisões reais
+- Precisão: 90% → 95%+ ao longo do uso
+
+#### **FASE 9: ROI Calculator Robusto**
+**Prioridade**: 🟢 POST-MVP
+
+- Scores numéricos (R$/ano economizado)
+- Cálculo de payback
+- Dashboard de impacto acumulado
+
+#### **FASE 10: Integração Zero-Fricção**
+**Prioridade**: 🟢 POST-MVP
+
+- API REST
+- Integração com sistema de autoria Daktus
+- Interface web drag-and-drop
+
+#### **FASE 11: Análise de Custo e Tokens**
+**Prioridade**: 🟢 FUTURO
+
+- Rastreamento detalhado de custo por protocolo
+- Otimização automática de custos
+- Relatórios de eficiência de tokens
+
+---
+
+## 📅 Prioridades de Implementação MVP V3
+
+### 🔥 CORE OBRIGATÓRIO (2 Semanas)
+
+**Semana 1:**
+1. **DIA 1**: Validar auto-apply (experimento Sonnet 4.5) ← CRÍTICO
+2. **DIAS 2-4**: JSONCompactor + SmartChunking
+3. **DIAS 5-7**: ImprovementApplicator + StructuralValidator
+
+**Semana 2:**
+4. **DIA 8**: Prompt Caching Agressivo integrado
+5. **DIA 9**: Impact Scoring via prompt (quick win)
+6. **DIA 10**: DiffGenerator básico
+7. **DIAS 11-13**: Testes intensivos com protocolos reais
+8. **DIA 14**: Apresentação para stakeholders
+
+### 🎯 Nice-to-Have (se der tempo)
+- Confidence scoring refinado
+- Diff visual HTML
+- Logs de auditoria detalhados
+
+### 🟢 POST-MVP (após validação)
+- Feedback loop completo
+- ROI calculator robusto
+- API + Integrações
+- Análise de custo detalhada
+
+---
+
+## 🔥 Ações Imediatas (HOJE)
+
+### 1. Validar Auto-Apply (DIA 1 - CRÍTICO)
+**Ação**:
+- Pegar 5-10 protocolos reais
+- Rodar V2 → gerar sugestões
+- Enviar para Sonnet 4.5 → aplicar melhorias automaticamente
+- Revisar manualmente: funciona? quebra JSON? mantém lógica clínica?
+- Medir: % sucesso, tipos de erro, tempo economizado
+
+**Decisão**: 
+- **Se >80% sucesso** → implementar Fase 5 imediatamente
+- **Se <80% sucesso** → refinar prompt e tentar novamente (não desistir)
+
+### 2. Implementar JSONCompactor (DIAS 2-4)
+**Ação**:
+- Criar módulo que reduz JSON ao essencial
+- Testar com 3-5 protocolos >3k linhas
+- Validar que compactação mantém toda lógica clínica
+- Se ainda muito grande → implementar SmartChunking
+
+### 3. Implementar Auto-Apply (DIAS 5-7)
+**Ação**:
+- ImprovementApplicator (core engine)
+- StructuralValidator (garantir JSON válido)
+- ConfidenceScoring básico (threshold fixo >90%)
+- DiffGenerator básico (mostrar mudanças)
+
+### 4. Integrar Prompt Caching 100% (DIA 8)
+**Ação**:
+- Garantir que playbook está sempre em cache
+- Protocolo original em cache
+- Instruções de sistema em cache
+- Apenas output variável sem cache
+- Validar economia de tokens em logs
+
+### 5. Impact Scoring via Prompt (DIA 9 - QUICK WIN)
+**Ação**:
+- Ajustar prompt V2 para incluir scores (Segurança 0-10, Economia L/M/A, Esforço L/M/A)
+- Rankear sugestões no relatório
+- Zero código novo
+
+### 6. Testar + Apresentar (DIAS 10-14)
+**Ação**:
+- Rodar V3 em 10-20 protocolos reais de múltiplas especialidades
+- Validar que auto-apply funciona consistentemente
+- Coletar feedback qualitativo
+- Ajustar conforme necessário
+- Preparar apresentação com casos de sucesso e métricas
+
+---
+
+## 📊 Métricas de Sucesso MVP V3
+
+### Produto
+- ✅ Protocolos JSON >3k linhas processados sem quebrar
+- ✅ Tempo de implementação: dias → <10 minutos
+- ✅ Taxa de auto-apply bem-sucedida >80%
+- ✅ Zero regressões da V2
+
+### Performance
+- ✅ Prompt caching >70% (economia brutal de custo)
+- ✅ Validação estrutural 100% (zero JSON quebrado salvo)
+- ✅ Rastreabilidade completa (diff de todas as mudanças)
+
+### Impacto
+- ✅ 100% sugestões com score de impacto
+- ✅ Stakeholders veem valor imediato e quantificável
+- ✅ ROI demonstrável (tempo economizado + qualidade)
+
+---
+
+## 🎯 Definição de Sucesso
+
+**MVP V3 é bem-sucedido se:**
+1. ✅ Processa protocolos JSON gigantes (>3k linhas) sem quebrar
+2. ✅ Auto-apply funciona em >80% dos casos
+3. ✅ Tempo de implementação cai de dias para minutos
+4. ✅ Prompt caching reduz custo em >50%
+5. ✅ Stakeholders aprovam para produção
+6. ✅ Zero regressões da V2
+
+**Após MVP:**
+- Decidir investimento em Fases 8-11 (feedback, ROI robusto, API)
+- Planejar integração com sistema de autoria Daktus
+- Escalar para produção completa
+
+---
+
+## 🧨 Princípios de Execução
+
+**Velocidade acima de tudo:**
+- ✅ Arquitetura V2 já é sólida - só adicionar módulos
+- ✅ Usar Claude Code / Cursor para implementação rápida
+- ✅ Testar com casos reais desde o dia 1
+- ✅ Iterar rápido, validar diariamente
+- ✅ MVP imperfeito hoje > produto perfeito em 3 meses
+
+**Foco brutal:**
+- 🔴 JSONCompactor + Auto-Apply + Prompt Caching = CORE
+- 🟡 Impact Scoring = Quick win (1 dia)
+- 🟢 Todo resto = POST-MVP
+
+**Fail-fast:**
+- Se auto-apply não funcionar no dia 1 → pivotar imediatamente
+- Se JSON quebrar → StructuralValidator obrigatório
+- Se custo explodir → validar prompt caching
+
+---
+
+**Para instruções de uso, veja [`README.md`](README.md)**  
+**Para histórico de desenvolvimento, veja [`dev_history.md`](dev_history.md)**

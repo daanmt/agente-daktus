@@ -1,304 +1,363 @@
 # 🔍 Agente Daktus QA
 
-> Clinical protocol validation using AI-powered playbook analysis
+> Sistema de validação e correção automatizada de protocolos clínicos usando IA
 
-**Version**: 2.3-production  
-**Status**: ✅ Production Ready - Agent V2 
-**Last Updated**: 2025-11-29
-
----
-
-## 🎯 What It Does
-
-Validates clinical protocols (JSON) against medical playbooks (text/PDF) to ensure:
-
-- ✅ Clinical logic consistency  
-- ✅ Complete symptom coverage
-- ✅ Appropriate diagnostic paths
-- ✅ Evidence-based recommendations
-
-**Input**: Clinical protocol (JSON) + Medical playbook (Markdown/PDF)  
-**Output**: Clinical validation report (text + JSON) with gap analysis and improvement suggestions
+**Versão Atual**: 2.3-production ✅  
+**Próxima Versão**: 3.0-alpha (em desenvolvimento)  
+**Status**: Pronto para Produção (v2) | Roadmap v3 Definido  
+**Última Atualização**: 2025-11-30
 
 ---
 
-## 🚀 Quick Start
+## 🎯 O Que Faz
 
-### 1. Install Dependencies
+### Versão 2.x (Atual - Produção)
+
+Valida protocolos clínicos (JSON) contra playbooks médicos (texto/PDF) para garantir:
+
+- ✅ Consistência da lógica clínica
+- ✅ Cobertura completa de sintomas
+- ✅ Caminhos diagnósticos apropriados
+- ✅ Recomendações baseadas em evidências
+- ✅ Identificação de gaps e oportunidades de melhoria
+
+**Entrada**: Protocolo clínico (JSON) + Playbook médico (Markdown/PDF)  
+**Saída**: Relatório de validação clínica (texto + JSON) com análise de gaps e sugestões de melhoria priorizadas
+
+### Versão 3.0 (Em Desenvolvimento)
+
+**Evolução transformacional:** De auditoria passiva para correção ativa.
+
+- ✅ Tudo da v2.x
+- 🔥 **Auto-Apply de Melhorias** - Aplica correções automaticamente no JSON
+- 🔥 **Chunking Inteligente** - Processa playbooks gigantes (50-200+ páginas)
+- 🔥 **Priorização por Impacto** - Sugestões ranqueadas por ROI clínico-financeiro
+- 🔥 **Loop de Feedback** - Aprende com decisões clínicas reais
+- 🔥 **Workflow de Aprovação** - Preview, diff visual, rollback automático
+
+**Resultado:** Redução de 90% no tempo de implementação de melhorias (de dias para minutos).
+
+---
+
+## 🚀 Início Rápido
+
+### 1. Instalar Dependências
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure OpenRouter
+### 2. Configurar OpenRouter
 
-```bash
-python scripts/setup_openrouter.py
-```
-
-Or manually create `.env`:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
-OPENROUTER_API_KEY=sk-or-v1-seu-key-aqui
-LLM_MODEL=anthropic/claude-sonnet-4.5
-USE_SIMPLIFIED_AGENT=true  # Optional: enable Agent V2
+OPENROUTER_API_KEY=sk-or-v1-sua-chave-aqui
 ```
 
-**Get API key**: https://openrouter.ai/keys
+**Obter chave de API**: https://openrouter.ai/keys
 
-### 3. Run Analysis
+### 3. Executar Análise
 
 ```bash
 python run_qa_cli.py
 ```
 
-Follow the prompts:
-1. Select protocol JSON file from `models_json/`
-2. Select playbook file (optional but recommended)
-3. Choose LLM model
-4. View results in `reports/`
+Siga as instruções:
+1. Selecione o arquivo JSON do protocolo em `models_json/`
+2. Selecione o arquivo do playbook (opcional mas recomendado)
+3. Escolha o modelo LLM
+4. Visualize os resultados em `reports/`
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Arquitetura
 
-### Agent V2 is a **LLM-centric architecture** where:
-- **Zero clinical logic in code** - all clinical intelligence comes from LLM
-- **Single LLM call** - comprehensive analysis via super prompt
-- **Specialty-agnostic** - works identically for ORL, AVC, Pediatrics, etc.
-- **Focus on improvement suggestions** - actionable recommendations for protocol enhancement
+### Agent V2: Arquitetura Centrada em LLM (Produção)
 
-**Activation**:
+**Princípios fundamentais**:
+- **Zero lógica clínica no código** - toda inteligência clínica vem do LLM
+- **Chamada única ao LLM** - análise abrangente via super prompt
+- **Agnóstico a especialidades** - funciona identicamente para ORL, AVC, Pediatria, etc.
+- **Foco em sugestões de melhoria** - recomendações acionáveis para aprimoramento do protocolo
 
-```bash
-# Windows (PowerShell)
-$env:USE_SIMPLIFIED_AGENT="true"
-python run_qa_cli.py
-
-# Linux/Mac
-export USE_SIMPLIFIED_AGENT=true
-python run_qa_cli.py
+**Pipeline de Execução**:
 ```
-
-**Pipeline**:
-```
-Playbook + Protocol → protocol_loader (raw load)
+Playbook + Protocolo → protocol_loader (carregamento bruto)
     ↓
-prompt_builder (super prompt assembly)
+prompt_builder (montagem do super prompt com cache)
     ↓
-llm_client → OpenRouter API (single comprehensive analysis)
+llm_client → API OpenRouter (análise abrangente única)
     ↓
-output/validator (schema validation)
+output/validator (validação de schema)
     ↓
-pipeline.analyze() → Unified JSON output
+pipeline.analyze() → Saída JSON unificada
     ↓
 CLI Report Generator → reports/*.txt, reports/*.json
 ```
 
-**Estrutura Simplificada**:
-- ✅ Pipeline único: `agent_v2.pipeline.analyze()`
-- ✅ Zero duplicação: arquivos obsoletos removidos
-- ✅ Imports limpos: sem referências quebradas
-- ✅ Sistema consolidado: estrutura clara e consistente
+### Agent V3: Arquitetura de Correção Automatizada (Roadmap)
+
+**Evolução transformacional** em 3 etapas:
+
+```
+ETAPA 1: PREPROCESSAMENTO INTELIGENTE
+Playbook gigante → ChunkingEngine → Chunks semânticos
+    ↓
+SynthesisEngine → Playbook-Synth compactado (só essencial)
+    ↓
+MemoryManager → Contexto mantido entre chunks
+
+ETAPA 2: ANÁLISE + CORREÇÃO
+Protocolo JSON + Playbook-Synth → LLM (análise)
+    ↓
+Relatório de melhorias + Scores de impacto
+    ↓
+ImprovementApplicator → Protocolo JSON corrigido (auto-apply)
+    ↓
+ConfidenceScoring → Alta confiança = auto-apply | Baixa = preview
+
+ETAPA 3: APROVAÇÃO + APRENDIZADO
+Protocolo corrigido → ApprovalWorkflow (diff visual)
+    ↓
+Usuário aprova/rejeita → FeedbackCollector
+    ↓
+LearningEngine → Fine-tuning contínuo baseado em decisões reais
+```
+
+**Ganhos esperados v3:**
+- 🔥 Tempo de implementação: dias → minutos (-90%)
+- 🔥 Custo de tokens: -50-70% (chunking + cache)
+- 🔥 Precisão: 80% → 95%+ (loop de feedback)
+- 🔥 ROI quantificável: R$ economizados + eventos evitados
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuração
 
-### Environment Variables (.env)
+### Variáveis de Ambiente (.env)
 
 ```env
-# Required
-OPENROUTER_API_KEY=sk-or-v1-seu-key-aqui
+# Obrigatório
+OPENROUTER_API_KEY=sk-or-v1-sua-chave-aqui
 
-# Optional
-LLM_MODEL=anthropic/claude-sonnet-4.5  # Default model
-USE_SIMPLIFIED_AGENT=true              # Enable Agent V2 (default: false)
+# Opcional
+LLM_MODEL=anthropic/claude-sonnet-4.5  # Modelo padrão v3
 ```
 
-### Supported Models
+### Modelos Suportados
 
-- `anthropic/claude-sonnet-4.5` ⭐ (recommended)
-- `anthropic/claude-3.5-haiku-20241022` (faster, cheaper)
-- `google/gemini-2.5-flash` (alternative)
-- `x-ai/grok-4.1-fast:free` (free tier)
+**Recomendados para v2/v3:**
+- `anthropic/claude-sonnet-4.5` ⭐ (recomendado v3 - auto-apply)
+- `anthropic/claude-sonnet-4-20250514` (alternativa)
+- `google/gemini-2.5-flash-preview-09-2025` 🔧 (v2 padrão)
 
----
+**Outros modelos disponíveis:**
+- `anthropic/claude-3.5-haiku-20241022` (mais rápido, mais barato)
+- `google/gemini-2.5-flash`, `google/gemini-2.5-pro`
+- `openai/gpt-5-mini`, `openai/gpt-4.1-mini`, `openai/gpt-4o-mini`
+- `x-ai/grok-2-1212`
 
-## 📊 Output Format
-
-### Report Structure
-
-**Text Report** (`reports/*.txt`):
-- Protocol structure summary
-- Playbook extraction summary
-- Clinical validation (coverage, gaps)
-- Efficiency analysis
-- Improvement suggestions
-- Quality metrics
-
-**JSON Report** (`reports/*.json`):
-- Complete structured data
-- All analysis results
-- Metadata (timestamps, model used, processing times)
-- Entity counts (syndromes, exams, treatments)
-
-### Log Files
-
-**Location**: `logs/qa_analysis_YYYYMMDD_HHMMSS.log`
-
-**Contains**:
-- Detailed execution logs
-- LLM call details (latency, tokens)
-- Error traces
-- Performance metrics
+**Total**: 12+ modelos disponíveis
 
 ---
 
-## 🔧 Troubleshooting
+## 📊 Formato de Saída
 
-### "LLM not available"
+### V2 (Atual)
 
-**Cause**: `OPENROUTER_API_KEY` not configured
+**Relatório em Texto** (`reports/*.txt`):
+- Resumo da estrutura do protocolo
+- Resumo da extração do playbook
+- Validação clínica (cobertura, gaps)
+- Análise de eficiência
+- Sugestões de melhoria
+- Métricas de qualidade
 
-**Fix**:
+**Relatório em JSON** (`reports/*.json`):
+- Dados estruturados completos
+- Todos os resultados da análise
+- Metadados (timestamps, modelo usado, tempos de processamento)
+- Contagens de entidades (síndromes, exames, tratamentos)
+
+### V3 (Futuro)
+
+**Adições ao output:**
+- ✅ Protocolo JSON corrigido (`reports/*_fixed.json`)
+- ✅ Diff visual de mudanças (`reports/*_diff.html`)
+- ✅ Scores de impacto por sugestão (Segurança 0-10, Economia R$, Esforço horas)
+- ✅ ROI calculado de cada melhoria
+- ✅ Rastreabilidade completa (qual fonte de evidência justifica cada mudança)
+- ✅ Logs de aprovação/rejeição (feedback loop)
+
+---
+
+## 🔧 Solução de Problemas
+
+### "API key não configurada"
+
+**Causa**: `OPENROUTER_API_KEY` não configurado
+
+**Solução**:
 ```bash
-# Check .env exists
-cat .env  # Linux/Mac
+# Verifique se o .env existe
 type .env  # Windows
+cat .env   # Linux/Mac
 
-# Or reconfigure
-python scripts/setup_openrouter.py
+# Ou crie manualmente
+echo OPENROUTER_API_KEY=sk-or-v1-sua-chave > .env
 ```
 
-### "No protocol files found"
+### "Nenhum arquivo de protocolo encontrado"
 
-**Cause**: No JSON files in `models_json/`
+**Causa**: Nenhum arquivo JSON em `models_json/`
 
-**Fix**: Add protocol JSON files to `models_json/` directory
+**Solução**: Adicione arquivos JSON de protocolos no diretório `models_json/`
 
+### "Playbook muito grande - context overflow"
 
-### Import errors
+**Causa (v2)**: Playbook >50 páginas excede janela de contexto
 
-**Cause**: Missing dependencies or path issues
+**Solução temporária**: Reduza playbook manualmente ou divida em seções
 
-**Fix**:
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt
-
-# Validate system
-python scripts/validate_system.py
-```
+**Solução definitiva (v3)**: ChunkingEngine processará playbooks gigantes automaticamente
 
 ---
 
-## 📚 Documentation
+## 📚 Documentação
 
-**Official Documentation** (consolidated in 3 master files):
+**Documentação Oficial** (consolidada em 3 arquivos principais):
 
-- **This file** (`readme.md`) - Overview and usage
-- **`roadmap.md`** - Product vision and backlog
-- **`dev_history.md`** - Development history (append-only log)
+- **Este arquivo** (`README.md`) - Visão geral e uso
+- **`roadmap.md`** - Roadmap completo v2 → v3
+- **`dev_history.md`** - Histórico de desenvolvimento (log append-only)
 
-**Additional Resources**:
+**Recursos Adicionais**:
 
-- `REVIEW_CLAUDE.txt` - Complete specification for Agent V2
-- `src/agent_v2/` - Agent V2 source code
-- `docs/` - Additional technical documentation (legacy, being consolidated)
-
----
-
-## 🎯 Key Principles
-
-### Agent V2 Design Principles
-
-1. **Zero Clinical Logic in Code**
-   - All clinical decisions come from LLM
-   - No hardcoded rules, regex, or heuristics
-   - Code is pure orchestration
-
-2. **Single LLM Call**
-   - One comprehensive super prompt
-   - All analysis (extraction, structural, semantic, alignment) in one call
-   - Reduces latency and cost
-
-3. **Specialty-Agnostic**
-   - Same code path for all medical specialties
-   - No `if specialty == "ORL"` logic
-   - Specialty-specific knowledge in playbooks, not code
-
-4. **Fail-Fast**
-   - Errors are logged and propagated immediately
-   - No silent failures
-   - Structured error responses (no fabricated clinical content)
+- `REVIEW_CLAUDE.txt` - Especificação completa do Agent V2
+- `src/agent_v2/` - Código-fonte do Agent V2
 
 ---
 
-## 🧪 Testing
+## 🎯 Princípios-Chave
 
-### Run Tests
+### Princípios de Design do Agent V2/V3
 
-```bash
-# Unit tests
-pytest tests/unit/
+1. **Zero Lógica Clínica no Código**
+   - Todas as decisões clínicas vêm do LLM
+   - Sem regras hardcoded, regex ou heurísticas
+   - Código é pura orquestração
 
-# Integration tests
-pytest tests/integration/
+2. **Chamada Única ao LLM** (v2) → **Chunking Inteligente** (v3)
+   - v2: Um super prompt abrangente
+   - v3: Processamento incremental com síntese
 
-# Compliance tests (Agent V2)
-python test_agent_v2_compliance.py
-```
+3. **Agnóstico a Especialidades**
+   - Mesmo caminho de código para todas as especialidades médicas
+   - Sem lógica `if especialidade == "ORL"`
+   - Conhecimento específico de especialidade nos playbooks, não no código
 
-### Test with Real Protocols
+4. **De Passivo para Ativo** (v3)
+   - v2: Identifica problemas
+   - v3: Identifica + Corrige automaticamente
 
-```bash
-python test_agent_v2_real_protocols.py
-```
+5. **Fail-Fast com Segurança**
+   - Erros são registrados e propagados imediatamente
+   - Auto-apply somente com alta confiança (>90%)
+   - Aprovação humana obrigatória para mudanças críticas
+
+6. **Aprendizado Contínuo** (v3)
+   - Sistema aprende com decisões clínicas reais
+   - Fine-tuning baseado em feedback
+   - Precisão melhora ao longo do tempo
 
 ---
 
 ## 📈 Performance
 
-**Agent V2**:
-- **Latency p95**: ≤ 60 seconds
-- **Cost per analysis**: ~$0.05-0.10 (depends on model)
-- **Success rate**: ≥ 95%
+### Agent V2 (Atual)
+- **Latência p95**: ≤ 60 segundos
+- **Custo por análise**: ~R$ 0,25-0,50 (depende do modelo)
+- **Taxa de sucesso**: ≥ 95%
+- **Cache de prompts**: Reduz até 90% do custo em análises repetidas
 
-**Legacy**:
-- **Latency p95**: ~90-120 seconds
-- **Cost per analysis**: ~$0.10-0.15
-- **Success rate**: ~90%
-
----
-
-## 🤝 Contributing
-
-**Important**: Before making changes, read:
-- `roadmap.md` - Product vision and priorities
-- `dev_history.md` - Recent changes and context
-- `REVIEW_CLAUDE.txt` - Architecture principles
-
-**Documentation Policy**:
-- All new information goes into `readme.md`, `roadmap.md`, or `dev_history.md`
-- Do not create new documentation files
-- Update existing master files instead
+### Agent V3 (Expectativa)
+- **Latência p95**: ≤ 90 segundos (chunking + auto-apply)
+- **Custo por análise**: ~R$ 0,15-0,30 (-50% via chunking otimizado)
+- **Taxa de sucesso**: ≥ 98%
+- **Tempo de implementação de melhorias**: Dias → Minutos (-90%)
+- **Precisão de sugestões**: 80% → 95%+ (após 3-6 meses de feedback)
 
 ---
 
-## 📝 License
-
-[Add license information here]
-
----
-
-## 🔗 Links
+## 🔗 Links Úteis
 
 - **OpenRouter**: https://openrouter.ai
-- **API Keys**: https://openrouter.ai/keys
-- **Model Catalog**: https://openrouter.ai/models
+- **Chaves de API**: https://openrouter.ai/keys
+- **Catálogo de Modelos**: https://openrouter.ai/models
+- **Anthropic Claude**: https://www.anthropic.com/claude
 
 ---
 
-**For detailed product roadmap, see [`roadmap.md`](roadmap.md)**  
-**For development history, see [`dev_history.md`](dev_history.md)**
+## 📝 Uso Programático
+
+### V2 (Atual)
+
+```python
+from agent_v2.pipeline import analyze
+
+# Análise completa
+resultado = analyze(
+    protocol_path="models_json/protocolo.json",
+    playbook_path="models_json/playbook.md",
+    model="anthropic/claude-sonnet-4.5"
+)
+
+# Resultado contém:
+# - protocol_analysis: análise estrutural e extração clínica
+# - improvement_suggestions: sugestões de melhoria priorizadas
+# - metadata: informações sobre processamento, modelo, qualidade
+```
+
+### V3 (Futuro)
+
+```python
+from agent_v3.pipeline import analyze_and_fix
+
+# Análise + Correção automatizada
+resultado = analyze_and_fix(
+    protocol_path="models_json/protocolo.json",
+    playbook_path="models_json/playbook_gigante.pdf",  # Suporta playbooks massivos
+    model="anthropic/claude-sonnet-4.5",
+    auto_apply=True,  # Aplica correções automaticamente
+    confidence_threshold=0.90  # Só auto-apply se confiança >90%
+)
+
+# Resultado contém:
+# - protocol_analysis: análise estrutural
+# - improvement_suggestions: sugestões ranqueadas por impacto
+# - fixed_protocol: protocolo JSON corrigido
+# - changes_diff: diff visual de mudanças
+# - impact_scores: scores de segurança, economia, esforço
+# - metadata: custo, tempo, confiança de cada mudança
+```
+
+---
+
+## 🎯 Próximos Passos
+
+### Para Usuários (v2)
+1. ✅ Use v2 em produção para validação de protocolos
+2. ✅ Colete feedback sobre qualidade das sugestões
+3. ⏳ Aguarde v3 para correção automatizada
+
+### Para Desenvolvedores
+1. 🔥 **Validar hipótese de auto-apply** (experimento 1 semana)
+2. 🔥 **Implementar ChunkingEngine** (MVP 2 semanas)
+3. 🔥 **Implementar ImprovementApplicator** (2-4 meses)
+4. ⏳ Ver roadmap completo em `roadmap.md`
+
+---
+
+**Para o roadmap detalhado v2 → v3, veja [`roadmap.md`](roadmap.md)**  
+**Para o histórico de desenvolvimento, veja [`dev_history.md`](dev_history.md)**
