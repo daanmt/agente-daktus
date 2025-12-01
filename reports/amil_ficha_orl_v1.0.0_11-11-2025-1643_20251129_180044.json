@@ -1,0 +1,493 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "node-cronologia-fatores",
+          "issue": "A condição de visibilidade ('condicao') é excessivamente complexa e redundante, verificando a ausência de 'nenhum_sintoma' em cinco listas de sintomas. Uma única verificação de que pelo menos um sintoma foi selecionado seria mais eficiente.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-resultados-exames",
+          "issue": "O nó 'Resultados de Exames' é condicional a 'exames_avaliacao == true', mas a pergunta 'Q-exames-avaliacao' (uid: exames_avaliacao) só é visível se 'retorno_consulta' for selecionado. Se o paciente estiver em 'primeira_consulta' e trouxer exames, o fluxo não permite o registro dos resultados, pois o nó é ignorado.",
+          "severity": "High"
+        },
+        {
+          "node_id": "conduta-final-otorrinolaringologia",
+          "issue": "A conduta 'prednisolona-corticoide-sistemico' tem uma condição clínica complexa que mistura indicações nasossinusais e vestibulares ('vertigem_rotatoria' in sintomas_vestibulares and duracao_sintomas == 'agudo'). O uso de corticoides sistêmicos para vertigem aguda (neurite vestibular) é uma indicação clínica válida, mas a lógica de inclusão no protocolo deve ser clara e separada das indicações nasais.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "conduta-final-otorrinolaringologia",
+          "issue": "A conduta 'betaistina-vertigem' (Betaistina) é condicionada a 'duracao_sintomas != 'agudo'', o que está correto (uso crônico/recorrente), mas a conduta 'prednisolona-corticoide-sistemico' é condicionada a 'duracao_sintomas == 'agudo'' para vertigem. A ausência de um vestibulossupressor de fase aguda (ex: Dimenidrinato) é uma lacuna no tratamento da vertigem aguda.",
+          "severity": "High"
+        },
+        {
+          "node_id": "conduta-final-otorrinolaringologia",
+          "issue": "O encaminhamento 'neurologia-vertigem-central' e a mensagem 'msg-vertigem-central-alerta' dependem da seleção de 'sintomas_neurologicos' em 'sintomas_associados'. Esta é uma implementação correta de um Red Flag, mas a urgência (Emergência/Urgente) não é explicitamente forçada no fluxo, apenas recomendada na mensagem.",
+          "severity": "Medium"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": [],
+      "missing_required_fields": [
+        {
+          "node_id": "node-alergias-contraindicacoes",
+          "field": "condicao",
+          "issue": "A condição de visibilidade é redundante e complexa, similar ao nó anterior, mas funcionalmente correta."
+        }
+      ]
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Rinite Alérgica",
+          "description": "Condição prevalente em otorrinolaringologia ambulatorial, afeta cerca de 30% dos adultos e 40% das crianças.",
+          "symptoms": [
+            "Prurido nasal",
+            "Espirros",
+            "Obstrução nasal",
+            "Rinorreia clara",
+            "Conjuntivite alérgica"
+          ]
+        },
+        {
+          "name": "Rinite Não Alérgica (Vasomotora)",
+          "description": "Sintomas semelhantes à rinite alérgica, porém não mediados por IgE e desencadeados por odores, variação térmica ou irritantes.",
+          "symptoms": [
+            "Obstrução nasal",
+            "Rinorreia"
+          ]
+        },
+        {
+          "name": "Rinossinusite Aguda Bacteriana (ABRS)",
+          "description": "Ocorre em 0,5–2% dos casos de infecção viral das vias aéreas superiores.",
+          "symptoms": [
+            "Congestão nasal",
+            "Dor facial",
+            "Rinorreia purulenta",
+            "Febre persistente >10 dias"
+          ]
+        },
+        {
+          "name": "Rinossinusite Crônica (CRS)",
+          "description": "Acomete aproximadamente 12% da população mundial.",
+          "symptoms": [
+            "Sintomas >12 semanas",
+            "Secreção purulenta",
+            "Obstrução nasal",
+            "Hiposmia/Anosmia"
+          ]
+        },
+        {
+          "name": "Otite Média Aguda (OMA)",
+          "description": "Infecção bacteriana mais comum na infância.",
+          "symptoms": [
+            "Dor otológica (otalgia)",
+            "Febre",
+            "Irritabilidade",
+            "Otorreia",
+            "Hipoacusia transitória"
+          ]
+        },
+        {
+          "name": "Otite Média com Efusão (OME)",
+          "description": "Ocorre em cerca de 20% das crianças após OMA.",
+          "symptoms": [
+            "Sensação de plenitude auricular",
+            "Perda auditiva condutiva sem sinais inflamatórios agudos"
+          ]
+        },
+        {
+          "name": "Otite Externa",
+          "description": "Causa comum de queixas otológicas em adultos.",
+          "symptoms": [
+            "Dor intensa à tração do pavilhão",
+            "Otorreia",
+            "Edema do conduto auditivo externo"
+          ]
+        },
+        {
+          "name": "Vertigem Posicional Paroxística Benigna (VPPB)",
+          "description": "Responde por até 30% dos casos de vertigem em idosos.",
+          "symptoms": [
+            "Vertigem rotatória",
+            "Súbita",
+            "Rotatória",
+            "Associada a náusea, vômitos e desequilíbrio"
+          ]
+        },
+        {
+          "name": "Labirintite Viral",
+          "description": "Principal causa de vertigem periférica aguda.",
+          "symptoms": [
+            "Vertigem periférica",
+            "Nistagmo horizontal-rotatório, fatigável"
+          ]
+        },
+        {
+          "name": "Doença de Ménière",
+          "description": "Causa frequente de síndromes vestibulares.",
+          "symptoms": [
+            "Vertigem recorrente",
+            "Hipoacusia",
+            "Zumbido"
+          ]
+        },
+        {
+          "name": "Doença do Refluxo Laringofaríngeo (DRGE-LF)",
+          "description": "Afeta até 10% da população geral e está presente em >50% dos pacientes com disfonia crônica.",
+          "symptoms": [
+            "Pigarro crônico",
+            "Rouquidão",
+            "Sensação de globo faríngeo",
+            "Tosse seca persistente",
+            "Halitose",
+            "Ardor faríngeo",
+            "Geralmente sem pirose típica"
+          ]
+        },
+        {
+          "name": "Síndrome da Apneia Obstrutiva do Sono (SAHOS)",
+          "description": "Acomete de 4–8% dos adultos e até 3% das crianças.",
+          "symptoms": [
+            "Ronco habitual",
+            "Pausas respiratórias observadas",
+            "Sonolência diurna excessiva",
+            "Cefaleia matinal",
+            "Irritabilidade",
+            "Déficit cognitivo"
+          ]
+        }
+      ],
+      "exams": [
+        {
+          "name": "TC de seios nasais",
+          "type": "Imagem",
+          "indication": "Casos refratários / candidatos à cirurgia funcional endoscópica (CRS)",
+          "normalized_name": "TC de Seios da Face"
+        },
+        {
+          "name": "Endoscopia naso-sinusal",
+          "type": "Procedimento Diagnóstico",
+          "indication": "Confirmação de inflamação objetiva (RSC); Obstrução nasal crônica (>12 semanas), perda de olfato ou sinusite recorrente",
+          "normalized_name": "Vídeo-endoscopia naso-sinusal (ótica flexível)"
+        },
+        {
+          "name": "Otoscopia",
+          "type": "Exame Físico",
+          "indication": "Diagnóstico de Otites",
+          "normalized_name": "Otoscopia"
+        },
+        {
+          "name": "Timpanometria",
+          "type": "Funcional",
+          "indication": "Detecção de efusão (OME); Sensação de plenitude auricular, suspeita de efusão da orelha média ou disfunção tubária",
+          "normalized_name": "Impedanciometria / Timpanometria"
+        },
+        {
+          "name": "TC de ossos temporais",
+          "type": "Imagem",
+          "indication": "Casos complicados ou suspeita de colesteatoma",
+          "normalized_name": "TC de Ossos Temporais"
+        },
+        {
+          "name": "Audiometria tonal e vocal",
+          "type": "Funcional",
+          "indication": "Avaliação da função auditiva, especialmente em OME persistente ou recorrente; Paciente relata diminuição da audição, zumbido no ouvido ou sensação de ouvido tampado",
+          "normalized_name": "Audiometria tonal limiar + testes de discriminação"
+        },
+        {
+          "name": "Protocolo HINTS",
+          "type": "Exame Físico",
+          "indication": "Diferencia causas periféricas de centrais de vertigem",
+          "normalized_name": "Protocolo HINTS"
+        },
+        {
+          "name": "Vectoeletronistagmografia (VNG)",
+          "type": "Funcional",
+          "indication": "Exame objetivo de função vestibular; Vertigem rotatória, tontura com desequilíbrio ou episódios recorrentes de labirintite",
+          "normalized_name": "Vectoeletronistagmografia computadorizada"
+        },
+        {
+          "name": "vHIT",
+          "type": "Funcional",
+          "indication": "Exame objetivo de função vestibular",
+          "normalized_name": "vHIT"
+        },
+        {
+          "name": "VEMP",
+          "type": "Funcional",
+          "indication": "Avalia otólitos (sáculo e utrículo)",
+          "normalized_name": "VEMP"
+        },
+        {
+          "name": "RM de encéfalo",
+          "type": "Imagem",
+          "indication": "Suspeita de etiologia central de vertigem",
+          "normalized_name": "RM de Encéfalo"
+        },
+        {
+          "name": "Audiometria vocal – discriminação",
+          "type": "Funcional",
+          "indication": "Paciente com perda auditiva confirmada na audiometria tonal, especialmente neurossensorial",
+          "normalized_name": "Audiometria vocal – discriminação"
+        },
+        {
+          "name": "Audiometria vocal – inteligibilidade",
+          "type": "Funcional",
+          "indication": "Paciente com perda auditiva neurossensorial para avaliação de discriminação da fala",
+          "normalized_name": "Audiometria vocal – inteligibilidade"
+        },
+        {
+          "name": "Audiometria infantil condicionada (Peep-show)",
+          "type": "Funcional",
+          "indication": "Criança de 6 meses a 4 anos com suspeita de perda auditiva ou que não atende quando chamada",
+          "normalized_name": "Audiometria infantil condicionada (Peep-show)"
+        },
+        {
+          "name": "Testes vestibulares com prova calórica + ENG",
+          "type": "Funcional",
+          "indication": "Vertigem rotatória unilateral, suspeita de neurite vestibular ou labirintite",
+          "normalized_name": "Testes vestibulares com prova calórica + ENG"
+        },
+        {
+          "name": "Polissonografia de noite inteira (PSG)",
+          "type": "Funcional",
+          "indication": "Ronco intenso com pausas respiratórias observadas e sonolência diurna excessiva (IAH ≥5 eventos/hora em adultos; >1 evento/h em crianças)",
+          "normalized_name": "Polissonografia de noite inteira (PSG)"
+        },
+        {
+          "name": "Polissonograma com EEG de noite inteira",
+          "type": "Funcional",
+          "indication": "Suspeita de eventos centrais do sono ou distúrbios da arquitetura do sono",
+          "normalized_name": "Polissonograma com EEG de noite inteira"
+        }
+      ],
+      "treatments": [
+        {
+          "name": "Corticoides intranasais (Budesonida, Mometasona, Fluticasona)",
+          "type": "Medicamento",
+          "indication": "1ª linha em todas as formas crônicas e moderadas-graves de Rinite/RSC; Obstrução nasal crônica, rinite alérgica com prurido e espirros, sinusite crônica com perda de olfato"
+        },
+        {
+          "name": "Antibióticos",
+          "type": "Medicamento",
+          "indication": "Restritos a ABRS com critérios clínicos de infecção bacteriana; OMA em casos graves, em menores de 2 anos ou quando há otorreia; Labirintite infecciosa"
+        },
+        {
+          "name": "Cirurgia Endoscópica Funcional dos Seios Paranasais (FESS)",
+          "type": "Cirurgia",
+          "indication": "CRS refratária"
+        },
+        {
+          "name": "Antibióticos tópicos e limpeza do conduto",
+          "type": "Medicamento/Procedimento",
+          "indication": "Otite externa"
+        },
+        {
+          "name": "Vigilância e reavaliação audiológica periódica",
+          "type": "Monitoramento",
+          "indication": "OME"
+        },
+        {
+          "name": "Antieméticos, vestibulossupressores e reidratação",
+          "type": "Medicamento/Suporte",
+          "indication": "Fase aguda de síndromes vestibulares"
+        },
+        {
+          "name": "Reabilitação vestibular precoce",
+          "type": "Fisioterapia",
+          "indication": "Fase de compensação de síndromes vestibulares"
+        },
+        {
+          "name": "Restrição salina, diuréticos e betahistina",
+          "type": "Medicamento/Comportamental",
+          "indication": "Doença de Ménière"
+        },
+        {
+          "name": "IBP em alta dose e medidas comportamentais",
+          "type": "Medicamento/Comportamental",
+          "indication": "DRGE-LF"
+        },
+        {
+          "name": "CPAP, dispositivos de avanço mandibular (DAM)",
+          "type": "Dispositivo",
+          "indication": "SAHOS (adultos)"
+        },
+        {
+          "name": "Adenoamigdalectomia",
+          "type": "Cirurgia",
+          "indication": "SAHOS (casos pediátricos)"
+        },
+        {
+          "name": "Antihistamínicos orais (Fexofenadina, Loratadina, Desloratadina)",
+          "type": "Medicamento",
+          "indication": "Coceira nasal, espirros frequentes, rinite alérgica"
+        },
+        {
+          "name": "Antihistamínicos intranasais (azelastina)",
+          "type": "Medicamento",
+          "indication": "Rinite vasomotora e mista, obstrução nasal por irritantes químicos ou odores"
+        },
+        {
+          "name": "Amoxicilina ± Clavulanato",
+          "type": "Medicamento",
+          "indication": "Rinorreia purulenta com dor facial e febre persistente por mais de 10 dias (ABRS)"
+        },
+        {
+          "name": "Macrolídeos (azitromicina, claritromicina)",
+          "type": "Medicamento",
+          "indication": "Rinossinusite bacteriana aguda em pacientes alérgicos à penicilina"
+        },
+        {
+          "name": "Prednisona / Prednisolona (corticosteroide sistêmico)",
+          "type": "Medicamento",
+          "indication": "Rinossinusite crônica com pólipos e anosmia, refratária ao corticoide intranasal"
+        },
+        {
+          "name": "Irrigação nasal salina (isotônica ou hipertônica)",
+          "type": "Procedimento",
+          "indication": "Obstrução nasal, rinorreia (clara ou purulenta), complemento universal para rinites e sinusites"
+        },
+        {
+          "name": "Pantoprazol / Omeprazol / Esomeprazol (IBP)",
+          "type": "Medicamento",
+          "indication": "Pigarro crônico, sensação de globo faríngeo, tosse seca persistente, ardor na garganta (DRGE-LF)"
+        },
+        {
+          "name": "Medidas comportamentais (elevação de cabeceira, perda ponderal, evitar refeições noturnas)",
+          "type": "Comportamental",
+          "indication": "Ronco com pausas respiratórias, refluxo laringofaríngeo, medidas adjuvantes em SAHOS"
+        }
+      ],
+      "red_flags": [
+        {
+          "flag": "Urgências e emergências otorrinolaringológicas",
+          "urgency": "Exclusão/Emergência",
+          "action": "Não incluir no protocolo ambulatorial (Epistaxe grave, corpo estranho, abscessos, angina de Ludwig, complicações intracranianas)"
+        },
+        {
+          "flag": "Trauma facial, craniano ou cervical agudo",
+          "urgency": "Exclusão/Emergência",
+          "action": "Não incluir no protocolo ambulatorial"
+        },
+        {
+          "flag": "Suspeita de neoplasias de cabeça e pescoço",
+          "urgency": "Exclusão/Emergência",
+          "action": "Não incluir no protocolo ambulatorial"
+        },
+        {
+          "flag": "Vertigem central (progressiva, acompanhada de diplopia, disartria, fraqueza ou ataxia; nistagmo vertical ou multidirecional, não suprimido por fixação)",
+          "urgency": "Urgente",
+          "action": "RM de encéfalo, avaliação neurológica imediata"
+        },
+        {
+          "flag": "Febre alta (acima de 39°C), dor de cabeça muito forte, rigidez no pescoço, saída de sangue pelo nariz ou ouvido, inchaço no rosto ou pescoço",
+          "urgency": "Urgente",
+          "action": "Buscar ajuda médica imediatamente (Conforme orientações)"
+        },
+        {
+          "flag": "Dificuldade para respirar ou falta de ar, chiado no peito, lábios ou unhas azulados, sensação de sufocamento",
+          "urgency": "Urgente",
+          "action": "Buscar ajuda médica imediatamente (Conforme orientações)"
+        }
+      ],
+      "signs_symptoms": [
+        "Audição impactada",
+        "Equilíbrio impactado",
+        "Sono impactado",
+        "Via aérea superior impactada",
+        "Prurido nasal",
+        "Espirros",
+        "Obstrução nasal",
+        "Rinorreia clara",
+        "Rinorreia purulenta",
+        "Dor facial",
+        "Hiposmia/Anosmia",
+        "Dor otológica (otalgia)",
+        "Febre",
+        "Irritabilidade",
+        "Otorreia",
+        "Hipoacusia",
+        "Plenitude auricular",
+        "Zumbido (tinnitus)",
+        "Dor intensa à tração do pavilhão (Otite Externa)",
+        "Edema do conduto auditivo externo",
+        "Vertigem rotatória",
+        "Tontura/Instabilidade",
+        "Desequilíbrio",
+        "Náusea/Vômitos",
+        "Nistagmo (horizontal-rotatório, fatigável, suprimido pela fixação visual - periférico)",
+        "Nistagmo (vertical ou multidirecional, não suprimido por fixação - central)",
+        "Diplopia",
+        "Disartria",
+        "Fraqueza",
+        "Ataxia",
+        "Pigarro crônico",
+        "Rouquidão",
+        "Sensação de globo faríngeo",
+        "Tosse seca persistente",
+        "Halitose",
+        "Ardor faríngeo",
+        "Ronco habitual",
+        "Pausas respiratórias observadas",
+        "Sonolência diurna excessiva",
+        "Cefaleia matinal",
+        "Déficit cognitivo"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Safety/Clinical Coverage",
+      "description": "Adicionar um medicamento vestibulossupressor de fase aguda (ex: Dimenidrinato ou Meclizina) na seção de condutas. O playbook menciona 'antieméticos, vestibulossupressores' para a fase aguda, mas o protocolo só implementa Betaistina (fase crônica) e Prednisolona (neurite).",
+      "impact": "Melhora a segurança e o manejo da vertigem aguda, alinhando-se ao guideline de fase aguda."
+    },
+    {
+      "priority": "High",
+      "category": "Structural Logic",
+      "description": "Revisar a lógica de visibilidade do nó 'node-resultados-exames'. Permitir que este nó seja visível se 'exames_avaliacao == true', independentemente do 'motivo_consulta', ou garantir que 'Q-exames-avaliacao' seja visível em 'primeira_consulta' se o paciente trouxer exames.",
+      "impact": "Garante a captura de dados de exames trazidos na primeira consulta, essencial para o diagnóstico."
+    },
+    {
+      "priority": "High",
+      "category": "Clinical Coverage",
+      "description": "Adicionar a indicação de 'Otite Externa' com tratamento tópico (antibiótico tópico) e limpeza do conduto. O playbook detalha a clínica e conduta, mas o protocolo não possui uma conduta medicamentosa específica para OE.",
+      "impact": "Cobre uma síndrome prevalente e sua conduta de primeira linha, conforme o playbook."
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Coverage",
+      "description": "Implementar a avaliação de critérios de gravidade para OMA (Otite Média Aguda) em crianças, conforme o playbook ('menores de 2 anos ou quando há otorreia'). A conduta 'msg-otite-media-pediatrica' menciona os critérios, mas o fluxo de prescrição de antibiótico ('amoxicilina-clavulanato-antibiotico') não os utiliza explicitamente para otalgia pediátrica.",
+      "impact": "Refina a indicação de antibióticos em pediatria, promovendo stewardship e alinhamento com guidelines (wait-and-see)."
+    },
+    {
+      "priority": "Medium",
+      "category": "Question Optimization",
+      "description": "Simplificar a condição de visibilidade dos nós 'node-cronologia-fatores' e 'node-alergias-contraindicacoes' para: `not('nenhum_sintoma_nasal' in sintomas_nasossinusais and 'nenhum_sintoma_otologico' in sintomas_otologicos and 'nenhum_sintoma_vestibular' in sintomas_vestibulares and 'nenhum_sintoma_laringofaringeo' in sintomas_laringofaringeos and 'nenhum_sintoma_sono' in sintomas_sono)`.",
+      "impact": "Melhora a legibilidade e manutenção da lógica do protocolo."
+    },
+    {
+      "priority": "Low",
+      "category": "Clinical Coverage",
+      "description": "Adicionar a opção de encaminhamento para 'Cirurgia de Cabeça e Pescoço' ou 'Otorrinolaringologia Cirúrgica' para casos de 'Suspeita de neoplasias' (critério de exclusão/red flag) ou 'CRS refratária' (FESS).",
+      "impact": "Formaliza o fluxo de encaminhamento para condições cirúrgicas e oncológicas."
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\amil_ficha_orl_v1.0.0_11-11-2025-1643.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\Sobre a ficha de atendimento em Otorrinolaringolog 29d6587d2ef5800ba358f9c1b2236875.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 85.0,
+      "structural_quality": 90.0,
+      "safety_implementation": 95.0,
+      "overall_quality": 90.0
+    }
+  }
+}

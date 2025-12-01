@@ -1,0 +1,26 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\Athena_Infertilidade_v0.5_21-11-2025-1127.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\Sobre o protocolo de Infertilidade - Athena (ambul 23c6587d2ef580f4916bd486be04e63f.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Convert all placeholder conditions (e.g., 'Cond_ aparece: se < 35 anos E [ ] um_ano_mais...') in the 'Conduta' node (exams, medications, referrals) into valid, executable JSON logic expressions. This is the single most critical structural flaw.
+2. [High] Correct the indication logic for 'Histeroscopia' in the 'Conduta' node. It should be indicated for 'cotte_negativa' (non-patent tubes) or uterine abnormalities, not 'cotte_positiva'.
+3. [High] Adjust the conditional logic for 'Anamnese - Casal' (node-1753729145202) to be visible for both 'consulta_primeira_vez' and 'consulta_acompanhamento_exames', as anamnesis review is essential for follow-up.
+4. [High] Modify the conditional logic for 'Resultado de exames - Mulher' and 'Resultado de exames - Homem' to be visible regardless of the consultation type, allowing users to input existing exam results even on a 'consulta_primeira_vez'.
+5. [Medium] Add a question to capture the female patient's age explicitly, as age is a critical variable (35 years) used in multiple conditional logic statements (e.g., exam ordering).
+6. [Medium] The 'Termo de ciência' node (5f312f2f-258b-41d8-a463-d50d9c25ff41) should include a mandatory selection to proceed, ensuring legal compliance is met before data entry.
+7. [Medium] Review and simplify the complex referral logic for 'Reprodução Assistida' to ensure it functions correctly across all pathways (first consultation vs. follow-up). Consider using a clinical score or simpler criteria.
+8. [Low] Ensure the 'outros' option in 'muc_mulher' and 'muc_homem' is exclusive to prevent simultaneous selection with 'sem_medicacao', or ensure 'sem_medicacao' is exclusive to all other options.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\Athena_Infertilidade_v0.5_21-11-2025-1127_20251129_190317.json
+============================================================

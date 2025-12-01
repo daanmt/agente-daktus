@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_reumato_v0.2.0_FIXED_20251201_103057.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\playbook reumato.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Adicionar arestas de saída para os nós 'node-sem-dor-articular', 'node-investigacao-septica', 'node-investigacao-espondiloartrite' e 'node-investigacao-artrite-psoriasica'. Todos os caminhos devem convergir para 'conduta-final-reumatologia' ou para um nó de alerta/encaminhamento imediato.
+2. [High] Implementar lógica de bloqueio de prescrição de AINEs (Naproxeno) e DMARDs (Metotrexato, Leflunomida) dentro do nó de conduta, utilizando as variáveis de contraindicação ('alergia_aines', 'insuficiencia_renal', 'gravidez_lactacao', etc.) de forma explícita para garantir a segurança do paciente.
+3. [High] Expandir a condição de visibilidade do nó 'node-investigacao-ar' para incluir oligoartrite inflamatória crônica, que pode ser AR inicial ou Artrite Psoriásica. Sugestão: ('oligoarticular' in numero_articulacoes or 'poliarticular' in numero_articulacoes) and caracteristica_inflamatoria == true and 'cronico' in duracao_sintomas.
+4. [Medium] Adicionar um nó de investigação para Lúpus Eritematoso Sistêmico (LES) e Síndrome de Sjögren, ativado por 'Fenômeno de Raynaud' ou 'Sintomas sicca' no nó 'node-sem-dor-articular' ou por poliartrite inflamatória com sintomas sistêmicos (febre, fadiga).
+5. [Medium] Revisar a condição de ativação do nó 'node-historia-medicamentos' para garantir que ele seja alcançado por todos os caminhos de investigação de partes moles (manguito, epicondilite, etc.) e não apenas pelos caminhos de doenças inflamatórias/gota. Isso garante a coleta de comorbidades e medicamentos para todos os pacientes.
+6. [Low] No nó 'node-triagem-sintomas', a pergunta Q-sintomas-sistemicos-triagem deve ter a opção 'Nenhum sintoma sistêmico' como exclusiva, mas não pré-selecionada, para evitar que o usuário ignore a questão. Se for pré-selecionada, deve ser desmarcada automaticamente ao selecionar qualquer outra opção.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_reumato_v0.2.0_FIXED_20251201_103057_20251201_104509.json
+============================================================

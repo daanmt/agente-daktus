@@ -1,0 +1,807 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "node-investigacao-ar",
+          "issue": "A condição de visibilidade ('poliarticular' in numero_articulacoes and caracteristica_inflamatoria == true and 'cronico' in duracao_sintomas) é muito restritiva. Pacientes com AR inicial podem ser oligoarticulares ou ter duração <6 semanas. O nó deveria ser alcançável por mais caminhos.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-investigacao-espondiloartrite",
+          "issue": "A condição de visibilidade ('coluna_axial' in localizacao_geral and caracteristica_inflamatoria == true and 'cronico' in duracao_sintomas and age < 45) é restritiva. EA pode ocorrer em >45 anos (embora menos comum) e a condição 'cronico' pode ser redundante se a dor lombar inflamatória já implica cronicidade.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-investigacao-gota",
+          "issue": "A condição de visibilidade ('monoarticular' in numero_articulacoes and ('tornozelos_pes' in localizacao_geral or 'joelhos' in localizacao_geral)) não considera a gota em outras articulações (ex: cotovelo, punho) ou a poliarticularidade (embora rara).",
+          "severity": "Low"
+        },
+        {
+          "node_id": "node-investigacao-fibromialgia",
+          "issue": "A condição de visibilidade ('fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral) é muito específica. Pacientes com dor difusa, mas sem fadiga/sono marcantes, podem ser excluídos da investigação de FM.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-investigacao-osteoartrite",
+          "issue": "A condição de visibilidade (caracteristica_inflamatoria == false and 'cronico' in duracao_sintomas and ('joelhos' in localizacao_geral or 'quadris' in localizacao_geral or 'maos_punhos' in localizacao_geral)) exclui OA em outras articulações comuns (ex: coluna cervical/lombar, 1ª MTF).",
+          "severity": "Low"
+        },
+        {
+          "node_id": "node-historia-medicamentos",
+          "issue": "A condição de visibilidade é complexa e pode ser simplificada. A lógica atual (('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes) or ('duas_tres_crises' in frequencia_crises or 'quatro_ou_mais_crises' in frequencia_crises) or age >= 50 or 'febre' in sintomas_sistemicos) garante que o nó seja alcançado em casos graves ou de risco, mas a dependência de nós opcionais (como rigidez_matinal_duracao) pode falhar se o nó anterior não for ativado.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "conduta-final-reumatologia",
+          "issue": "O nó de conduta final depende de 'node-historia-medicamentos'. Se nenhum dos nós de investigação de partes moles (manguito, epicondilite, etc.) for ativado, o fluxo pode parar antes de 'node-historia-medicamentos' se a condição deste último não for atendida.",
+          "severity": "High"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": [
+        {
+          "path": [
+            "node-triagem-sintomas",
+            "node-sem-dor-articular"
+          ],
+          "reason": "O nó 'node-sem-dor-articular' não possui aresta de saída, resultando em um caminho sem conclusão."
+        },
+        {
+          "path": [
+            "node-triagem-sintomas",
+            "node-investigacao-septica"
+          ],
+          "reason": "O nó 'node-investigacao-septica' não possui aresta de saída. Embora seja um nó de alerta (red flag), o fluxo deve ser direcionado para a conduta final ou para o próximo nó de investigação."
+        },
+        {
+          "path": [
+            "node-triagem-sintomas",
+            "node-investigacao-espondiloartrite"
+          ],
+          "reason": "O nó 'node-investigacao-espondiloartrite' não possui aresta de saída, resultando em um caminho sem conclusão."
+        },
+        {
+          "path": [
+            "node-investigacao-ar",
+            "node-investigacao-artrite-psoriasica"
+          ],
+          "reason": "O nó 'node-investigacao-artrite-psoriasica' não possui aresta de saída, resultando em um caminho sem conclusão."
+        }
+      ]
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Artrite Reumatoide (AR)",
+          "description": "Doença autoimune que ataca articulações, causando inflamação, dor e inchaço. Afeta principalmente mãos, punhos e pés, geralmente bilateralmente.",
+          "symptoms": [
+            "Dor articular",
+            "Poliarticular (5 ou mais articulações)",
+            "Simétrico",
+            "Crônico (>6 semanas)",
+            "Característica inflamatória (piora pela manhã, rigidez >30min, melhora com movimento)",
+            "Rigidez matinal prolongada (>60 minutos)",
+            "Fadiga/cansaço excessivo",
+            "Febre",
+            "Perda de peso não intencional"
+          ]
+        },
+        {
+          "name": "Gota",
+          "description": "Artrite inflamatória causada por deposição de cristais de ácido úrico.",
+          "symptoms": [
+            "Monoarticular",
+            "Agudo (<6 semanas)",
+            "Localização: 1ª metatarsofalângica (hálux), tornozelo, joelho",
+            "Crises recorrentes",
+            "Presença de tofos"
+          ]
+        },
+        {
+          "name": "Fibromialgia",
+          "description": "Síndrome de dor crônica generalizada, fadiga e distúrbio do sono.",
+          "symptoms": [
+            "Dor difusa/generalizada",
+            "Fadiga/cansaço excessivo",
+            "Distúrbio do sono",
+            "Sono não reparador",
+            "Pontos dolorosos (WPI)"
+          ]
+        },
+        {
+          "name": "Osteoartrite (OA)",
+          "description": "Doença articular degenerativa (desgaste) com dor mecânica.",
+          "symptoms": [
+            "Dor articular",
+            "Crônico (>6 semanas)",
+            "Característica não inflamatória (piora com atividade, melhora com repouso)",
+            "Rigidez matinal breve (<30 min)",
+            "Dor mais intensa no final do dia",
+            "Crepitação (estalos) nas articulações"
+          ]
+        },
+        {
+          "name": "Espondiloartrite Axial (EAx)",
+          "description": "Grupo de doenças inflamatórias que afetam primariamente a coluna e articulações sacroilíacas.",
+          "symptoms": [
+            "Dor na coluna (axial)",
+            "Crônico (>6 semanas)",
+            "Característica inflamatória",
+            "Início insidioso (gradual)",
+            "Melhora com exercício",
+            "Não melhora com repouso",
+            "Dor noturna (segunda metade da noite)",
+            "Uveíte",
+            "Psoríase",
+            "Doença inflamatória intestinal (DII)",
+            "Dactilite (dedo em salsicha)",
+            "Entesite (dor inserção tendínea)"
+          ]
+        },
+        {
+          "name": "Artrite Psoriásica (AP)",
+          "description": "Artrite inflamatória associada à psoríase.",
+          "symptoms": [
+            "Oligoarticular (2-4 articulações) ou Poliarticular",
+            "Padrão assimétrico",
+            "Lesões psoriásicas (placas, couro cabeludo, unhas)",
+            "Alterações ungueais (pitting, onicólise)",
+            "Dactilite (dedo em salsicha)"
+          ]
+        },
+        {
+          "name": "Artrite Séptica",
+          "description": "Infecção bacteriana da articulação.",
+          "symptoms": [
+            "Monoarticular",
+            "Agudo (<6 semanas)",
+            "Febre",
+            "Calor local",
+            "Rubor intenso",
+            "Edema importante",
+            "Derrame articular volumoso"
+          ]
+        },
+        {
+          "name": "Síndrome do Manguito Rotador",
+          "description": "Lesão ou inflamação dos tendões do ombro.",
+          "symptoms": [
+            "Dor no ombro",
+            "Dor ao elevar o braço acima da cabeça",
+            "Dor na rotação externa do ombro",
+            "Dor noturna que impede o sono"
+          ]
+        },
+        {
+          "name": "Capsulite Adesiva (Ombro Congelado)",
+          "description": "Inflamação e fibrose da cápsula articular do ombro, levando à rigidez.",
+          "symptoms": [
+            "Dor no ombro",
+            "Crônico (>6 semanas)",
+            "Restrição global dos movimentos do ombro (ativo e passivo)",
+            "Evolução em fases (dolorosa, rígida, recuperação)"
+          ]
+        },
+        {
+          "name": "Epicondilite Lateral (Cotovelo de Tenista)",
+          "description": "Tendinopatia dos extensores do punho no cotovelo.",
+          "symptoms": [
+            "Dor no cotovelo",
+            "Dor à palpação do epicôndilo lateral",
+            "Dor ao estender o punho contra resistência"
+          ]
+        },
+        {
+          "name": "Tendinite de De Quervain",
+          "description": "Tenossinovite dos tendões do polegar no punho.",
+          "symptoms": [
+            "Dor nas mãos/punhos",
+            "Dor na região radial do punho",
+            "Teste de Finkelstein positivo"
+          ]
+        },
+        {
+          "name": "Dedo em Gatilho",
+          "description": "Tenossinovite estenosante dos tendões flexores.",
+          "symptoms": [
+            "Dor nas mãos/punhos",
+            "Travamento ou 'clique' ao flexionar/estender o dedo",
+            "Dor na base do dedo afetado"
+          ]
+        },
+        {
+          "name": "Síndrome do Grande Trocânter",
+          "description": "Tendinopatia ou bursite trocantérica no quadril.",
+          "symptoms": [
+            "Dor no quadril",
+            "Dor lateral no quadril",
+            "Dor ao deitar-se sobre o lado afetado",
+            "Dor ao subir escadas"
+          ]
+        },
+        {
+          "name": "Bursite Anserina",
+          "description": "Inflamação da bursa da pata de ganso no joelho.",
+          "symptoms": [
+            "Dor no joelho",
+            "Dor medial e inferior do joelho",
+            "Sensibilidade local à palpação da pata de ganso"
+          ]
+        },
+        {
+          "name": "Fasciíte Plantar",
+          "description": "Inflamação da fáscia plantar no pé.",
+          "symptoms": [
+            "Dor nos tornozelos/pés",
+            "Dor na região plantar medial do pé",
+            "Dor mais intensa nos primeiros passos pela manhã",
+            "Dor ao iniciar a marcha após períodos de inatividade"
+          ]
+        }
+      ],
+      "exams": [
+        {
+          "name": "Fator reumatóide, quantitativo",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Suspeita de Artrite Reumatoide - critérios ACR/EULAR",
+          "normalized_name": "Fator Reumatoide (FR)"
+        },
+        {
+          "name": "Anticorpos anti peptídeo cíclico citrulinado - IgG",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Suspeita de Artrite Reumatoide - maior especificidade",
+          "normalized_name": "Anti-CCP (ACPA)"
+        },
+        {
+          "name": "Proteína C reativa, quantitativa",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Marcadores inflamatórios - artrite inflamatória",
+          "normalized_name": "PCR"
+        },
+        {
+          "name": "Hemossedimentação, (VHS)",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Marcadores inflamatórios - artrite inflamatória",
+          "normalized_name": "VHS"
+        },
+        {
+          "name": "Ácido úrico",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Suspeita de gota - pode estar normal na crise",
+          "normalized_name": "Ácido Úrico Sérico"
+        },
+        {
+          "name": "Hemograma com contagem de plaquetas",
+          "type": "Laboratório (Hematologia)",
+          "indication": "Monitorização DMARDs ou investigação sistêmica",
+          "normalized_name": "Hemograma Completo"
+        },
+        {
+          "name": "Creatinina",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Segurança para DMARDs e AINEs",
+          "normalized_name": "Creatinina"
+        },
+        {
+          "name": "Transaminase oxalacética (AST)",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Segurança hepática para DMARDs",
+          "normalized_name": "TGO (AST)"
+        },
+        {
+          "name": "Transaminase pirúvica (ALT)",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Segurança hepática para DMARDs",
+          "normalized_name": "TGP (ALT)"
+        },
+        {
+          "name": "Hepatite B - HBSAG",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Rastreamento pré-biológicos AR - risco reativação",
+          "normalized_name": "HBsAg"
+        },
+        {
+          "name": "Hepatite C - anti-HCV",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Rastreamento pré-biológicos AR - risco reativação",
+          "normalized_name": "Anti-HCV"
+        },
+        {
+          "name": "HIV1 ou HIV2, pesquisa de anticorpos",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Rastreamento pré-biológicos AR - imunossupressão",
+          "normalized_name": "HIV Sorologia"
+        },
+        {
+          "name": "Ensaio para dosagem da liberação de interferon gama (IGRA)",
+          "type": "Laboratório (Microbiologia)",
+          "indication": "Triagem TB latente pré-biológicos AR",
+          "normalized_name": "IGRA (Tuberculose)"
+        },
+        {
+          "name": "Colesterol (HDL)",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Estratificação risco CV em AR ≥40 anos",
+          "normalized_name": "Colesterol HDL"
+        },
+        {
+          "name": "Colesterol (LDL)",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Estratificação risco CV em AR ≥40 anos",
+          "normalized_name": "Colesterol LDL"
+        },
+        {
+          "name": "Colesterol total",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Estratificação risco CV em AR ≥40 anos",
+          "normalized_name": "Colesterol Total"
+        },
+        {
+          "name": "Triglicerídeos",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Estratificação risco CV em AR ≥40 anos",
+          "normalized_name": "Triglicerídeos"
+        },
+        {
+          "name": "Tireoestimulante, hormônio (TSH)",
+          "type": "Laboratório (Endocrinologia)",
+          "indication": "Exclusão disfunção tireoidiana em fadiga",
+          "normalized_name": "TSH"
+        },
+        {
+          "name": "T4 livre",
+          "type": "Laboratório (Endocrinologia)",
+          "indication": "Exclusão disfunção tireoidiana em fadiga",
+          "normalized_name": "T4 Livre"
+        },
+        {
+          "name": "Ferritina",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Exclusão deficiência ferro em fadiga",
+          "normalized_name": "Ferritina"
+        },
+        {
+          "name": "Ferro sérico",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Exclusão deficiência ferro em fadiga",
+          "normalized_name": "Ferro Sérico"
+        },
+        {
+          "name": "Vitamina B12",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Exclusão deficiência B12 em fadiga/neuropatia",
+          "normalized_name": "Vitamina B12"
+        },
+        {
+          "name": "Vitamina \"D\" 25 HIDROXI",
+          "type": "Laboratório (Bioquímica)",
+          "indication": "Exclusão deficiência vitamina D em dor difusa",
+          "normalized_name": "Vitamina D (25-OH)"
+        },
+        {
+          "name": "Fator antinúcleo, (FAN)",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Exclusão doença autoimune em sintomas sistêmicos",
+          "normalized_name": "FAN (ANA)"
+        },
+        {
+          "name": "Densitometria óssea - rotina: coluna e fêmur",
+          "type": "Imagem (Densitometria)",
+          "indication": "Osteoporose induzida por glicocorticoides (GIOP)",
+          "normalized_name": "Densitometria Óssea (DMO)"
+        },
+        {
+          "name": "Radiografia da mão e punho - carpal",
+          "type": "Imagem (Radiologia)",
+          "indication": "Documentar dano estrutural basal - suspeita AR",
+          "normalized_name": "RX Mãos e Punhos"
+        },
+        {
+          "name": "RM - Articular (ombro)",
+          "type": "Imagem (Ressonância)",
+          "indication": "Suspeita ruptura manguito/capsulite refratária",
+          "normalized_name": "RM Ombro"
+        },
+        {
+          "name": "RX - Articulação escapuloumeral (ombro)",
+          "type": "Imagem (Radiologia)",
+          "indication": "Dor crônica ombro - exclusão artrose, calcificações",
+          "normalized_name": "RX Ombro"
+        },
+        {
+          "name": "US - Articular (ombro)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "Suspeita ruptura manguito - 3 critérios positivos",
+          "normalized_name": "US Ombro"
+        },
+        {
+          "name": "US - Articular (punho)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "De Quervain - diagnóstico duvidoso ou guia infiltração",
+          "normalized_name": "US Punho"
+        },
+        {
+          "name": "US - Articular (cotovelo)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "Epicondilite refratária >3 meses",
+          "normalized_name": "US Cotovelo"
+        },
+        {
+          "name": "RX - Joelho",
+          "type": "Imagem (Radiologia)",
+          "indication": "Osteoartrite joelho - diagnóstico incerto",
+          "normalized_name": "RX Joelho"
+        },
+        {
+          "name": "US - Articular (dedo)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "Dedo em gatilho - dúvida diagnóstica ou guia infiltração",
+          "normalized_name": "US Dedo"
+        },
+        {
+          "name": "US - Articular (quadril)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "Síndrome grande trocânter - diagnóstico/guia infiltração",
+          "normalized_name": "US Quadril"
+        },
+        {
+          "name": "RM - Articular (quadril)",
+          "type": "Imagem (Ressonância)",
+          "indication": "Síndrome grande trocânter refratária >3 meses",
+          "normalized_name": "RM Quadril"
+        },
+        {
+          "name": "US - Articular (joelho)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "Bursite anserina - diagnóstico/guia infiltração",
+          "normalized_name": "US Joelho"
+        },
+        {
+          "name": "US - Articular (pé)",
+          "type": "Imagem (Ultrassonografia)",
+          "indication": "Fasciíte plantar persistente >6-12 semanas",
+          "normalized_name": "US Pé"
+        },
+        {
+          "name": "RX - Tórax - 2 incidências",
+          "type": "Imagem (Radiologia)",
+          "indication": "Rastreio TB pré-biológicos AR",
+          "normalized_name": "RX Tórax"
+        },
+        {
+          "name": "RX - Pé",
+          "type": "Imagem (Radiologia)",
+          "indication": "Fasciíte plantar - diferencial fratura/esporão",
+          "normalized_name": "RX Pé"
+        },
+        {
+          "name": "Punção articular diagnóstica ou terapêutica",
+          "type": "Procedimento",
+          "indication": "Suspeita artrite séptica vs gota - monoartrite febril",
+          "normalized_name": "Punção Articular"
+        },
+        {
+          "name": "TC - Segmento apendicular (braço ou antebraço ou mão ou coxa ou perna ou pé) - unilateral",
+          "type": "Imagem (Tomografia)",
+          "indication": "Gota duvidosa - detecção depósitos urato",
+          "normalized_name": "TC Dupla Energia (Gota)"
+        },
+        {
+          "name": "Polissonografia de noite inteira (PSG)",
+          "type": "Funcional (Neurofisiologia)",
+          "indication": "Distúrbio sono grave em fibromialgia - suspeita apneia",
+          "normalized_name": "Polissonografia"
+        },
+        {
+          "name": "Tomografia de coerência óptica",
+          "type": "Funcional (Oftalmologia)",
+          "indication": "Rastreio retinopatia por hidroxicloroquina",
+          "normalized_name": "OCT (Oftalmo)"
+        },
+        {
+          "name": "Campimetria computadorizada",
+          "type": "Funcional (Oftalmologia)",
+          "indication": "Rastreio retinopatia por hidroxicloroquina",
+          "normalized_name": "Campimetria"
+        },
+        {
+          "name": "Fundoscopia sob medríases",
+          "type": "Funcional (Oftalmologia)",
+          "indication": "Rastreio retinopatia por hidroxicloroquina",
+          "normalized_name": "Fundoscopia"
+        },
+        {
+          "name": "HLA-B27 - pesquisa",
+          "type": "Laboratório (Imunologia)",
+          "indication": "Suspeita espondiloartrite axial - critérios ASAS",
+          "normalized_name": "HLA-B27"
+        },
+        {
+          "name": "RM - Articulações sacroilíacas",
+          "type": "Imagem (Ressonância)",
+          "indication": "Suspeita espondiloartrite axial - detecta sacroiliíte precoce",
+          "normalized_name": "RM Sacroilíacas"
+        },
+        {
+          "name": "RX - Bacia",
+          "type": "Imagem (Radiologia)",
+          "indication": "Avaliação sacroilíacas - espondiloartrite estabelecida",
+          "normalized_name": "RX Bacia (Sacroilíacas)"
+        },
+        {
+          "name": "Cultura - líquido sinovial",
+          "type": "Laboratório (Microbiologia)",
+          "indication": "Artrite séptica - identificação agente etiológico",
+          "normalized_name": "Cultura Líquido Sinovial"
+        },
+        {
+          "name": "Bacterioscopia (Gram) - líquido sinovial",
+          "type": "Laboratório (Microbiologia)",
+          "indication": "Artrite séptica - resultado rápido",
+          "normalized_name": "Gram Líquido Sinovial"
+        }
+      ],
+      "treatments": [
+        {
+          "name": "Naproxeno 550mg",
+          "type": "Medicamento (AINE)",
+          "indication": "Dor articular/inflamatória (primeira linha)"
+        },
+        {
+          "name": "Paracetamol 750mg",
+          "type": "Medicamento (Analgésico)",
+          "indication": "Dor articular (alternativa segura em DRC ou alergia a AINEs)"
+        },
+        {
+          "name": "Metotrexato 2,5mg",
+          "type": "Medicamento (DMARD sintético)",
+          "indication": "Artrite Reumatoide (primeira linha)"
+        },
+        {
+          "name": "Leflunomida 20mg",
+          "type": "Medicamento (DMARD sintético)",
+          "indication": "Artrite Reumatoide (alternativa ao MTX ou em combinação)"
+        },
+        {
+          "name": "Sulfassalazina 500mg",
+          "type": "Medicamento (DMARD sintético)",
+          "indication": "Artrite Reumatoide (combinação)"
+        },
+        {
+          "name": "Hidroxicloroquina 400mg",
+          "type": "Medicamento (Antimalárico/DMARD)",
+          "indication": "Artrite Reumatoide leve ou em combinação"
+        },
+        {
+          "name": "Prednisolona 20mg",
+          "type": "Medicamento (Corticoide)",
+          "indication": "Ponte terapêutica para AR (dose baixa)"
+        },
+        {
+          "name": "Ácido Fólico 5mg",
+          "type": "Medicamento (Suplemento)",
+          "indication": "Redução de toxicidade do Metotrexato"
+        },
+        {
+          "name": "Colchicina 0,5mg",
+          "type": "Medicamento (Antigotoso)",
+          "indication": "Crise aguda de Gota (primeira linha)"
+        },
+        {
+          "name": "Alopurinol 100mg",
+          "type": "Medicamento (Urato-redutor)",
+          "indication": "Gota crônica (≥2 crises/ano ou tofos)"
+        },
+        {
+          "name": "Benzobromarona 50mg",
+          "type": "Medicamento (Uricosúrico)",
+          "indication": "Gota crônica (alternativa ao Alopurinol)"
+        },
+        {
+          "name": "Amitriptilina 25mg",
+          "type": "Medicamento (Antidepressivo tricíclico)",
+          "indication": "Fibromialgia (dor + sono)"
+        },
+        {
+          "name": "Duloxetina 60mg",
+          "type": "Medicamento (Antidepressivo IRSN)",
+          "indication": "Fibromialgia (dor intensa ou depressão)"
+        },
+        {
+          "name": "Pregabalina 150mg",
+          "type": "Medicamento (Anticonvulsivante)",
+          "indication": "Fibromialgia (dor neuropática e distúrbio sono)"
+        },
+        {
+          "name": "Gabapentina 300mg",
+          "type": "Medicamento (Anticonvulsivante)",
+          "indication": "Fibromialgia (alternativa à Pregabalina)"
+        },
+        {
+          "name": "Ciclobenzaprina 10mg",
+          "type": "Medicamento (Relaxante muscular)",
+          "indication": "Fibromialgia (componente espástico e distúrbio do sono)"
+        },
+        {
+          "name": "Tramadol 50mg",
+          "type": "Medicamento (Analgésico opioide)",
+          "indication": "Dor refratária em fibromialgia/OA (reserva)"
+        },
+        {
+          "name": "Sulfato de Condroitina",
+          "type": "Medicamento (Condroprotector)",
+          "indication": "Osteoartrite de mãos"
+        },
+        {
+          "name": "Carbonato de Cálcio 500mg + Vitamina D 400UI",
+          "type": "Medicamento (Suplemento)",
+          "indication": "Prevenção de Osteoporose induzida por Glicocorticoides (GIOP)"
+        },
+        {
+          "name": "Omeprazol 20mg",
+          "type": "Medicamento (IBP)",
+          "indication": "Gastroproteção em pacientes de risco usando AINEs"
+        },
+        {
+          "name": "Fisioterapia",
+          "type": "Encaminhamento",
+          "indication": "Reabilitação de lesões de partes moles (ombro, cotovelo, quadril)"
+        },
+        {
+          "name": "Psicologia/TCC",
+          "type": "Encaminhamento",
+          "indication": "Fibromialgia - manejo de dor crônica e estratégias de enfrentamento"
+        },
+        {
+          "name": "Reumatologia",
+          "type": "Encaminhamento",
+          "indication": "Suspeita de AR, Espondiloartrite, Artrite Psoriásica"
+        },
+        {
+          "name": "Ortopedia",
+          "type": "Encaminhamento",
+          "indication": "Lesões de partes moles refratárias ou necessidade de procedimentos"
+        }
+      ],
+      "red_flags": [
+        {
+          "flag": "Suspeita de Artrite Séptica (Monoartrite aguda + Febre + Sinais inflamatórios locais intensos)",
+          "urgency": "URGÊNCIA MÉDICA",
+          "action": "Encaminhar EMERGÊNCIA HOJE. Punção articular URGENTE (Gram + Cultura + Contagem celular) + Hemocultura + Antibiótico IV imediato."
+        },
+        {
+          "flag": "Uveíte (olho vermelho doloroso) em Espondiloartrite",
+          "urgency": "URGENTE",
+          "action": "Procurar oftalmologista URGENTE."
+        },
+        {
+          "flag": "Dor piora muito ou não melhora em 2-3 semanas (Manguito Rotador)",
+          "urgency": "ALERTA",
+          "action": "Procurar médico imediatamente."
+        },
+        {
+          "flag": "Perda total da força no braço ou Dormência/formigamento (Manguito Rotador)",
+          "urgency": "ALERTA",
+          "action": "Procurar médico imediatamente."
+        },
+        {
+          "flag": "Sinais de alerta em Fibromialgia (Sinovite objetiva, febre, perda peso significativa, fraqueza muscular assimétrica, rigidez matinal >1 hora, sintomas neurológicos focais)",
+          "urgency": "ALERTA",
+          "action": "Reavaliar diagnóstico (excluir doenças autoimunes/neurológicas)."
+        },
+        {
+          "flag": "Contraindicações absolutas para DMARDs (Gravidez/lactação, Insuficiência Hepática, Alergia)",
+          "urgency": "CRÍTICO",
+          "action": "Bloquear prescrição e buscar alternativa (ex: Leflunomida no lugar de MTX)."
+        }
+      ],
+      "signs_symptoms": [
+        "Idade do paciente (anos)",
+        "Sexo",
+        "Dor articular ou musculoesquelética",
+        "Localização da dor (Mãos/punhos, Ombros, Cotovelos, Quadris, Joelhos, Tornozelos/pés, Dor difusa, Coluna)",
+        "Duração dos sintomas (Agudo <6 semanas, Crônico >6 semanas)",
+        "Número de articulações envolvidas (Monoarticular, Oligoarticular, Poliarticular)",
+        "Dor com característica inflamatória (Rigidez >30min, melhora com movimento)",
+        "Sintomas sistêmicos (Fadiga, Febre, Distúrbio do sono, Perda de peso)",
+        "Queixa principal não articular (Fadiga isolada, Fenômeno de Raynaud, Lesões cutâneas, Sintomas sicca)",
+        "Sinais de infecção local (Calor, Rubor, Edema, Derrame articular)",
+        "Fatores de risco para artrite séptica (Prótese, Imunossupressão, Diabetes, Drogas IV, Infecção recente)",
+        "Duração da rigidez matinal (Curta <30min, Moderada 30-60min, Prolongada >60min)",
+        "Padrão de envolvimento articular (Simétrico, Assimétrico)",
+        "Envolvimento de metacarpofalângicas (MCPs)",
+        "Características da dor lombar (Início insidioso, Melhora com exercício, Não melhora com repouso, Dor noturna)",
+        "Manifestações extra-articulares (Uveíte, Psoríase, DII, Dactilite, Entesite)",
+        "História familiar de espondiloartrite/psoríase/DII",
+        "Presença de lesões psoriásicas",
+        "Alterações ungueais (Pitting, Onicólise, Hiperqueratose)",
+        "Dactilite presente",
+        "História familiar de psoríase",
+        "Localização específica da gota (Hálux/MTF, Tornozelo, Joelho)",
+        "Frequência de crises de gota",
+        "Presença de tofos",
+        "Áreas corporais com dor (WPI - 12 áreas)",
+        "Sono não reparador",
+        "Características da dor OA (Piora atividade, Melhora repouso, Rigidez curta, Dor fim dia)",
+        "Presença de crepitação",
+        "Dor ao elevar o braço",
+        "Dor na rotação externa do ombro",
+        "Dor noturna no ombro",
+        "Restrição global dos movimentos do ombro",
+        "Evolução em fases (Capsulite)",
+        "Dor à palpação do epicôndilo lateral",
+        "Dor ao estender o punho contra resistência",
+        "Dor na região radial do punho",
+        "Teste de Finkelstein positivo",
+        "Travamento ou 'clique' no dedo",
+        "Dor na base do dedo",
+        "Dor lateral no quadril",
+        "Dor ao deitar-se sobre o lado afetado",
+        "Dor ao subir escadas",
+        "Dor medial e inferior do joelho",
+        "Sensibilidade pata de ganso",
+        "Dor na região plantar medial do pé",
+        "Dor mais intensa nos primeiros passos pela manhã",
+        "Dor ao iniciar a marcha após repouso",
+        "Comorbidades (Diabetes, Hipertensão, Doença renal, Doença cardiovascular, Obesidade)",
+        "Medicamentos em uso (AINEs, Corticoides, DMARDs, Biológicos)",
+        "Duração do uso de corticoides (meses)",
+        "Alergias medicamentosas",
+        "Contraindicações relativas (Úlcera péptica, Insuficiência renal/hepática, Gravidez/lactação)"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Structural",
+      "description": "Adicionar arestas de saída para os nós 'node-sem-dor-articular', 'node-investigacao-septica', 'node-investigacao-espondiloartrite' e 'node-investigacao-artrite-psoriasica'. Todos os caminhos devem convergir para 'conduta-final-reumatologia' ou para um nó de alerta/encaminhamento imediato.",
+      "impact": "Corrige dead-end paths e garante que todas as informações coletadas cheguem à conduta final."
+    },
+    {
+      "priority": "High",
+      "category": "Safety",
+      "description": "Implementar lógica de bloqueio de prescrição de AINEs (Naproxeno) e DMARDs (Metotrexato, Leflunomida) dentro do nó de conduta, utilizando as variáveis de contraindicação ('alergia_aines', 'insuficiencia_renal', 'gravidez_lactacao', etc.) de forma explícita para garantir a segurança do paciente.",
+      "impact": "Aumenta a segurança do paciente, prevenindo prescrições inadequadas em casos de alto risco (DRC, úlcera, gravidez)."
+    },
+    {
+      "priority": "High",
+      "category": "Clinical Content",
+      "description": "Expandir a condição de visibilidade do nó 'node-investigacao-ar' para incluir oligoartrite inflamatória crônica, que pode ser AR inicial ou Artrite Psoriásica. Sugestão: ('oligoarticular' in numero_articulacoes or 'poliarticular' in numero_articulacoes) and caracteristica_inflamatoria == true and 'cronico' in duracao_sintomas.",
+      "impact": "Melhora a sensibilidade do protocolo para detecção precoce de artrites inflamatórias."
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Content",
+      "description": "Adicionar um nó de investigação para Lúpus Eritematoso Sistêmico (LES) e Síndrome de Sjögren, ativado por 'Fenômeno de Raynaud' ou 'Sintomas sicca' no nó 'node-sem-dor-articular' ou por poliartrite inflamatória com sintomas sistêmicos (febre, fadiga).",
+      "impact": "Cobre diagnósticos diferenciais importantes em reumatologia que atualmente não possuem investigação dedicada."
+    },
+    {
+      "priority": "Medium",
+      "category": "Structural",
+      "description": "Revisar a condição de ativação do nó 'node-historia-medicamentos' para garantir que ele seja alcançado por todos os caminhos de investigação de partes moles (manguito, epicondilite, etc.) e não apenas pelos caminhos de doenças inflamatórias/gota. Isso garante a coleta de comorbidades e medicamentos para todos os pacientes.",
+      "impact": "Garante a coleta de dados de segurança e histórico médico para todos os pacientes, independentemente do diagnóstico principal."
+    },
+    {
+      "priority": "Low",
+      "category": "Question Optimization",
+      "description": "No nó 'node-triagem-sintomas', a pergunta Q-sintomas-sistemicos-triagem deve ter a opção 'Nenhum sintoma sistêmico' como exclusiva, mas não pré-selecionada, para evitar que o usuário ignore a questão. Se for pré-selecionada, deve ser desmarcada automaticamente ao selecionar qualquer outra opção.",
+      "impact": "Melhora a precisão da coleta de dados de sintomas sistêmicos."
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\amil_ficha_reumato_v0.2.0_FIXED_20251201_103057.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\playbook reumato.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 95.0,
+      "structural_quality": 70.0,
+      "safety_implementation": 85.0,
+      "overall_quality": 83.0
+    }
+  }
+}

@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\playbook reumato.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Implementar uma condição de visibilidade para o 'node-triagem-sintomas' baseada em 'dor_articular_presente == true' ou garantir que o fluxo avance para um nó de 'dor não reumatológica' se a dor estiver ausente. Atualmente, o nó é sempre visível, mas as perguntas internas dependem da dor, criando um fluxo confuso se a dor for 'false'.
+2. [High] Adicionar um nó de investigação para Espondiloartrites (EsA), pois o protocolo atual não cobre especificamente dor lombar inflamatória, sacroileíte ou entesite, que são diferenciais cruciais em reumatologia. A triagem atual foca em dor articular periférica e difusa.
+3. [High] Criar um nó de 'Dor Não Inflamatória/Mecânica' genérico (Nível 2) que consolide as investigações de partes moles (Manguito, Epicondilite, De Quervain, etc.) e Osteoartrite. Isso simplificaria a lógica de transição, que atualmente exige 9 arestas sequenciais para cobrir todas as possibilidades de dor localizada.
+4. [Medium] Revisar a pergunta Q-sintomas-sistemicos-triagem. A opção 'nenhum_sistemico' é marcada como 'preselected: true' e 'exclusive: true'. Se o usuário selecionar 'fadiga', 'nenhum_sistemico' deve ser desmarcado automaticamente. Garantir que a lógica de exclusividade funcione corretamente para evitar inconsistências na triagem de fibromialgia.
+5. [Medium] Adicionar a indicação de Bisfosfonato (e.g., Alendronato) no bloco de medicamentos, condicionada à GIOP (duracao_corticoides_meses >= 3 and age >= 50) e alto risco FRAX (conforme ACR 2022), complementando a prescrição de Cálcio + Vitamina D.
+6. [Low] Simplificar a condição de visibilidade do 'node-historia-medicamentos' para torná-la mais legível e modular. Ex: Criar variáveis intermediárias (e.g., is_high_risk_ar, is_chronic_gout) para melhorar a manutenção da lógica complexa.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914_20251129_181212.json
+============================================================

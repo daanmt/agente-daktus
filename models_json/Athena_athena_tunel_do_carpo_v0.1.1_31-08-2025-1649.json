@@ -1,0 +1,1170 @@
+{
+  "metadata": {
+    "company": "Athena",
+    "name": "athena_tunel_do_carpo",
+    "version": "0.1.1"
+  },
+  "nodes": [
+    {
+      "id": "node-1",
+      "type": "custom",
+      "position": {
+        "x": 900,
+        "y": 100
+      },
+      "data": {
+        "label": "Termo de ciência",
+        "descricao": "<p><strong>Toda informação inserida neste atendimento será gravada no prontuário e não poderá ser alterada após a conclusão do mesmo.</strong></p><p><strong>&nbsp;</strong></p><p><strong>Este protocolo é uma ferramenta institucional de registro junto ao prontuário do paciente. Em concordância com a resolução do CFM nº 1.638/2002, este documento possui valor médico legal.</strong></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P1",
+            "nodeId": "node-1",
+            "titulo": "Termo de compromisso",
+            "descricao": "Ciente de que as informações preenchidas serão registradas no prontuário.",
+            "select": "F",
+            "options": [
+              {
+                "id": "ciente",
+                "label": "Ciente de que as informações preenchidas neste protocolo serão registradas no prontuário.",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "36eee02b-d7d7-405d-897a-6324bdaf691d"
+              }
+            ],
+            "opcional": false,
+            "condicional": "visivel",
+            "uid": "ciencia"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-2",
+      "type": "custom",
+      "position": {
+        "x": 1800,
+        "y": 100
+      },
+      "data": {
+        "label": "Perfil do paciente",
+        "descricao": "Informações sobre o paciente.",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P2",
+            "nodeId": "node-2",
+            "titulo": "<p>Tipo de consulta:</p>",
+            "descricao": "Primeira consulta ou retorno?",
+            "select": "E",
+            "options": [
+              {
+                "id": "primeiro_atendimento",
+                "label": "Primeira consulta",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "f5fdcc20-f91a-48c2-b81a-49f515a9aad6"
+              },
+              {
+                "id": "retorno_atendimento",
+                "label": "Consulta de retorno",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "90d26500-80e1-41c4-87f1-384ee378332a"
+              }
+            ],
+            "opcional": false,
+            "uid": "motivo_consulta",
+            "condicional": "visivel"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-3",
+      "type": "custom",
+      "position": {
+        "x": 2700,
+        "y": 100
+      },
+      "data": {
+        "label": "Anamnese - Sintomas",
+        "condicao": "",
+        "descricao": "<p>Perguntas sobre os sintomas relatados pelo paciente.</p><p></p><p>Obs.: atentar para paresia ou parestesia em membros, sobretudo em <strong>polegar, dedo indicador e médio.</strong></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P3",
+            "nodeId": "node-3",
+            "titulo": "<p>Sintomas atuais do(a) paciente:</p>",
+            "descricao": "Quais são os sintomas atuais? Dor, parestesia?",
+            "select": "E",
+            "options": [
+              {
+                "iid": "d48ecd9b-7dc6-49b6-bad8-25f4390e5cbc",
+                "id": "assintomatico",
+                "label": "Paciente assintomático",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "id": "dor_msd",
+                "label": "Dor em MSD",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "20baeb16-6372-49ec-bfe2-0d19d2a36af6"
+              },
+              {
+                "iid": "c27c58bf-a1f2-4109-a816-25bbe5affbb3",
+                "id": "dor_mse",
+                "label": "Dor em MSE",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "id": "parestesia",
+                "label": "Parestesia",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "2ff43155-8016-49b4-ac2f-ffd16c94ae11"
+              },
+              {
+                "iid": "edd816ef-cffe-45e6-8dc9-722622cdbc0c",
+                "id": "paresia",
+                "label": "Paresia",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": false,
+            "uid": "sintomas_atuais",
+            "condicional": "visivel"
+          },
+          {
+            "id": "P4",
+            "nodeId": "node-3",
+            "titulo": "<p>Tempo de dor (desde o início - em dias):</p>",
+            "descricao": "Tempo desde o início dos sintomas?",
+            "select": "A",
+            "min": 1,
+            "max": 1000,
+            "opcional": true,
+            "options": [],
+            "uid": "tempo_sintoma",
+            "condicional": "visivel"
+          },
+          {
+            "id": "P03623647-3adc-4daa-8de4-cf3c7c58a977",
+            "nodeId": "node-3",
+            "uid": "intensidade_dor",
+            "titulo": "<p>Intensidade de dor (de 0 a 10):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "A",
+            "options": [],
+            "max": 10,
+            "min": 0,
+            "opcional": true
+          },
+          {
+            "id": "Pe8a3337e-4e0a-4858-845b-c21affe29b89",
+            "nodeId": "node-3",
+            "uid": "associados",
+            "titulo": "<p>Sintomas associados:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "E",
+            "options": [
+              {
+                "iid": "ed149d3a-dc19-487e-8c02-3db7e5a2afd9",
+                "id": "piora_noite",
+                "label": "Piora dos sintomas à noite",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f6e8295e-68d3-438c-b50c-501ca5de6c7e",
+                "id": "rigidez_matinal",
+                "label": "Rigidez matinal",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "a24cdd40-922d-4bc6-ad59-855d2ed71240",
+                "id": "palidez",
+                "label": "Palidez",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "105211d6-7d31-490c-afc0-00de50e15595",
+                "id": "rubor",
+                "label": "Rubor",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "9dad46ab-d28c-4a9f-834b-baa7156ec461",
+                "id": "cianose",
+                "label": "Cianose",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "05674941-e816-426f-aa04-0404c79e807d",
+                "id": "edema",
+                "label": "Edema",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "ee1dbd4e-bcee-4279-a617-e50e6646fd10",
+                "id": "deformidades_articulares",
+                "label": "Deformidades articulares",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "7679edcf-f70e-4e31-acfb-7c8a2d804e83",
+                "id": "none_sintomas_associados",
+                "label": "Sem sintomas associados",
+                "preselected": true,
+                "exclusive": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-4",
+      "type": "custom",
+      "position": {
+        "x": 3600,
+        "y": 100
+      },
+      "data": {
+        "label": "Anamnese - Fatores de Risco",
+        "condicao": "'primeiro_atendimento' in motivo_consulta",
+        "descricao": "Perguntas sobre comorbidades e histórico do paciente.",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P5",
+            "nodeId": "node-4",
+            "titulo": "<p>Comorbidades do paciente:</p>",
+            "descricao": "O paciente tem alguma das seguintes comorbidades?",
+            "select": "E",
+            "options": [
+              {
+                "iid": "1a28c9b6-309a-46b8-9fc9-4671da44ac99",
+                "id": "sem_comorbidade",
+                "label": "Sem comorbidade",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "be06224a-08cd-4411-832d-340281e02ecf",
+                "id": "dm1",
+                "label": "Diabetes mellitus tipo 1",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "3c389862-406a-4e11-9e9d-c5e772364d21",
+                "id": "dm2",
+                "label": "Diabetes mellitus tipo 2",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "6136a142-6af0-4730-84b0-394b9d114fd8",
+                "id": "hipotireoidismo",
+                "label": "Hipotireoidismo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e9b2c38f-3c29-4c2d-b5f2-38e04893493f",
+                "id": "obesidade",
+                "label": "Obesidade",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "609f66dc-d5b6-4b4d-897f-72e99380af6b",
+                "id": "sd_metabolica",
+                "label": "Síndrome metabólica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "9794b119-7221-4d85-a5bf-df3fc95039fe",
+                "id": "artrite_reumatoide",
+                "label": "Artrite reumatoide",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d56641fe-5df8-4a29-bbad-cb53f2657ca1",
+                "id": "lupus",
+                "label": "Lúpus eritematoso sistêmico",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "5bd996c3-3da8-416f-9aca-5f12e1552b46",
+                "id": "artrite_psoriase",
+                "label": "Artrite psoriásica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f8ef59ad-a361-4e31-8cb4-4d53d355f1d7",
+                "id": "amiloidose",
+                "label": "Amiloidose",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "ceaa9903-5102-46b0-bd4c-09d388c9a5ea",
+                "id": "gestante",
+                "label": "Gestantes",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f7612dcf-03d4-435a-8992-9784701f6d12",
+                "id": "puerperio",
+                "label": "Puerpério",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "c794f34e-9683-4bbb-810b-64e31929bffc",
+                "id": "acromegalia",
+                "label": "Acromegalia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f6763310-ee4f-415d-a94d-1159e7e7c6f8",
+                "id": "drc_dialitico",
+                "label": "DRC dialítico",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "2c591b5a-353d-4a5c-a455-6019dc1a8329",
+                "id": "historia_trauma_mao",
+                "label": "Fraturas ou trauma em mãos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b9bb6770-9def-4f6f-a2db-4173e45f29c9",
+                "id": "cisto_sinovial",
+                "label": "Cisto sinovial",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b2f243e8-da3c-41b0-b3bc-450a3bee8640",
+                "id": "idoso",
+                "label": "Paciente idoso",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": false,
+            "uid": "comorbidades",
+            "condicional": "visivel"
+          },
+          {
+            "id": "P5a4329a2-93ed-4e87-b4aa-a09c5b327f11",
+            "nodeId": "node-4",
+            "uid": "tabaco",
+            "titulo": "<p>O paciente fuma? Se sim, quantificar.</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "B",
+            "options": [],
+            "opcional": true,
+            "max": 100,
+            "min": 0
+          },
+          {
+            "id": "P221eefd2-c2d7-4520-a23c-1a46b6fbd1e2",
+            "nodeId": "node-4",
+            "uid": "historia_ocupacional",
+            "titulo": "<p>História de atividade repetitiva, carga, vibração, etc.?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P3c2ca0b6-4e23-4189-92b6-fcdb31ed6f8c",
+            "nodeId": "node-4",
+            "uid": "antecedentes_cirurgicos",
+            "titulo": "<p>Antecedentes cirúrgicos:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P8d4b081a-8ffa-4816-8dc3-c32dd55b5966",
+            "nodeId": "node-4",
+            "uid": "internou",
+            "titulo": "<p>Existe histórico de internações prévias?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pf78da0c5-0c0d-4c12-8afe-4c897967def6",
+            "nodeId": "node-4",
+            "uid": "complemento_historia",
+            "titulo": "<p>Complemento da história clínica, antecedentes e medicações:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "(internou == True) or (antecedentes_cirurgicos == True)",
+            "select": "B",
+            "options": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "52484c01-e863-4dca-a875-c3cc0502feb9",
+      "type": "custom",
+      "position": {
+        "x": 4500,
+        "y": 100
+      },
+      "data": {
+        "label": "Reavaliação",
+        "condicao": "'retorno_atendimento' in motivo_consulta",
+        "descricao": "<p>Reavaliação do paciente.</p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Pf21c76b3-5b8e-4633-ae9d-2d8e5836d6a7",
+            "nodeId": "52484c01-e863-4dca-a875-c3cc0502feb9",
+            "uid": "tratamento_realizado",
+            "titulo": "<p>Paciente realizou algum tratamento?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pbdc7536f-3b4d-4963-bc1e-71f6b066300f",
+            "nodeId": "52484c01-e863-4dca-a875-c3cc0502feb9",
+            "uid": "tratamento_fisioterapia",
+            "titulo": "<p>Paciente realizou tratamento fisioterápico?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P84390cb8-d1c7-4484-8dbd-67b7a1950a2d",
+            "nodeId": "52484c01-e863-4dca-a875-c3cc0502feb9",
+            "uid": "tratamento_adesao",
+            "titulo": "<p>Adesão ao tratamento proposto:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "tratamento_realizado == True",
+            "select": "C",
+            "options": [],
+            "defaultValue": "true"
+          },
+          {
+            "id": "P7d92fa8e-97e5-4038-a4dc-b0ddd7e0b39d",
+            "nodeId": "52484c01-e863-4dca-a875-c3cc0502feb9",
+            "uid": "tratamento_6_semanas",
+            "titulo": "<p>Tratamento conservador por mais de 6 semanas?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "tratamento_realizado == True",
+            "select": "C",
+            "options": [],
+            "defaultValue": "true"
+          }
+        ]
+      }
+    },
+    {
+      "id": "a3aed470-386f-40e4-80db-e08a5dcf3c33",
+      "type": "custom",
+      "position": {
+        "x": 5400,
+        "y": 100
+      },
+      "data": {
+        "label": "Exame físico",
+        "descricao": "Verificação dos sinais clínicos.",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P4f82bce3-c9bd-46e9-8130-3c2e8d40ae66",
+            "nodeId": "a3aed470-386f-40e4-80db-e08a5dcf3c33",
+            "uid": "local_dor",
+            "titulo": "<p>Localização principal da dor:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "any_selected(sintomas_atuais, 'dor_msd', 'dor_mse')",
+            "select": "E",
+            "options": [
+              {
+                "iid": "65954168-f280-4b1c-8dbd-0f51e056d524",
+                "id": "dor_punho_volar",
+                "label": "Dor em punho (volar, face palmar)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "fb54bacf-4efb-43b8-9562-9baa224be9f1",
+                "id": "dor_punho_radial",
+                "label": "Dor em punho (face radial, perto da estiloide radial)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "bd002f67-27c0-4ddd-b734-99e59b48a7ac",
+                "id": "dor_punho_ulnar",
+                "label": "Dor em punho (face ulnar)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "22418f95-5a57-4705-a332-c3f197eba15d",
+                "id": "dor_mao_dorso",
+                "label": "Dor em dorso da mão",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f023d3dd-ac18-4033-829d-e7b9a6e6e52a",
+                "id": "dor_mao_tenar",
+                "label": "Dor em região tenar (base do polegar, face palmar radial)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e8db0fdc-8d43-4f94-ba4d-e00d2bccb987",
+                "id": "dor_mao_hipotenar",
+                "label": "Dor em região hipotenar (base do 5º dedo)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "a355abb2-8b58-4511-947e-13067bb264ba",
+                "id": "dor_mao_antebraco",
+                "label": "Dor irradiada para antebraço",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "652c55ad-9ab4-46d7-aedd-518d5124c277",
+            "nodeId": "node-5",
+            "titulo": "<p>Teste de Tinel positivo?</p>",
+            "descricao": "O paciente apresenta o sinal de Tinel positivo?",
+            "select": "C",
+            "options": [
+              {
+                "id": "positivo",
+                "label": "Positivo",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "94467951-d799-442a-8431-1e90dac1a17f"
+              },
+              {
+                "id": "negativo",
+                "label": "Negativo",
+                "preselected": false,
+                "exclusive": false,
+                "iid": "d1e6c0e9-2b58-4620-8ae7-509a078633c8"
+              }
+            ],
+            "opcional": false,
+            "defaultValue": "false",
+            "uid": "teste_tinel",
+            "condicional": "visivel"
+          },
+          {
+            "id": "80af8c26-a73e-405f-b626-96c2c27d6c80",
+            "nodeId": "node-5",
+            "uid": "teste_phalen",
+            "titulo": "<p>Teste de Phalen positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pbe09df9d-706e-40e7-bc77-847d7eb80277",
+            "nodeId": "node-5",
+            "uid": "teste_phalen_reverso",
+            "titulo": "<p>Teste de Phalen reverso (ou da oração) positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P5f4eb530-1469-479e-863f-336c2a4d69a8",
+            "nodeId": "node-5",
+            "uid": "teste_durkan",
+            "titulo": "<p>Teste de Durkan positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P5c9aa622-5c30-442d-a7d4-16cd464081ad",
+            "nodeId": "node-5",
+            "uid": "teste_what",
+            "titulo": "<p>WHAT test positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pa14dbef3-2ae6-4b9c-8c9e-7e9407765a9d",
+            "nodeId": "node-5",
+            "uid": "teste_grind",
+            "titulo": "<p>Grind test positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P7147f44c-3142-4461-8674-daf11274e3cf",
+            "nodeId": "node-5",
+            "uid": "teste_froment",
+            "titulo": "<p>Teste de Froment positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pe2a8ce0f-ad2b-4924-9509-1edc6f12f050",
+            "nodeId": "node-5",
+            "uid": "teste_wartenberg",
+            "titulo": "<p>Teste de Wartenberg positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P03bbcee3-b5ee-43d2-8884-ef94107bf8b0",
+            "nodeId": "node-5",
+            "uid": "teste_finkelstein",
+            "titulo": "<p>Teste de Finkelstein positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P310138be-6b79-4d4a-b161-7948e486d940",
+            "nodeId": "node-5",
+            "uid": "teste_wrist_drop",
+            "titulo": "<p>Teste da queda do punho (wrist drop) positivo?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "58a15911-f2d4-43c6-a019-edcfe67e05c0",
+            "nodeId": "node-5",
+            "uid": "forca_alterada",
+            "titulo": "<p>Força muscular alterada?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "168649d8-f95b-4b13-9a94-1ef80f00677a",
+            "nodeId": "node-5",
+            "uid": "sensibilidade_alterada",
+            "titulo": "<p>Sensibilidade alterada?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P23859795-2818-426f-95c4-d2fee96cb3ad",
+            "nodeId": "a3aed470-386f-40e4-80db-e08a5dcf3c33",
+            "uid": "suspeita_efeito_massa",
+            "titulo": "<p>Suspeita de efeito de massa?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "C",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "summary-6b3065dc-832d-4963-9a49-9183966d1890",
+      "type": "summary",
+      "position": {
+        "x": 6300,
+        "y": 100
+      },
+      "data": {
+        "label": "Resumo do atendimento - direta",
+        "condicao": "",
+        "descricao": "<p>Paciente de xx anos, sexo xxx.</p><p></p><p>Perguntas+respostas na <strong>ordem preenchida.</strong></p><p><br>Cond_<strong>aparece: [ ] alternativa x em Pergunta y</strong></p><p></p><p>Informação 1: xxx</p><p>Informação 2: yyy</p><p>Informação 3: zzz</p><hr><p><strong>CTS-6 Evaluation Tool</strong></p><p></p><p>1. Parestesia + região tenar = 3.5 pontos</p><p></p><p>2. Parestesia + piora à noite = 4 pontos</p><p></p><p>3. Atrofia ou Paresia + região tenar = 5 pontos</p><p></p><p>4. Teste de Phalen Positivo = 5 pontos</p><p></p><p>5. Alteração na sensibilidade = 4.5 pontos</p><p></p><p>6. Teste de Tinel Positivo = 4 pontos<br><br>Se o escore é &gt; 12, a probabilidade de STC é aproximadamente 80%</p><p>Se o escore é &gt;5, a probabilidade de STC é aproximadamente 25%</p>",
+        "condicional": "visivel",
+        "clinicalExpressions": [
+          {
+            "id": "expr-5abdbd66-34f7-4ac7-9d53-211c630e9875",
+            "name": "pts1",
+            "formula": "'parestesia' in sintomas_atuais and 'dor_mao_tenar' in local_dor",
+            "description": "",
+            "template": "<p>Parestesia + tenar = 3.5 pontos</p>"
+          },
+          {
+            "id": "expr-ec4c1435-49c0-4339-b885-5ee8197d2de9",
+            "name": "pts2",
+            "formula": "'parestesia' in sintomas_atuais and 'piora_noite' in associados",
+            "description": "",
+            "template": "<p>Parestesia + piora à noite = 4 pontos</p>"
+          },
+          {
+            "id": "expr-dec0225d-bc1e-4682-a927-112fbddeae84",
+            "name": "pts3",
+            "formula": "('paresia' in sintomas_atuais or forca_alterada == True) and 'dor_mao_tenar' in local_dor",
+            "description": "",
+            "template": "<p>Atrofia / Paresia + tenar = 5 pontos</p>"
+          },
+          {
+            "id": "expr-6cad212a-13a3-413d-a93f-3c3bf3b6afc2",
+            "name": "pts4",
+            "formula": "teste_phalen == True",
+            "description": "",
+            "template": "<p>Teste de Phalen Positivo = 5 pontos </p>"
+          },
+          {
+            "id": "expr-e098dbb2-c206-4e42-84e3-cc4effac87b3",
+            "name": "pts5",
+            "formula": "(sensibilidade_alterada == True)",
+            "description": "",
+            "template": "<p>Alteração na sensibilidade = 4.5 pontos</p>"
+          },
+          {
+            "id": "expr-2928492d-81f9-4456-94ba-ee984e5baa4a",
+            "name": "pts6",
+            "formula": "teste_tinel == True",
+            "description": "",
+            "template": "<p>Teste de Tinel Positivo = 4 pontos </p>"
+          },
+          {
+            "id": "expr-da10f174-982e-4623-91df-9998a5568071",
+            "name": "total_cts6",
+            "formula": "pts1 + pts2 + pts3 + pts4 + pts5 + pts6",
+            "description": "",
+            "template": "<p></p>"
+          }
+        ],
+        "templateMarkdown": ""
+      }
+    },
+    {
+      "id": "node-7",
+      "type": "conduct",
+      "position": {
+        "x": 7200,
+        "y": 100
+      },
+      "data": {
+        "label": "Conduta",
+        "condicao": "",
+        "descricao": "<p><strong>Casos leves </strong>(sem déficit motor objetivo), considerar tratamento conservador e empírico, não sendo necessário exames de imagem nesse momento.</p><p></p><p><strong>Casos graves </strong>(déficit motor, sensitivo, radiculopatia, limitação importante do movimento, dentre outros), considerar exames de imagem para confirmação diagnóstica.</p>",
+        "conduta": "pausa",
+        "condutaDataNode": {
+          "orientacao": [
+            {
+              "id": "4fbc59b8-83e7-49e4-ad32-045485891635",
+              "nome": "Orientações gerais ao paciente",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<p><strong>Orientações ao paciente:</strong><br>O(a) Sr.(a) apresenta sintomas compatíveis com Síndrome do Túnel do Carpo. Este quadro pode melhorar com cuidados simples:</p><ul><li><p>Use a <strong>tala/órtese no punho durante a noite</strong>.</p></li><li><p>Evite esforços repetitivos e mantenha <strong>pausas frequentes</strong> durante atividades manuais.</p></li><li><p>Aplique <strong>gelo envolto em pano</strong> por 15 minutos em momentos de dor.</p></li><li><p><strong>Mantenha acompanhamento</strong> das suas condições de saúde (diabetes, tireoide, peso corporal).</p></li><li><p>Caso perceba <strong>fraqueza intensa, perda de força ou atrofia do polegar</strong>, procure o médico imediatamente.</p></li></ul>"
+            }
+          ],
+          "exame": [
+            {
+              "id": "96e751a5-3fdb-4a32-a7bc-f1de7f26d914",
+              "nome": "Tireoestimulante, hormônio (TSH) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'primeiro_atendimento' in motivo_consulta",
+              "condicionalExame": "domiciliar",
+              "codigo": "40316521",
+              "categoria": "Laboratoriais",
+              "cid": "G56",
+              "indicacao": "Sindrome tunel do carpo",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "82a6e9a3-8657-4872-a6a3-49d56e4c1c04",
+              "nome": "Creatinina - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'primeiro_atendimento' in motivo_consulta",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": "40301630",
+              "categoria": "Laboratoriais",
+              "cid": "G56",
+              "indicacao": "Sindrome tunel do carpo",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "f3d5216e-5cf8-4ffd-8c0c-23b1e239553f",
+              "nome": "Glicose - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'primeiro_atendimento' in motivo_consulta",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": "40302040",
+              "categoria": "Laboratoriais",
+              "cid": "G56",
+              "indicacao": "Sindrome tunel do carpo",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "bb4dba52-53cb-479b-b0a1-80489aedc7bb",
+              "nome": "Eletroneuromiografia de MMSS",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(comorbidades, 'gestante', 'puerperio') or ('paresia' in sintomas_atuais) or (forca_alterada == true) or ('piora_noite' in associados)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": "40103323",
+              "categoria": "Eletroneuromiografia",
+              "cid": "G56",
+              "indicacao": "Sd. tunel do carpo",
+              "alerta": "",
+              "material": "Imagem"
+            },
+            {
+              "id": "ac836535-b73b-412e-a19d-7cb46209f184",
+              "nome": "US - Articular (por articulação)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "(suspeita_efeito_massa == True)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": "40901220",
+              "categoria": "Exame de imagem",
+              "cid": "G56",
+              "indicacao": "Sindrome de tunel do carpo",
+              "alerta": "",
+              "material": "Imagem"
+            }
+          ],
+          "medicamento": [
+            {
+              "id": "560c0eba-cc54-4fbe-92b7-7d8d97c9888f",
+              "nome": "Ibuprofeno",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "AINE",
+              "nomeMed": "Ibuprofeno",
+              "posologia": "<p>600mg, 8/8h após refeições, por 05 dias.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "0255c2d8-bd69-4ca6-b3bc-f3f478f91670",
+              "nome": "Naproxeno",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "AINE",
+              "nomeMed": "Naproxeno",
+              "posologia": "<p>500mg, 12/12h após refeições, por 05 dias.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "c37261c1-de1f-478f-a3a1-6a4e32102882",
+              "nome": "Diclofenaco sódico",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "AINE",
+              "nomeMed": "Diclofenaco sódico",
+              "posologia": "<p>50mg, 8/8h após refeições, por 05 dias.</p>",
+              "mensagemMedico": "",
+              "via": "Oral ou IM"
+            },
+            {
+              "id": "c2e79e83-c1ab-4f8e-a688-2734529bc005",
+              "nome": "Meloxicam",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "AINE",
+              "nomeMed": "",
+              "posologia": "<p>10mg 1x/dia, por 05 dias.</p>",
+              "mensagemMedico": "",
+              "via": ""
+            },
+            {
+              "id": "4e206332-25b7-4bb6-9e5a-5c3d423787b3",
+              "nome": "Celecoxibe",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "AINE",
+              "nomeMed": "Celecoxibe",
+              "posologia": "<p>200mg, 12/12h, por 03 dias.</p>",
+              "mensagemMedico": "",
+              "via": ""
+            },
+            {
+              "id": "f4fdafed-d26e-40ac-91d7-c57c00ef1812",
+              "nome": "Prednisona",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "Glicocorticoide",
+              "nomeMed": "Prednisona",
+              "posologia": "<p>40mg, 1x/dia, por 5 dias.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "e31e196c-4057-4c7e-a537-b63d11998a16",
+              "nome": "Metilprednisolona",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "Glicocorticoide",
+              "nomeMed": "Metilprednisolona",
+              "posologia": "<p>20–40 mg, dose única agora.</p>",
+              "mensagemMedico": "",
+              "via": "Infiltração local"
+            },
+            {
+              "id": "f9b24fb5-5fbb-4e84-bdf0-1c48a92d2f9f",
+              "nome": "Triancinolona acetonida",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "Glicocorticoide",
+              "nomeMed": "Triancinolona acetonida",
+              "posologia": "<p>20–40 mg, dose única agora.</p>",
+              "mensagemMedico": "",
+              "via": "Infiltração local"
+            },
+            {
+              "id": "1d4af9da-0320-4dd5-9ceb-64eab2b58275",
+              "nome": "Piridoxina (Vitamina B6)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "Suplemento vitamínico",
+              "nomeMed": "",
+              "posologia": "<p>50–100 mg, 1x/dia.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "6a70442c-56dd-425a-927f-796c88e6b1b2",
+              "nome": "Gabapentina",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "Anticonvulsivante / modulador neuropático",
+              "nomeMed": "Gabapentina",
+              "posologia": "<p>150mg, 12/12h, titulando até 1800mg/dia.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "8cc7c0d6-8b4b-421d-ba1b-d35bb17bb6fb",
+              "nome": "Duloxetina",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": "",
+              "categoria": "Antidepressivo ISRN",
+              "nomeMed": "Duloxetina",
+              "posologia": "<p>60 mg, 1x/dia</p>",
+              "mensagemMedico": "<p></p>",
+              "via": "Oral"
+            }
+          ],
+          "encaminhamento": [
+            {
+              "id": "1",
+              "nome": "Fisioterapia",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "",
+              "cid": "CID G56",
+              "indicacao": "Tunel do carpo. Encaminhamento para exercícios de mobilidade e fortalecimento.",
+              "destino": "Fisioterapia"
+            },
+            {
+              "id": "2010a902-6a16-492f-bf8f-49c4e5bb55df",
+              "nome": "Endocrinologia",
+              "descricao": "<p>Encaminhamento, se houver diabetes ou hipotireoidismo descontrolado.</p>",
+              "condicional": "visivel",
+              "condicao": "selected_any(comorbidades, 'dm1', 'dm2', 'hipotireoidismo', 'obesidade', 'sd_metabolica')",
+              "indicacao": "Tunel do carpo + doença metabólica cmo fator de risco.",
+              "codigo": "",
+              "cid": "CID G56",
+              "destino": "Endocrinologia"
+            }
+          ],
+          "mensagem": [
+            {
+              "id": "58b7bfe8-007e-44f0-8d64-4065d6c0f2fd",
+              "nome": "Orientações gerais ao médico",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<p><strong>Protocolo clínico estruturado para STC:</strong></p><ul><li><p>Iniciar sempre com <strong>medidas não farmacológicas</strong> (órtese noturna, ergonomia, fisioterapia).</p></li><li><p>Considerar <strong>AINEs curtos</strong> apenas para controle de dor.</p></li><li><p><strong>Infiltração com corticoide</strong> indicada em falha do tratamento conservador ou se dor intensa.</p></li><li><p>Solicitar <strong>eletroneuromiografia</strong> em casos graves(confirmação diagnóstica), gestante ou puérpera e refratariedade.</p></li><li><p>Encaminhar para <strong>cirurgia de liberação do túnel do carpo</strong> em casos graves (déficit motor, atrofia, dor refratária) ou refratário.</p></li><li><p>Monitorar comorbidades (diabetes, tireoide, artrite reumatoide).</p></li></ul>",
+              "observacao": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-node-1-node-2",
+      "source": "node-1",
+      "target": "node-2",
+      "data": {}
+    },
+    {
+      "id": "e-node-2-node-3",
+      "source": "node-2",
+      "target": "node-3",
+      "data": {}
+    },
+    {
+      "id": "e-node-3-node-4",
+      "source": "node-3",
+      "target": "node-4",
+      "data": {}
+    },
+    {
+      "id": "e-node-4-52484c01-e863-4dca-a875-c3cc0502feb9",
+      "source": "node-4",
+      "target": "52484c01-e863-4dca-a875-c3cc0502feb9",
+      "data": {}
+    },
+    {
+      "id": "e-52484c01-e863-4dca-a875-c3cc0502feb9-a3aed470-386f-40e4-80db-e08a5dcf3c33",
+      "source": "52484c01-e863-4dca-a875-c3cc0502feb9",
+      "target": "a3aed470-386f-40e4-80db-e08a5dcf3c33",
+      "data": {}
+    },
+    {
+      "id": "e-a3aed470-386f-40e4-80db-e08a5dcf3c33-summary-6b3065dc-832d-4963-9a49-9183966d1890",
+      "source": "a3aed470-386f-40e4-80db-e08a5dcf3c33",
+      "target": "summary-6b3065dc-832d-4963-9a49-9183966d1890",
+      "data": {}
+    },
+    {
+      "id": "e-summary-6b3065dc-832d-4963-9a49-9183966d1890-node-7",
+      "source": "summary-6b3065dc-832d-4963-9a49-9183966d1890",
+      "target": "node-7",
+      "data": {}
+    }
+  ]
+};

@@ -1,0 +1,23 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\playbook reumato.md
+Model: anthropic/claude-sonnet-4
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [high] Adicionar investigação para artrite psoriásica e espondiloartrites
+2. [high] Implementar alertas automáticos para contraindicações de DMARDs
+3. [medium] Adicionar nó específico para pacientes sem dor articular
+4. [medium] Incluir critérios para artrite séptica e diagnóstico diferencial
+5. [low] Simplificar condições lógicas complexas para melhor usabilidade
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914_20251201_093419.json
+============================================================

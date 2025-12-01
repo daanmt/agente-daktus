@@ -1,0 +1,223 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "node-3",
+          "issue": "Node-3 (Avaliação geral - direta) is only reachable if 'primeiro_atendimento' is selected in node-2. If 'retorno_atendimento' is selected, the flow skips directly to node '52484c01-e863-4dca-a875-c3cc0502feb9' (Reavaliação - direta). This is correct based on the conditional logic, but the edge e-node-3-feec4651-0d95-462a-a865-a5bb440eba81 implies a sequential flow through node-3 and feec4651-0d95-462a-a865-a5bb440eba81, which are both conditional on 'primeiro_atendimento'.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "feec4651-0d95-462a-a865-a5bb440eba81",
+          "issue": "Node 'Avaliação comorbidades - direta' is conditional on 'primeiro_atendimento' in motivo_consulta. If 'retorno_atendimento' is selected, this node is skipped, which is correct. However, the edge e-feec4651-0d95-462a-a865-a5bb440eba81-52484c01-e863-4dca-a875-c3cc0502feb9 connects it to the 'Reavaliação' node, which is conditional on 'retorno_atendimento'. This creates a structural inconsistency in the linear flow, as the 'Reavaliação' node should be reached directly from node-2 if 'retorno_atendimento' is chosen.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-2",
+          "issue": "Missing edge for 'retorno_atendimento' path: If 'retorno_atendimento' is selected in node-2, the flow should jump directly to '52484c01-e863-4dca-a875-c3cc0502feb9' (Reavaliação). The current edges only support the 'primeiro_atendimento' path (node-2 -> node-3 -> feec4651-0d95-462a-a865-a5bb440eba81). A direct edge from node-2 to 52484c01-e863-4dca-a875-c3cc0502feb9 is required for the 'retorno' path.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "52484c01-e863-4dca-a875-c3cc0502feb9",
+          "issue": "Question 'suspeita_defeito_dev_enzimatico' (P7d92fa8e-97e5-4038-a4dc-b0ddd7e0b39d) is a checkbox ('C') but has no options defined. It relies solely on 'defaultValue': 'false'. This is structurally weak; it should be a boolean question type or have explicit options [True, False].",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "a3aed470-386f-40e4-80db-e08a5dcf3c33",
+          "issue": "The condition for this node is complex: (('primeiro_atendimento' in motivo_consulta) and (selected_any(sinais_sintomas_hipogonadismo, 'none_sintomas'))) or (('retorno_atendimento' in motivo_consulta) and (testo_serica >= 300)). This node handles both 'primeiro atendimento' (no symptoms of hypogonadism) and 'retorno' (Testo >= 300 ng/dL). This is logically sound for filtering non-indicated cases.",
+          "severity": "Low"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": []
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Hipogonadismo",
+          "description": "Condição clínica caracterizada por desenvolvimento sexual incompleto/atrasado, ginecomastia, testículos pequenos, perda de pelos corporais, diminuição da libido/ereções espontâneas, infertilidade, e/ou sintomas inespecíficos como diminuição da massa magra, aumento da gordura corporal, diminuição da energia, diminuição da densidade óssea, anemia, déficit cognitivo, fogacho, depressão, sudorese, diminuição da performance.",
+          "symptoms": [
+            "Desenvolvimento sexual incompleto ou atrasado",
+            "Ginecomastia",
+            "Testículos muito pequenos",
+            "Perda de pelos corporais",
+            "Diminuição da libido ou das ereções espontâneas",
+            "Infertilidade",
+            "Diminuição da massa magra e força muscular",
+            "Aumento da gordura corporal ou do IMC",
+            "Diminuição da energia ou cansaço",
+            "Diminuição da densidade óssea",
+            "Fratura por fragilidade",
+            "Anemia em investigação",
+            "Déficit cognitivo de início recente",
+            "Ondas de calor ou fogacho",
+            "Depressão",
+            "Sudorese",
+            "Diminuição da performance ou da vitalidade"
+          ]
+        },
+        {
+          "name": "Hipogonadismo primário",
+          "description": "Diferenciado do secundário por níveis de FSH e LH elevados na presença de testosterona total reduzida (< 300 ng/dL).",
+          "symptoms": []
+        },
+        {
+          "name": "Hipogonadismo secundário",
+          "description": "Diferenciado do primário por níveis de FSH e LH baixos/normais na presença de testosterona total reduzida (< 300 ng/dL).",
+          "symptoms": []
+        },
+        {
+          "name": "Síndrome de Klinefelter",
+          "description": "Comorbidade associada a risco aumentado de hipogonadismo.",
+          "symptoms": []
+        },
+        {
+          "name": "Cirrose hepática",
+          "description": "Comorbidade associada a risco aumentado de hipogonadismo.",
+          "symptoms": []
+        },
+        {
+          "name": "Doença renal crônica (DRC)",
+          "description": "Comorbidade associada a risco aumentado de hipogonadismo.",
+          "symptoms": []
+        },
+        {
+          "name": "HIV",
+          "description": "Comorbidade associada a risco aumentado de hipogonadismo.",
+          "symptoms": []
+        },
+        {
+          "name": "Hemocromatose hereditária",
+          "description": "Comorbidade associada a risco aumentado de hipogonadismo.",
+          "symptoms": []
+        },
+        {
+          "name": "Doença inflamatória crônica sistêmica (DICS)",
+          "description": "Comorbidade associada a risco aumentado de hipogonadismo.",
+          "symptoms": []
+        },
+        {
+          "name": "Distúrbios do desenvolvimento sexual ou defeitos enzimáticos",
+          "description": "Condições que podem indicar a dosagem de Dehidrotestosterona (DHT).",
+          "symptoms": []
+        }
+      ],
+      "exams": [
+        {
+          "name": "Testosterona total - pesquisa e/ou dosagem",
+          "type": "Laboratorial",
+          "indication": "Avaliação inicial do hipogonadismo. Uma segunda dosagem confirmatória deve ser solicitada se testosterona total reduzida (<300 ng/dL).",
+          "normalized_name": "Testosterona Total"
+        },
+        {
+          "name": "Testosterona livre - pesquisa e/ou dosagem",
+          "type": "Laboratorial",
+          "indication": "Indicada apenas se exame prévio com testosterona total reduzida (< 300 ng/dL).",
+          "normalized_name": "Testosterona Livre"
+        },
+        {
+          "name": "Dehidrotestosterona (DHT) - pesquisa e/ou dosagem",
+          "type": "Laboratorial",
+          "indication": "Indicada apenas na pesquisa de distúrbios do desenvolvimento sexual ou suspeita de defeitos enzimáticos na conversão de testosterona em dehidrotestosterona.",
+          "normalized_name": "Dehidrotestosterona (DHT)"
+        },
+        {
+          "name": "Folículo estimulante, hormônio (FSH) - pesquisa e/ou dosagem",
+          "type": "Laboratorial",
+          "indication": "Testosterona total reduzida (< 300 ng/dL), para diferenciar hipogonadismo primário vs. secundário.",
+          "normalized_name": "FSH"
+        },
+        {
+          "name": "Hormônio luteinizante (LH) - pesquisa e/ou dosagem.",
+          "type": "Laboratorial",
+          "indication": "Testosterona total reduzida (< 300 ng/dL), para diferenciar hipogonadismo primário vs. secundário.",
+          "normalized_name": "LH"
+        }
+      ],
+      "treatments": [],
+      "red_flags": [
+        {
+          "flag": "Testosterona total sérica < 300 ng/dL",
+          "urgency": "Alto",
+          "action": "Requer segunda dosagem confirmatória e investigação de hipogonadismo (FSH, LH, Testosterona Livre)."
+        },
+        {
+          "flag": "Tumor de hipófise ou hipotálamo (confirmado ou em investigação)",
+          "urgency": "Alto",
+          "action": "Comorbidade de risco que justifica investigação hormonal."
+        },
+        {
+          "flag": "Trauma craniano com disfunção hormonal",
+          "urgency": "Alto",
+          "action": "Comorbidade de risco que justifica investigação hormonal."
+        }
+      ],
+      "signs_symptoms": [
+        "Paciente assintomático",
+        "Diminuição da massa magra e força muscular",
+        "Aumento da gordura corporal ou do IMC",
+        "Diminuição da energia ou cansaço",
+        "Diminuição da densidade óssea",
+        "Fratura por fragilidade",
+        "Anemia em investigação",
+        "Déficit cognitivo de início recente",
+        "Ondas de calor ou fogacho (fogacho)",
+        "Depressão",
+        "Sudorese",
+        "Diminuição da performance ou da vitalidade",
+        "Desenvolvimento sexual incompleto ou atrasado",
+        "Ginecomastia",
+        "Testículos muito pequenos",
+        "Perda de pelos corporais",
+        "Diminuição da libido ou das ereções espontâneas",
+        "Infertilidade"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Structural",
+      "description": "Add a direct edge from 'node-2' (Identificação) to '52484c01-e863-4dca-a875-c3cc0502feb9' (Reavaliação) to handle the 'Consulta de retorno' path. Currently, this path is structurally broken, leading to an incomplete flow if 'retorno_atendimento' is selected.",
+      "impact": "Fixes critical workflow error and ensures protocol completeness."
+    },
+    {
+      "priority": "High",
+      "category": "Clinical Logic",
+      "description": "The indication for DHT ('b0148caa-ea6a-4147-9be7-d24ad7c13c9e') is too broad. It currently fires if the patient is indicated for any test (not(desejo_solicitacao_sem_indicacao == False) or testo_serica < 300). It should be conditional on 'suspeita_defeito_dev_enzimatico' being True, as stated in its own indication text.",
+      "impact": "Prevents unnecessary ordering of DHT, improving cost-effectiveness and clinical accuracy."
+    },
+    {
+      "priority": "Medium",
+      "category": "Question Structure",
+      "description": "Refactor question 'suspeita_defeito_dev_enzimatico' (Node 52484c01-e863-4dca-a875-c3cc0502feb9). Change type from Checkbox ('C') without options to a proper Boolean (Yes/No) type or explicitly define options [True, False] to ensure reliable data capture.",
+      "impact": "Improves data integrity and reliability of conditional logic based on this variable."
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Content",
+      "description": "The protocol defines a threshold for Testosterona Total (<300 ng/dL) but does not specify the required timing (e.g., morning sample) or context (e.g., fasting status) for the initial measurement, which is crucial for accurate diagnosis of hypogonadism. Add an orientation/alert regarding proper collection time.",
+      "impact": "Enhances diagnostic accuracy and adherence to clinical best practices."
+    },
+    {
+      "priority": "Low",
+      "category": "Structural",
+      "description": "Review the sequential placement of nodes 'node-3' and 'feec4651-0d95-462a-a865-a5bb440eba81' in the JSON 'nodes' array, as they are both conditional on 'primeiro_atendimento'. While the logic works, the visual flow implied by the edges is confusing due to the missing direct jump for 'retorno'. Ensure the visual representation matches the logical branching.",
+      "impact": "Improves maintainability and clarity of the protocol structure."
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\UNIMED_FORTALEZA_protocolo_solicitacao_testosterona_v0.1.2_22-09-2025-1840.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\Sobre o protocolo de Testosterona (solicitação) -  1c76587d2ef581a6ad3ac9cc3e3f290a.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 95.0,
+      "structural_quality": 65.0,
+      "safety_implementation": 80.0,
+      "overall_quality": 72.5
+    }
+  }
+}

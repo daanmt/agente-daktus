@@ -1,0 +1,313 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "784ee532-b42f-489f-bea0-29e836a63d69",
+          "issue": "The question 'sinais_alarme' (b55f6f5f-a475-4e8f-b59a-b237ee31eb89) is only visible if 'tempo_perda_menor72' is selected. If the user selects '> 72 hours', these critical red flags are hidden, which is a safety concern.",
+          "severity": "High"
+        },
+        {
+          "node_id": "784ee532-b42f-489f-bea0-29e836a63d69",
+          "issue": "The question 'sintomas_associados' (4fba3a9f-f4ab-4b72-a541-d8bf8fdda1ff) is only visible if 'tempo_perda_maior72' is selected. If the user selects '< 72 hours', these associated symptoms (vertigem, plenitude) are hidden, which limits clinical assessment.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-1751740431710",
+          "issue": "The conditional logic for node 'Etapa de detalhamento dos sintomas' (node-1751740431710) is complex and includes a check for 'contraindicacao_ressonancia is True'. This seems misplaced; contraindication to RM should not trigger a detailed symptom description node, but rather a different diagnostic pathway (e.g., TC).",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The condition for 'Suspeita de perda auditiva súbita' orientation uses placeholder '[] Subita em P6' which is not a valid variable reference. P6 is 'tipo_perda_auditiva'. The condition should be 'perda_subita' in tipo_perda_auditiva.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The condition for 'Suspeita de perda auditiva ocupacional' orientation uses placeholder '[] Sim em P8' which is not a valid variable reference. P8 is 'P8' (exposição crônica a ruído). The condition should be 'P8 is True'.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The conditions for all medication treatments use invalid placeholder references: '[ ] Menos de 72 horas em P2 E [] Súbita em P20'. P2 is 'tempo_perda', P20 is 'tipo_perda_auditiva'. The condition should be \"'tempo_perda_menor72' in tempo_perda and 'perda_subita' in tipo_perda_auditiva\".",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The condition for 'Suspeita de Perda Auditiva Neurossensorial Súbita' message uses placeholder '[] Súbita em P20'. Should be \"'perda_subita' in tipo_perda_auditiva\".",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The condition for 'Suspeita de Perda Ocupacional' message uses placeholder '[] Sim em P8'. Should be 'P8 is True'.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The condition for 'Primeira consulta' message uses placeholder '[ ] Primeira consulta em P1'. Should be \"'primeiro_atendimento' in motivo_consulta\".",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The condition for 'Consulta de seguimento' message uses placeholder '[ ] Retorno/acompanhamento em P1'. Should be \"'retorno_atendimento' in motivo_consulta\".",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1751742650452",
+          "issue": "The Audiometria exam condition is set to be 'oculto' (hidden) if (contraindicacao_audiometria is True) OR ('retorno_atendimento' in motivo_consulta). Audiometria is the baseline exam and should almost always be visible/recommended unless contraindicated or recently performed. Hiding it on 'retorno' is acceptable if recent results are available, but the logic is inverted for 'oculto'.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-1751739501342",
+          "issue": "The node 'Exames' is only visible if 'exames_recentes_none' is selected. This means the user only details exam results if they explicitly state they brought NO recent exams, which is contradictory. This node should likely be visible if 'retorno_atendimento' is selected, or the condition should be inverted/removed.",
+          "severity": "High"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": [
+        {
+          "path": [
+            "2d8a8fcf-6e03-404e-9940-330cfe457e86 (Identificação)"
+          ],
+          "reason": "The initial node is connected to two subsequent nodes (Anamnese and Retorno/acompanhamento) via conditional logic, but there is no edge connecting the initial node to 'node-1751739241405' (Retorno/acompanhamento). The flow is linear: Identificação -> Anamnese -> Exame Físico -> Retorno/acompanhamento. If 'retorno_atendimento' is selected in the first node, the user must still navigate through Anamnese and Exame Físico, which are conditionally hidden, before reaching the Retorno node. This creates a confusing, non-branching flow for the two main pathways ('primeiro_atendimento' vs 'retorno_atendimento')."
+        }
+      ]
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Perda Auditiva Neurossensorial Súbita (PANS)",
+          "description": "Instalação abrupta (em até 72 horas) de perda auditiva ≥30 dB em pelo menos três frequências consecutivas. Urgência otológica, podendo ter origem viral, autoimune ou vascular. A janela terapêutica é curta, e a evolução pode ser irreversível sem intervenção precoce.",
+          "symptoms": [
+            "Perda auditiva súbita (até 72 horas)",
+            "Perda auditiva unilateral",
+            "Déficit neurossensorial (Rinne/Weber)",
+            "Perda auditiva flutuante",
+            "Zumbido (por mais de 6 meses)"
+          ]
+        },
+        {
+          "name": "Perda Auditiva Induzida por Ruído (PAIR)",
+          "description": "Neuropatia coclear irreversível, progressiva e dose-dependente, causada por exposição crônica a sons ≥85 dB. Doença ocupacional prevalente que requer vigilância continuada.",
+          "symptoms": [
+            "Exposição crônica a ruído"
+          ]
+        },
+        {
+          "name": "Otosclerose",
+          "description": "Doença do osso temporal que pode causar perda auditiva condutiva ou mista.",
+          "symptoms": [
+            "Perda auditiva condutiva (Tomografia)"
+          ]
+        },
+        {
+          "name": "Schwannoma vestibular",
+          "description": "Tumor benigno do nervo vestibulococlear.",
+          "symptoms": [
+            "Perda auditiva unilateral",
+            "Achado em RM"
+          ]
+        }
+      ],
+      "exams": [
+        {
+          "name": "Audiometria",
+          "type": "Funcional/Audiológico",
+          "indication": "Hipoacusia; Confirmação da perda auditiva, tipo e gravidade; Monitoramento em casos ocupacionais, progressivos ou em uso de AASI.",
+          "normalized_name": "Audiometria"
+        },
+        {
+          "name": "Ressonância Magnética (RM) de crânio",
+          "type": "Imagem",
+          "indication": "Perda de audição súbita; Assimetrias importantes ou sintomas unilaterais persistentes; Suspeita de lesão retrococlear (Schwannoma, lesão expansiva, alterações vasculares, inflamação/infecção).",
+          "normalized_name": "Ressonância Magnética"
+        },
+        {
+          "name": "Tomografia Computadorizada (TC) de ossos temporais",
+          "type": "Imagem",
+          "indication": "Hipoacusia; Suspeita de otosclerose, lesões ósseas, alterações congênitas, colesteatoma.",
+          "normalized_name": "Tomografia Computadorizada"
+        },
+        {
+          "name": "Audiometria de tronco encefálico (ABR)",
+          "type": "Funcional/Audiológico",
+          "indication": "Hipoacusia; Suspeita de lesão retrococlear (latência prolongada, assimetria interaural, resposta ausente unilateral).",
+          "normalized_name": "ABR"
+        },
+        {
+          "name": "Emissão Otoacústica (EOA)",
+          "type": "Funcional/Audiológico",
+          "indication": "Hipoacusia; Quando há contraindicação à Audiometria (dificuldade de compreender ou responder comandos).",
+          "normalized_name": "EOA"
+        },
+        {
+          "name": "Teste de Rinne e Webber",
+          "type": "Exame Físico/Funcional",
+          "indication": "Avaliação inicial do tipo de perda auditiva (condutiva vs neurossensorial).",
+          "normalized_name": "Rinne e Webber"
+        },
+        {
+          "name": "Teste da Voz Sussurrada",
+          "type": "Exame Físico/Funcional",
+          "indication": "Triagem de perda auditiva.",
+          "normalized_name": "Voz Sussurrada"
+        },
+        {
+          "name": "Otoscopia",
+          "type": "Exame Físico",
+          "indication": "Avaliação do canal auditivo externo e membrana timpânica.",
+          "normalized_name": "Otoscopia"
+        }
+      ],
+      "treatments": [
+        {
+          "name": "Glicocorticoide Oral (Prednisona, Metilprednisolona, Dexametasona)",
+          "type": "Farmacológico",
+          "indication": "Perda Auditiva Neurossensorial Súbita (início < 72 horas)",
+          "medications": [
+            {
+              "name": "Prednisona",
+              "dosage": "1mg/kg/dia (máx. 60mg), 1x/dia, por 10 dias.",
+              "route": "Oral",
+              "category": "Glicocorticoide"
+            },
+            {
+              "name": "Metilprednisolona",
+              "dosage": "48 mg, dose única, 1x/dia, por 10 dias.",
+              "route": "Oral",
+              "category": "Glicocorticoide"
+            },
+            {
+              "name": "Dexametasona",
+              "dosage": "10 mg, dose única, 1x/dia, por 10 dias.",
+              "route": "Oral",
+              "category": "Glicocorticoide"
+            }
+          ]
+        },
+        {
+          "name": "Corticoide Intratimpânico (Dexametasona, Metilprednisolona)",
+          "type": "Farmacológico/Procedimento",
+          "indication": "Perda Auditiva Neurossensorial Súbita (início < 72 horas)",
+          "medications": [
+            {
+              "name": "Dexametasona",
+              "dosage": "Solução de 24mg/ml, 0,5ml injetado no ouvido afetado, 1x/semana, por 3 semanas.",
+              "route": "Intratimpânico",
+              "category": "Corticoide intratimpânico"
+            },
+            {
+              "name": "Metilprednisolona",
+              "dosage": "Solução de 30mg/ml, 0,5 ml injetado no ouvido afetado, 4 vezes ao decorrer de 2 semanas.",
+              "route": "Intratimpânico",
+              "category": "Corticoide intratimpânico"
+            }
+          ]
+        }
+      ],
+      "red_flags": [
+        {
+          "flag": "Perda auditiva súbita (até 72 horas)",
+          "urgency": "Urgência Otológica",
+          "action": "Iniciar tratamento com glicocorticoide o mais rápido possível; Realizar audiometria em até 14 dias."
+        },
+        {
+          "flag": "Paralisia facial",
+          "urgency": "Alto",
+          "action": "Investigação imediata (sinal de alarme)."
+        },
+        {
+          "flag": "Ataxia ou vertigem incapacitantes",
+          "urgency": "Alto",
+          "action": "Investigação imediata (sinal de alarme)."
+        },
+        {
+          "flag": "Diplopia ou outros déficits neurológicos",
+          "urgency": "Alto",
+          "action": "Investigação imediata (sinal de alarme)."
+        },
+        {
+          "flag": "Cefaleia intensa ou súbita",
+          "urgency": "Alto",
+          "action": "Investigação imediata (sinal de alarme)."
+        },
+        {
+          "flag": "Otalgia intensa ou secreção purulenta",
+          "urgency": "Alto",
+          "action": "Investigação imediata (sinal de alarme)."
+        }
+      ],
+      "signs_symptoms": [
+        "Perda auditiva (hipoacusia/acusia)",
+        "Tempo de perda (até 72h vs > 72h)",
+        "Perda unilateral",
+        "Perda progressiva",
+        "Perda estável",
+        "Perda flutuante",
+        "Perda súbita",
+        "Vertigem",
+        "Desequilíbrio",
+        "Plenitude auricular",
+        "Secreção ou dor no ouvido (otalgia/otorreia)",
+        "Zumbido (por mais de 6 meses)",
+        "Exposição crônica a ruído",
+        "Alterações na otoscopia (secreção purulenta, perfuração timpânica, hiperemia/abaulamento timpânico, tímpano retraído ou opaco)",
+        "Déficit neurossensorial (Rinne/Weber)",
+        "Déficit de condução ósseo (Rinne/Weber)",
+        "Redução no teste da voz sussurrada"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Structural/Logic",
+      "description": "Correct all invalid variable references (e.g., '[] Subita em P6', '[] Sim em P8') in the 'Conduta' node (conduta-1751742650452) with the correct UID and syntax (e.g., \"'perda_subita' in tipo_perda_auditiva\"). This affects all orientations, messages, and medication prescriptions.",
+      "impact": "Ensures clinical actions (medication, guidance) are triggered correctly based on patient input, preventing critical safety failures."
+    },
+    {
+      "priority": "High",
+      "category": "Structural/Flow",
+      "description": "Rework the decision flow to properly branch based on 'motivo_consulta'. If 'retorno_atendimento' is selected, the flow should skip 'Anamnese' and 'Exame Físico' and go directly to 'Retorno/acompanhamento' (node-1751739241405). Add a direct edge from 'Identificação' to 'Retorno/acompanhamento'.",
+      "impact": "Improves user experience and efficiency by avoiding navigation through irrelevant, hidden nodes for follow-up appointments."
+    },
+    {
+      "priority": "High",
+      "category": "Clinical/Safety",
+      "description": "Review conditional visibility for 'sinais_alarme' and 'sintomas_associados'. Red flags ('sinais_alarme') should be visible regardless of the 72-hour cutoff, as they indicate severe pathology requiring urgent attention (e.g., tumor, infection).",
+      "impact": "Prevents missing critical safety indicators in patients presenting with subacute or chronic hearing loss."
+    },
+    {
+      "priority": "High",
+      "category": "Structural/Logic",
+      "description": "Invert or remove the conditional logic for the 'Exames' node (node-1751739501342). If this node is meant to detail results of recent exams, it should be visible when 'retorno_atendimento' is selected AND the user indicates they brought specific exams (e.g., 'audiometria' in exames_recentes). The current condition ('exames_recentes_none' in exames_recentes) is contradictory.",
+      "impact": "Allows for proper documentation and review of existing diagnostic data during follow-up."
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical/Diagnostic",
+      "description": "Add a specific condition to recommend Audiometria (eeca9f20-e61e-4b02-84e8-d60030ded2a6) for all 'primeiro_atendimento' cases, unless a clear contraindication exists. The current logic hides it on 'retorno' and if contraindicated, but doesn't explicitly show it when needed.",
+      "impact": "Ensures the baseline diagnostic test is consistently ordered for initial investigations."
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical/Diagnostic",
+      "description": "Review the logic for ordering RM and TC. The current condition for both is identical and very broad. Refine the RM indication to focus on retrocochlear suspicion (unilateral, neurossensorial, zumbido > 6m, ABR changes) and TC for conductive loss suspicion (otosclerose, otoscopia changes, conductive deficit on Rinne/Weber).",
+      "impact": "Optimizes resource utilization by ordering the most appropriate imaging modality based on clinical suspicion."
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\athena_hipoacusia_e_acusia_v0.1.1_21-11-2025-1308.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\[ATHENA] Hipoacusia e acusia 2256587d2ef5800ba8aac10cbff8f29c.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 90.0,
+      "structural_quality": 40.0,
+      "safety_implementation": 50.0,
+      "overall_quality": 60.0
+    }
+  }
+}

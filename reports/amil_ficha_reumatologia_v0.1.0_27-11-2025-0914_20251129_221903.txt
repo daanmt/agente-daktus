@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\playbook reumato.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Corrigir o uso do operador 'in' nas condições de visibilidade para variáveis de seleção única ('choice'). Ex: Mudar 'rigidez_prolongada' in rigidez_matinal_duracao para rigidez_matinal_duracao == 'rigidez_prolongada'. Isso afeta a ativação dos nós de investigação (AR, Gota) e o nó de História/Medicamentos.
+2. [High] Adicionar perguntas de triagem para Lúpus Eritematoso Sistêmico (LES) e Espondiloartrites (EsA), que são diferenciais importantes. Ex: Rash malar, fotossensibilidade, úlceras orais (LES); Dor lombar inflamatória (EsA).
+3. [High] Implementar uma pergunta de triagem para gravidez/lactação no nó 'node-identificacao-paciente' ou 'node-historia-medicamentos' e usar essa variável para bloquear a prescrição de Metotrexato e Leflunomida (teratogênicos). A condição atual ('gravidez_lactacao' in contraindicacoes_relativas) depende da marcação manual.
+4. [Medium] No nó 'node-investigacao-fibromialgia', a pergunta Q-pontos-dolorosos-wpi é uma lista de áreas. Adicionar uma contagem automática (WPI Score) e usar essa contagem (WPI >= 7) na conduta para fortalecer o diagnóstico de Fibromialgia (ACR 2010/2016).
+5. [Medium] Adicionar o medicamento Febuxostat como alternativa ao Alopurinol para Gota, especialmente em casos de insuficiência renal grave ou intolerância ao Alopurinol, conforme diretrizes ACR 2020.
+6. [Low] Revisar a condição de 'sulfassalazina-ar-dmard' para refletir a indicação clínica real (combinação ou falha MTX/HCQ) em vez de apenas 'dmards_uso' in medicamentos_atuais.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914_20251129_221903.json
+============================================================

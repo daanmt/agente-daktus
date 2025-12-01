@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\playbook reumato.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Revisar a condição de visibilidade do nó 'node-historia-medicamentos'. Comorbidades e medicamentos em uso são cruciais para a segurança (ex: prescrição de AINEs) e não devem depender de critérios de gravidade de doenças específicas. Sugestão: 'dor_articular_presente == true' ou remover a condição para coleta universal.
+2. [High] Corrigir a sintaxe de verificação de opções de escolha única (choice) em todas as condições. Exemplo: Em 'conduta-final-reumatologia', mudar 'simetrico' in simetria_envolvimento para 'simetrico' == simetria_envolvimento. Isso afeta a lógica de encaminhamento e prescrição de AR.
+3. [High] Corrigir a expressão condicional da pergunta 'Q-duracao-corticoides' no nó 'node-historia-medicamentos'. Deve ser visível APENAS se o paciente estiver usando corticoides ('corticoides_uso' in medicamentos_atuais). A inclusão da lógica de AR é incorreta e confusa.
+4. [Medium] Adicionar um nó de investigação para Espondiloartrites (ex: Espondilite Anquilosante, Artrite Psoriásica). A triagem atual foca em AR, Gota, Fibro e OA, mas ignora dor lombar inflamatória crônica (critério ASAS).
+5. [Medium] Adicionar a opção de 'Artrite Psoriásica' na triagem, incluindo perguntas sobre psoríase cutânea/unhas e dactilite/entesite, que são cruciais para o diagnóstico diferencial de oligoartrite/poliartrite.
+6. [Low] No nó 'node-triagem-sintomas', garantir que a seleção de 'nenhum_sistemico' seja mutuamente exclusiva com os outros sintomas sistêmicos (fadiga, febre, etc.) para evitar inconsistências lógicas.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914_20251129_190809.json
+============================================================

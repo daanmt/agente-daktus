@@ -1,0 +1,2859 @@
+{
+  "metadata": {
+    "company": "amil",
+    "name": "ficha_reumatologia",
+    "version": "0.1.0"
+  },
+  "nodes": [
+    {
+      "id": "node-identificacao-paciente",
+      "type": "custom",
+      "position": {
+        "x": 900,
+        "y": 100
+      },
+      "data": {
+        "label": "Identificação do Paciente",
+        "condicao": "",
+        "descricao": "Dados demográficos essenciais",
+        "condicional": "oculto",
+        "questions": [
+          {
+            "id": "Q-idade-paciente",
+            "nodeId": "node-identificacao-paciente",
+            "uid": "age",
+            "titulo": "<p><strong>Idade do paciente (anos):</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "min": 18,
+            "max": 120
+          },
+          {
+            "id": "Q-sexo-paciente",
+            "nodeId": "node-identificacao-paciente",
+            "uid": "sex",
+            "titulo": "<p><strong>Sexo:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "masculino-id",
+                "id": "masculino",
+                "label": "Masculino",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "feminino-id",
+                "id": "feminino",
+                "label": "Feminino",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-triagem-sintomas",
+      "type": "custom",
+      "position": {
+        "x": 1800,
+        "y": 100
+      },
+      "data": {
+        "label": "Triagem - Sintomas Base",
+        "condicao": "",
+        "descricao": "NÍVEL 1 - Triagem universal para direcionamento diagnóstico",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-articular-presente",
+            "nodeId": "node-triagem-sintomas",
+            "uid": "dor_articular_presente",
+            "titulo": "<p><strong>Paciente apresenta dor articular ou musculoesquelética?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-localizacao-geral",
+            "nodeId": "node-triagem-sintomas",
+            "uid": "localizacao_geral",
+            "titulo": "<p><strong>Localização da dor (marque todas):</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "dor_articular_presente == true",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "maos-punhos-geral-id",
+                "id": "maos_punhos",
+                "label": "Mãos/punhos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "ombros-geral-id",
+                "id": "ombros",
+                "label": "Ombros",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "cotovelos-geral-id",
+                "id": "cotovelos",
+                "label": "Cotovelos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "quadris-geral-id",
+                "id": "quadris",
+                "label": "Quadris",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "joelhos-geral-id",
+                "id": "joelhos",
+                "label": "Joelhos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "tornozelos-pes-geral-id",
+                "id": "tornozelos_pes",
+                "label": "Tornozelos/pés",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "difusa-geral-id",
+                "id": "dor_difusa",
+                "label": "Dor difusa/generalizada",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Q-duracao-sintomas",
+            "nodeId": "node-triagem-sintomas",
+            "uid": "duracao_sintomas",
+            "titulo": "<p><strong>Duração dos sintomas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "dor_articular_presente == true",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "agudo-id",
+                "id": "agudo",
+                "label": "Menos de 6 semanas (agudo)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "cronico-id",
+                "id": "cronico",
+                "label": "Mais de 6 semanas (crônico)",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "Q-numero-articulacoes",
+            "nodeId": "node-triagem-sintomas",
+            "uid": "numero_articulacoes",
+            "titulo": "<p><strong>Número de articulações envolvidas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "dor_articular_presente == true",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "monoarticular-id",
+                "id": "monoarticular",
+                "label": "Uma articulação (monoarticular)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "oligoarticular-id",
+                "id": "oligoarticular",
+                "label": "2-4 articulações (oligoarticular)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "poliarticular-id",
+                "id": "poliarticular",
+                "label": "5 ou mais articulações (poliarticular)",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "Q-caracteristica-inflamatoria",
+            "nodeId": "node-triagem-sintomas",
+            "uid": "caracteristica_inflamatoria",
+            "titulo": "<p><strong>Dor com característica inflamatória?</strong></p>",
+            "descricao": "Piora pela manhã com rigidez >30min, melhora com movimento",
+            "condicional": "visivel",
+            "expressao": "dor_articular_presente == true",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-sintomas-sistemicos-triagem",
+            "nodeId": "node-triagem-sintomas",
+            "uid": "sintomas_sistemicos",
+            "titulo": "<p><strong>Sintomas sistêmicos presentes:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "nenhum-sistemico-id",
+                "id": "nenhum_sistemico",
+                "label": "Nenhum sintoma sistêmico",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "fadiga-id",
+                "id": "fadiga",
+                "label": "Fadiga/cansaço excessivo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "febre-id",
+                "id": "febre",
+                "label": "Febre",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "disturbio-sono-id",
+                "id": "disturbio_sono",
+                "label": "Distúrbio do sono",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "perda-peso-id",
+                "id": "perda_peso",
+                "label": "Perda de peso não intencional",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-ar",
+      "type": "custom",
+      "position": {
+        "x": 2700,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Artrite Reumatoide",
+        "condicao": "'poliarticular' in numero_articulacoes and caracteristica_inflamatoria == true and 'cronico' in duracao_sintomas",
+        "descricao": "NÍVEL 2 - Investigação específica para suspeita de AR",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-rigidez-matinal-duracao",
+            "nodeId": "node-investigacao-ar",
+            "uid": "rigidez_matinal_duracao",
+            "titulo": "<p><strong>Duração da rigidez matinal:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "rigidez-curta-id",
+                "id": "rigidez_curta",
+                "label": "Menos de 30 minutos",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "rigidez-moderada-id",
+                "id": "rigidez_moderada",
+                "label": "30 a 60 minutos",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "rigidez-prolongada-id",
+                "id": "rigidez_prolongada",
+                "label": "Mais de 60 minutos",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "Q-simetria-envolvimento",
+            "nodeId": "node-investigacao-ar",
+            "uid": "simetria_envolvimento",
+            "titulo": "<p><strong>Padrão de envolvimento articular:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "simetrico-id",
+                "id": "simetrico",
+                "label": "Simétrico (mesmo padrão bilateral)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "assimetrico-id",
+                "id": "assimetrico",
+                "label": "Assimétrico",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "Q-mcps-envolvidas",
+            "nodeId": "node-investigacao-ar",
+            "uid": "mcps_envolvidas",
+            "titulo": "<p><strong>Envolvimento de metacarpofalângicas (MCPs)?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'maos_punhos' in localizacao_geral",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-gota",
+      "type": "custom",
+      "position": {
+        "x": 3600,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Gota",
+        "condicao": "'monoarticular' in numero_articulacoes and ('tornozelos_pes' in localizacao_geral or 'joelhos' in localizacao_geral)",
+        "descricao": "NÍVEL 2 - Investigação específica para suspeita de gota",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-localizacao-especifica-gota",
+            "nodeId": "node-investigacao-gota",
+            "uid": "localizacao_especifica_gota",
+            "titulo": "<p><strong>Localização específica da dor:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "halux-mtf-id",
+                "id": "halux_mtf",
+                "label": "1ª metatarsofalângica (hálux/dedão do pé)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "tornozelo-id",
+                "id": "tornozelo",
+                "label": "Tornozelo",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "joelho-id",
+                "id": "joelho",
+                "label": "Joelho",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "outras-articulacoes-id",
+                "id": "outras_articulacoes",
+                "label": "Outras articulações",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "Q-frequencia-crises",
+            "nodeId": "node-investigacao-gota",
+            "uid": "frequencia_crises",
+            "titulo": "<p><strong>Frequência de crises nos últimos 12 meses:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'cronico' in duracao_sintomas",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "primeira-crise-id",
+                "id": "primeira_crise",
+                "label": "Primeira crise",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "uma-crise-id",
+                "id": "uma_crise",
+                "label": "1 crise",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "duas-tres-crises-id",
+                "id": "duas_tres_crises",
+                "label": "2-3 crises",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "quatro-ou-mais-crises-id",
+                "id": "quatro_ou_mais_crises",
+                "label": "4 ou mais crises",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "Q-tofos-presentes",
+            "nodeId": "node-investigacao-gota",
+            "uid": "tofos_presentes",
+            "titulo": "<p><strong>Presença de tofos (nódulos esbranquiçados/calcificados)?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'cronico' in duracao_sintomas",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-fibromialgia",
+      "type": "custom",
+      "position": {
+        "x": 4500,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Fibromialgia",
+        "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral",
+        "descricao": "NÍVEL 2 - Investigação específica para suspeita de fibromialgia",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-pontos-dolorosos-wpi",
+            "nodeId": "node-investigacao-fibromialgia",
+            "uid": "pontos_dolorosos",
+            "titulo": "<p><strong>Áreas corporais com dor (marque todas - WPI):</strong></p>",
+            "descricao": "Widespread Pain Index - ACR 2010/2016",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "ombro-esquerdo-id",
+                "id": "ombro_esquerdo",
+                "label": "Ombro esquerdo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "ombro-direito-id",
+                "id": "ombro_direito",
+                "label": "Ombro direito",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "braco-esquerdo-id",
+                "id": "braco_esquerdo",
+                "label": "Braço esquerdo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "braco-direito-id",
+                "id": "braco_direito",
+                "label": "Braço direito",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "quadril-esquerdo-id",
+                "id": "quadril_esquerdo",
+                "label": "Quadril esquerdo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "quadril-direito-id",
+                "id": "quadril_direito",
+                "label": "Quadril direito",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "coxa-esquerda-id",
+                "id": "coxa_esquerda",
+                "label": "Coxa esquerda",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "coxa-direita-id",
+                "id": "coxa_direita",
+                "label": "Coxa direita",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "costas-superior-id",
+                "id": "costas_superior",
+                "label": "Costas (região superior)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "costas-inferior-id",
+                "id": "costas_inferior",
+                "label": "Costas (região inferior)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "pescoco-id",
+                "id": "pescoco",
+                "label": "Pescoço",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "mandibula-id",
+                "id": "mandibula",
+                "label": "Mandíbula",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Q-sono-nao-reparador",
+            "nodeId": "node-investigacao-fibromialgia",
+            "uid": "sono_nao_reparador",
+            "titulo": "<p><strong>Sono não reparador (acorda mais cansado)?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-osteoartrite",
+      "type": "custom",
+      "position": {
+        "x": 5400,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Osteoartrite",
+        "condicao": "not(caracteristica_inflamatoria == true) and 'cronico' in duracao_sintomas and ('joelhos' in localizacao_geral or 'quadris' in localizacao_geral or 'maos_punhos' in localizacao_geral)",
+        "descricao": "NÍVEL 2 - Investigação específica para suspeita de osteoartrite",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-caracter-mecanico-dor",
+            "nodeId": "node-investigacao-osteoartrite",
+            "uid": "caracter_mecanico_dor",
+            "titulo": "<p><strong>Características da dor:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "piora-atividade-id",
+                "id": "piora_atividade",
+                "label": "Piora com atividade física",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "melhora-repouso-id",
+                "id": "melhora_repouso",
+                "label": "Melhora com repouso",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "rigidez-curta-matinal-id",
+                "id": "rigidez_curta_matinal",
+                "label": "Rigidez matinal breve (<30 min)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "dor-fim-dia-id",
+                "id": "dor_fim_dia",
+                "label": "Dor mais intensa no final do dia",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Q-crepitacao-presente",
+            "nodeId": "node-investigacao-osteoartrite",
+            "uid": "crepitacao_presente",
+            "titulo": "<p><strong>Presença de crepitação (estalos) nas articulações?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-manguito-rotador",
+      "type": "custom",
+      "position": {
+        "x": 6300,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Síndrome do Manguito Rotador",
+        "condicao": "'ombros' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para síndrome do manguito rotador",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-elevacao-braco",
+            "nodeId": "node-investigacao-manguito-rotador",
+            "uid": "dor_elevacao_braco",
+            "titulo": "<p><strong>Dor ao elevar o braço acima da cabeça?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-rotacao-externa",
+            "nodeId": "node-investigacao-manguito-rotador",
+            "uid": "dor_rotacao_externa",
+            "titulo": "<p><strong>Dor na rotação externa do ombro?</strong></p>",
+            "descricao": "Movimento como pentear cabelo ou coçar as costas",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-noturna-ombro",
+            "nodeId": "node-investigacao-manguito-rotador",
+            "uid": "dor_noturna_ombro",
+            "titulo": "<p><strong>Dor noturna que impede o sono?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-capsulite",
+      "type": "custom",
+      "position": {
+        "x": 7200,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Capsulite Adesiva",
+        "condicao": "'ombros' in localizacao_geral and 'cronico' in duracao_sintomas",
+        "descricao": "NÍVEL 2 - Investigação específica para capsulite adesiva",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-restricao-global-ombro",
+            "nodeId": "node-investigacao-capsulite",
+            "uid": "restricao_global_ombro",
+            "titulo": "<p><strong>Restrição global dos movimentos do ombro (ativo e passivo)?</strong></p>",
+            "descricao": "Limitação em todas as direções",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-evolucao-fases-capsulite",
+            "nodeId": "node-investigacao-capsulite",
+            "uid": "evolucao_fases_capsulite",
+            "titulo": "<p><strong>Evolução dos sintomas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "fase-dolorosa-id",
+                "id": "fase_dolorosa",
+                "label": "Fase dolorosa (dor intensa, início da rigidez)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "fase-rigida-id",
+                "id": "fase_rigida",
+                "label": "Fase rígida (menos dor, rigidez máxima)",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "fase-recuperacao-id",
+                "id": "fase_recuperacao",
+                "label": "Fase de recuperação (melhora gradual)",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-epicondilite",
+      "type": "custom",
+      "position": {
+        "x": 8100,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Epicondilite Lateral",
+        "condicao": "'cotovelos' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para epicondilite lateral",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-epicondilo-lateral",
+            "nodeId": "node-investigacao-epicondilite",
+            "uid": "dor_epicondilo_lateral",
+            "titulo": "<p><strong>Dor à palpação do epicôndilo lateral?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-extensao-punho",
+            "nodeId": "node-investigacao-epicondilite",
+            "uid": "dor_extensao_punho",
+            "titulo": "<p><strong>Dor ao estender o punho contra resistência?</strong></p>",
+            "descricao": "Teste provocativo específico",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-dequervain",
+      "type": "custom",
+      "position": {
+        "x": 9000,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Tendinite de De Quervain",
+        "condicao": "'maos_punhos' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para tendinite de De Quervain",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-radial-punho",
+            "nodeId": "node-investigacao-dequervain",
+            "uid": "dor_radial_punho",
+            "titulo": "<p><strong>Dor na região radial do punho?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-teste-finkelstein",
+            "nodeId": "node-investigacao-dequervain",
+            "uid": "teste_finkelstein",
+            "titulo": "<p><strong>Teste de Finkelstein positivo?</strong></p>",
+            "descricao": "Dor ao desviar o punho para o lado do mindinho com o polegar fletido",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-dedogatilho",
+      "type": "custom",
+      "position": {
+        "x": 9900,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Dedo em Gatilho",
+        "condicao": "'maos_punhos' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para dedo em gatilho",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-travamento-dedo",
+            "nodeId": "node-investigacao-dedogatilho",
+            "uid": "travamento_dedo",
+            "titulo": "<p><strong>Travamento ou 'clique' ao flexionar/estender o dedo?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-base-dedo",
+            "nodeId": "node-investigacao-dedogatilho",
+            "uid": "dor_base_dedo",
+            "titulo": "<p><strong>Dor na base do dedo afetado?</strong></p>",
+            "descricao": "Região da polia A1",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-grandetrocanter",
+      "type": "custom",
+      "position": {
+        "x": 10800,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Síndrome do Grande Trocânter",
+        "condicao": "'quadris' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para síndrome dolorosa do grande trocânter",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-lateral-quadril",
+            "nodeId": "node-investigacao-grandetrocanter",
+            "uid": "dor_lateral_quadril",
+            "titulo": "<p><strong>Dor lateral no quadril?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-deitar-lado",
+            "nodeId": "node-investigacao-grandetrocanter",
+            "uid": "dor_deitar_lado",
+            "titulo": "<p><strong>Dor ao deitar-se sobre o lado afetado?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-subir-escadas",
+            "nodeId": "node-investigacao-grandetrocanter",
+            "uid": "dor_subir_escadas",
+            "titulo": "<p><strong>Dor ao subir escadas?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-bursiteanserina",
+      "type": "custom",
+      "position": {
+        "x": 11700,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Bursite Anserina",
+        "condicao": "'joelhos' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para bursite anserina",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-medial-joelho",
+            "nodeId": "node-investigacao-bursiteanserina",
+            "uid": "dor_medial_joelho",
+            "titulo": "<p><strong>Dor medial e inferior do joelho?</strong></p>",
+            "descricao": "Região da pata de ganso",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-sensibilidade-pata-ganso",
+            "nodeId": "node-investigacao-bursiteanserina",
+            "uid": "sensibilidade_pata_ganso",
+            "titulo": "<p><strong>Sensibilidade local à palpação da pata de ganso?</strong></p>",
+            "descricao": "Região medial ínfero-anterior do joelho",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao-fasciiteplantar",
+      "type": "custom",
+      "position": {
+        "x": 12600,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação - Fasciíte Plantar",
+        "condicao": "'tornozelos_pes' in localizacao_geral and not(caracteristica_inflamatoria == true)",
+        "descricao": "NÍVEL 2 - Investigação específica para fasciíte plantar",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-dor-plantar-medial",
+            "nodeId": "node-investigacao-fasciiteplantar",
+            "uid": "dor_plantar_medial",
+            "titulo": "<p><strong>Dor na região plantar medial do pé?</strong></p>",
+            "descricao": "Região do calcanhar",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-primeiros-passos",
+            "nodeId": "node-investigacao-fasciiteplantar",
+            "uid": "dor_primeiros_passos",
+            "titulo": "<p><strong>Dor mais intensa nos primeiros passos pela manhã?</strong></p>",
+            "descricao": "Característica típica da fasciíte plantar",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Q-dor-apos-repouso",
+            "nodeId": "node-investigacao-fasciiteplantar",
+            "uid": "dor_apos_repouso",
+            "titulo": "<p><strong>Dor ao iniciar a marcha após períodos de inatividade?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-historia-medicamentos",
+      "type": "custom",
+      "position": {
+        "x": 13500,
+        "y": 100
+      },
+      "data": {
+        "label": "História e Medicamentos",
+        "condicao": "('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes) or ('duas_tres_crises' in frequencia_crises or 'quatro_ou_mais_crises' in frequencia_crises) or age >= 50 or 'febre' in sintomas_sistemicos",
+        "descricao": "NÍVEL 3 - Informações complementares e de segurança",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Q-comorbidades-relevantes",
+            "nodeId": "node-historia-medicamentos",
+            "uid": "comorbidades",
+            "titulo": "<p><strong>Comorbidades relevantes:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "sem-comorbidades-id",
+                "id": "sem_comorbidades",
+                "label": "Sem comorbidades relevantes",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "diabetes-id",
+                "id": "diabetes",
+                "label": "Diabetes mellitus",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "hipertensao-id",
+                "id": "hipertensao",
+                "label": "Hipertensão arterial",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "doenca-renal-id",
+                "id": "doenca_renal",
+                "label": "Doença renal crônica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "doenca-cardiovascular-id",
+                "id": "doenca_cardiovascular",
+                "label": "Doença cardiovascular",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "obesidade-id",
+                "id": "obesidade",
+                "label": "Obesidade (IMC ≥30)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Q-medicamentos-atuais",
+            "nodeId": "node-historia-medicamentos",
+            "uid": "medicamentos_atuais",
+            "titulo": "<p><strong>Medicamentos em uso:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "nenhum-medicamento-id",
+                "id": "nenhum_medicamento",
+                "label": "Nenhum medicamento regular",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "aines-uso-id",
+                "id": "aines_uso",
+                "label": "Anti-inflamatórios (AINEs)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "corticoides-uso-id",
+                "id": "corticoides_uso",
+                "label": "Corticoides",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "dmards-uso-id",
+                "id": "dmards_uso",
+                "label": "DMARDs (metotrexato, leflunomida, etc.)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "biologicos-uso-id",
+                "id": "biologicos_uso",
+                "label": "Medicamentos biológicos",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Q-duracao-corticoides",
+            "nodeId": "node-historia-medicamentos",
+            "uid": "duracao_corticoides_meses",
+            "titulo": "<p><strong>Há quanto tempo usa ou usará corticoides? (meses)</strong></p>",
+            "descricao": "Importante para avaliação de osteoporose induzida (GIOP)",
+            "condicional": "visivel",
+            "expressao": "'corticoides_uso' in medicamentos_atuais or ('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes)",
+            "select": "number",
+            "options": [],
+            "min": 0,
+            "max": 240
+          },
+          {
+            "id": "Q-alergias-medicamentos",
+            "nodeId": "node-historia-medicamentos",
+            "uid": "alergias_medicamentos",
+            "titulo": "<p><strong>Alergias medicamentosas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "sem-alergias-id",
+                "id": "sem_alergias",
+                "label": "Sem alergias conhecidas",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "alergia-aines-id",
+                "id": "alergia_aines",
+                "label": "Alergia a AINEs",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "alergia-corticoides-id",
+                "id": "alergia_corticoides",
+                "label": "Alergia a corticoides",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "alergia-metotrexato-id",
+                "id": "alergia_metotrexato",
+                "label": "Alergia ao metotrexato",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Q-contraindicacoes-relativas",
+            "nodeId": "node-historia-medicamentos",
+            "uid": "contraindicacoes_relativas",
+            "titulo": "<p><strong>Contraindicações relativas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "sem-contraindicacoes-id",
+                "id": "sem_contraindicacoes",
+                "label": "Sem contraindicações relevantes",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "ulcera-peptica-id",
+                "id": "ulcera_peptica",
+                "label": "História de úlcera péptica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "insuficiencia-renal-id",
+                "id": "insuficiencia_renal",
+                "label": "Insuficiência renal",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "insuficiencia-hepatica-id",
+                "id": "insuficiencia_hepatica",
+                "label": "Insuficiência hepática",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "gravidez-lactacao-id",
+                "id": "gravidez_lactacao",
+                "label": "Gravidez ou lactação",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "conduta-final-reumatologia",
+      "type": "conduct",
+      "position": {
+        "x": 14400,
+        "y": 100
+      },
+      "data": {
+        "label": "Condutas Reumatológicas",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "conduta": "conclusao",
+        "condutaDataNode": {
+          "orientacao": [
+            {
+              "id": "orientacao-ar-educacao-adesao",
+              "nome": "ARTRITE REUMATOIDE - Guia Completo para o Paciente",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "conteudo": "<p><strong>🎯 O QUE VOCÊ PRECISA SABER SOBRE SUA CONDIÇÃO</strong></p><p><strong>Entendendo a Artrite Reumatoide:</strong></p><ul><li>É uma doença onde seu sistema imunológico ataca suas próprias articulações por engano</li><li>Causa inflamação, dor e inchaço - <strong>MAS NÃO É DESGASTE!</strong></li><li>Afeta principalmente mãos, punhos e pés, geralmente dos dois lados do corpo</li><li>É mais comum em mulheres, mas pode afetar qualquer pessoa</li><li>Com o tratamento certo, você pode viver uma vida completamente normal</li></ul><p><strong>🎯 NOSSAS METAS JUNTOS:</strong></p><ul><li><strong>Meta 1:</strong> Eliminar completamente a dor e rigidez matinal</li><li><strong>Meta 2:</strong> Impedir que suas articulações sejam danificadas</li><li><strong>Meta 3:</strong> Manter você ativo no trabalho, família e lazer</li><li><strong>Meta 4:</strong> Proteger seu coração (AR aumenta risco cardiovascular)</li></ul><p><strong>💊 POR QUE OS MEDICAMENTOS SÃO TÃO IMPORTANTES:</strong></p><ul><li><strong>Os DMARDs (como metotrexato) são seus melhores aliados:</strong></li><li>Eles literalmente 'freiam' a doença e protegem suas articulações</li><li>Funcionam como um 'seguro' contra deformidades futuras</li><li>Demoram 6-12 semanas para fazer efeito completo - seja paciente!</li><li><strong>⚠️ REGRA DE OURO:</strong> NUNCA pare os medicamentos por conta própria, mesmo se estiver se sentindo bem</li><li>Se tiver efeitos colaterais, me procure imediatamente - sempre há alternativas</li></ul><p><strong>🏃‍♂️ EXERCÍCIOS - SEU TRATAMENTO MAIS PODEROSO:</strong></p><ul><li><strong>Mito:</strong> 'Exercício vai piorar minha artrite' - FALSO!</li><li><strong>Verdade:</strong> Exercício é remédio para AR e melhora dor, rigidez e função</li><li><strong>Como começar:</strong></li><li>Semana 1-2: Caminhada leve 10-15 minutos por dia</li><li>Semana 3-4: Aumente para 20 minutos</li><li>Meta final: 30 minutos, 5 dias por semana</li><li><strong>Exercícios na água são excelentes</strong> - procure uma piscina aquecida</li><li>Fisioterapia pode acelerar muito sua recuperação</li></ul><p><strong>🍎 CUIDADOS EXTRAS:</strong></p><ul><li><strong>Coração:</strong> AR aumenta risco cardíaco - controle pressão, colesterol, diabetes</li><li><strong>Ossos:</strong> Se usar corticoide >3 meses, precisa de cálcio e vitamina D</li><li><strong>Infecções:</strong> Fique atento - medicamentos reduzem imunidade</li><li><strong>Vacinação:</strong> Mantenha vacinas em dia (exceto vacinas vivas)</li></ul>",
+              "categoria": "Educação",
+              "nivel_evidencia": "I-A"
+            },
+            {
+              "id": "orientacao-gota-aguda-cuidados",
+              "nome": "GOTA - Guia de Cuidados Durante a Crise",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'monoarticular' in numero_articulacoes and ('halux_mtf' in localizacao_especifica_gota) and 'agudo' in duracao_sintomas",
+              "conteudo": "<p><strong>🔥 VOCÊ ESTÁ TENDO UMA CRISE DE GOTA - VAMOS RESOLVER ISSO JUNTOS</strong></p><p><strong>O que está acontecendo no seu corpo:</strong></p><ul><li>Cristais de ácido úrico se formaram dentro da articulação</li><li>Seu corpo está reagindo como se fosse uma 'invasão', causando inflamação intensa</li><li>A boa notícia: com o tratamento certo, a dor vai passar completamente</li></ul><p><strong>🚨 AÇÕES IMEDIATAS (FAÇA AGORA):</strong></p><ul><li><strong>🛏️ REPOUSO ABSOLUTO:</strong> Mantenha o pé elevado sempre que possível</li><li><strong>❄️ GELO É SEU AMIGO:</strong> 15-20 minutos, várias vezes ao dia (nunca direto na pele)</li><li><strong>💊 TOME O MEDICAMENTO:</strong> Siga exatamente a prescrição - quanto antes, melhor o resultado</li><li><strong>🥤 BEBA MUITA ÁGUA:</strong> 2-3 litros por dia ajuda a eliminar o ácido úrico</li><li><strong>👟 SAPATOS LARGOS:</strong> Use calçados que não apertem o pé</li></ul><p><strong>⚠️ O QUE EVITAR DURANTE A CRISE:</strong></p><ul><li><strong>NÃO tome aspirina</strong> - pode piorar a crise</li><li><strong>NÃO beba álcool</strong> - especialmente cerveja e destilados</li><li><strong>NÃO force o pé</strong> - repouso é fundamental</li><li><strong>NÃO pare o medicamento</strong> mesmo se melhorar</li></ul><p><strong>📅 O QUE ESPERAR:</strong></p><ul><li><strong>24-48h:</strong> Dor deve começar a diminuir</li><li><strong>3-5 dias:</strong> Melhora significativa</li><li><strong>7-10 dias:</strong> Resolução completa da crise</li><li>Se não melhorar em 48h, me procure imediatamente</li></ul><p><strong>🔮 PREVENINDO PRÓXIMAS CRISES:</strong></p><ul><li>Depois que passar a crise, conversaremos sobre prevenção</li><li>Mudanças na alimentação e medicamentos preventivos podem evitar novas crises</li><li>O objetivo é você nunca mais passar por essa dor</li></ul>",
+              "categoria": "Cuidados Agudos",
+              "nivel_evidencia": "I-A"
+            },
+            {
+              "id": "orientacao-gota-cronica-estilo-vida",
+              "nome": "GOTA CRÔNICA - Estilo de Vida e Prevenção",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('duas_tres_crises' in frequencia_crises or 'quatro_ou_mais_crises' in frequencia_crises or tofos_presentes == true)",
+              "conteudo": "<p><strong>🎯 CONTROLANDO A GOTA PARA SEMPRE</strong></p><p><strong>Entendendo sua situação:</strong></p><ul><li>Você já teve múltiplas crises ou desenvolveu 'tofos' (nódulos)</li><li>Isso significa que precisa de tratamento contínuo para baixar o ácido úrico</li><li>Com disciplina, você pode ficar ANOS sem ter outra crise</li></ul><p><strong>🥘 ALIMENTAÇÃO INTELIGENTE:</strong></p><ul><li><strong>🥩 MODERE (não precisa cortar):</strong> Carnes vermelhas, frutos do mar, vísceras</li><li><strong>🍺 EVITE AO MÁXIMO:</strong> Cerveja e destilados (vinho com moderação)</li><li><strong>🥤 CUIDADO:</strong> Refrigerantes e sucos açucarados</li><li><strong>✅ PODE À VONTADE:</strong> Frango, peixe branco, ovos, laticínios, cerejas</li><li><strong>🥛 BEBA MUITO:</strong> Água, chás, leite - meta de 2,5-3L por dia</li></ul><p><strong>⚖️ CONTROLE DE PESO:</strong></p><ul><li>Cada quilo a menos diminui o risco de crise</li><li>Perca peso gradualmente - dietas radicais podem provocar crise</li><li>Meta: perder 1-2 kg por mês no máximo</li></ul><p><strong>💊 MEDICAÇÃO PREVENTIVA:</strong></p><ul><li><strong>NUNCA pare por conta própria</strong> - mesmo se estiver bem há meses</li><li>O medicamento mantém o ácido úrico baixo e previne danos</li><li>Meta: ácido úrico abaixo de 6 mg/dL (ou 5 mg/dL se tem tofos)</li><li>Continue tomando MESMO se tiver uma crise eventual</li></ul><p><strong>🚨 QUANDO ME PROCURAR:</strong></p><ul><li>Qualquer dor articular nova</li><li>Efeitos colaterais dos medicamentos</li><li>Dúvidas sobre alimentação ou medicação</li><li>Controle de rotina a cada 3-6 meses</li></ul>",
+              "categoria": "Estilo de Vida",
+              "nivel_evidencia": "I-A"
+            },
+            {
+              "id": "orientacao-fibromialgia-automanejo",
+              "nome": "FIBROMIALGIA - Estratégias de Automanejo e Qualidade de Vida",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral",
+              "conteudo": "<p><strong>🧠 ENTENDENDO A FIBROMIALGIA - VOCÊ NÃO ESTÁ IMAGINANDO</strong></p><ul><li><strong>É uma condição REAL e RECONHECIDA</strong> - não é 'coisa da sua cabeça'</li><li>O problema está no modo como seu cérebro processa a dor</li><li>É como se o 'volume da dor' estivesse sempre muito alto</li><li><strong>NÃO causa danos permanentes</strong> às articulações ou músculos</li><li>NÃO é progressiva ou degenerativa</li><li>Com as estratégias certas, você PODE ter uma vida plena e feliz</li></ul><p><strong>🏃‍♀️ EXERCÍCIOS - SUA FERRAMENTA MAIS PODEROSA:</strong></p><ul><li><strong>⚠️ IMPORTANTE:</strong> Comece devagar - seu corpo precisa se acostumar</li><li><strong>Semana 1-2:</strong> Caminhada leve 5-10 minutos por dia</li><li><strong>Semana 3-4:</strong> Aumente para 15 minutos</li><li><strong>Meta final:</strong> 30 minutos, 3-5 vezes por semana</li><li><strong>🏊‍♀️ EXERCÍCIOS NA ÁGUA:</strong> Ideais se tiver acesso - menos impacto, mais relaxamento</li><li><strong>🧘‍♀️ YOGA/PILATES:</strong> Excelentes para flexibilidade e relaxamento</li><li><strong>Dica de ouro:</strong> Se um dia estiver pior, faça menos - mas não pare completamente</li></ul><p><strong>😴 MELHORANDO SEU SONO:</strong></p><ul><li><strong>Horário fixo:</strong> Durma e acorde sempre no mesmo horário</li><li><strong>Ambiente:</strong> Quarto escuro, silencioso e fresco</li><li><strong>Antes de dormir:</strong> Banho morno, leitura, música suave</li><li><strong>Evite:</strong> Telas 1h antes de dormir, cafeína após 14h</li><li><strong>Cochilo:</strong> Máximo 30 min antes das 15h</li></ul><p><strong>🧠 CUIDANDO DA MENTE:</strong></p><ul><li><strong>Estresse piora a dor</strong> - aprenda técnicas de relaxamento</li><li><strong>Respiração profunda:</strong> 4 segundos inspirando, 4 prendendo, 4 soltando</li><li><strong>Mindfulness:</strong> Foque no presente, não se preocupe com o amanhã</li><li><strong>Apoio social:</strong> Converse com família e amigos sobre sua condição</li><li><strong>Psicoterapia:</strong> Muito eficaz - consideraremos encaminhar</li></ul><p><strong>📝 ORGANIZANDO SUA ROTINA:</strong></p><ul><li><strong>Planeje atividades</strong> para seus melhores momentos do dia</li><li><strong>Divida tarefas grandes</strong> em pequenas partes</li><li><strong>Estabeleça prioridades</strong> - nem tudo precisa ser perfeito</li><li><strong>Peça ajuda</strong> quando necessário - não é fraqueza</li></ul>",
+              "categoria": "Automanejo",
+              "nivel_evidencia": "I-A"
+            },
+            {
+              "id": "orientacao-osteoartrite-conservador",
+              "nome": "OSTEOARTRITE - Cuidados e Proteção das Articulações",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not(caracteristica_inflamatoria == true) and ('cronico' in duracao_sintomas) and (selected_count(caracter_mecanico_dor, 'piora_atividade', 'melhora_repouso') >= 2 or crepitacao_presente == true)",
+              "conteudo": "<p><strong>🦴 ENTENDENDO A OSTEOARTRITE - NÃO É UMA SENTENÇA</strong></p><ul><li>É o 'desgaste natural' das articulações que acontece com o tempo</li><li>Como pneus de carro que se desgastam com o uso</li><li>É MUITO comum - quase todo mundo desenvolve algum grau após os 50 anos</li><li><strong>NÃO significa que você vai ficar incapacitado</strong></li><li>Com os cuidados certos, você pode ter uma vida ativa e sem dor</li></ul><p><strong>🏃‍♂️ EXERCÍCIOS - O MELHOR TRATAMENTO DISPONÍVEL:</strong></p><ul><li><strong>Mito:</strong> 'Exercício vai desgastar mais' - FALSO!</li><li><strong>Verdade:</strong> Exercício fortalece músculos e protege articulações</li><li><strong>💪 FORTALECIMENTO:</strong></li><li>Foque nos músculos ao redor das articulações afetadas</li><li>Exercícios com peso do corpo ou elásticos são ideais</li><li><strong>🫀 EXERCÍCIOS AERÓBICOS:</strong></li><li>Caminhada, natação, bicicleta - protegem as articulações</li><li>Comece com 10-15 min e vá aumentando gradualmente</li><li><strong>🤸‍♀️ FLEXIBILIDADE:</strong></li><li>Alongue-se diariamente para manter amplitude de movimento</li><li>Yoga e pilates são excelentes opções</li></ul><p><strong>⚖️ CONTROLE DE PESO - ALÍVIO IMEDIATO:</strong></p><ul><li>Cada quilo perdido remove 3-4 kg de pressão dos joelhos</li><li>Mesmo 5 kg a menos já fazem diferença na dor</li><li>Perda gradual é melhor - 1-2 kg por mês</li><li>Combine dieta equilibrada com exercício</li></ul><p><strong>🛡️ PROTEGENDO SUAS ARTICULAÇÕES:</strong></p><ul><li><strong>Use ferramentas que facilitem:</strong> Abridores de frascos, utensílios ergonômicos</li><li><strong>Distribuia o peso:</strong> Use duas mãos, evite carregar peso só de um lado</li><li><strong>Mantenha boa postura:</strong> Protege coluna e articulações</li><li><strong>Calçados adequados:</strong> Sola amortecida, salto baixo</li><li><strong>Órteses quando indicadas:</strong> Joelheiras, munhequeiras podem ajudar</li></ul><p><strong>🌡️ CALOR E FRIO:</strong></p><ul><li><strong>CALOR:</strong> Para rigidez matinal - banho morno, compressas</li><li><strong>FRIO:</strong> Para inchaço e dor após atividade - 15-20 min</li><li><strong>Teste os dois</strong> e veja o que funciona melhor para você</li></ul><p><strong>💊 MEDICAMENTOS:</strong></p><ul><li><strong>Anti-inflamatórios em gel:</strong> Primeira opção - menos efeitos colaterais</li><li><strong>Paracetamol:</strong> Seguro para uso eventual</li><li><strong>Anti-inflamatórios orais:</strong> Uso curto quando necessário</li><li>Sempre converse comigo antes de tomar qualquer medicamento</li></ul>",
+              "categoria": "Automanejo",
+              "nivel_evidencia": "I-A"
+            },
+            {
+              "id": "orientacao-manguito-rotador-reabilitacao",
+              "nome": "SÍNDROME DO MANGUITO ROTADOR - Guia de Reabilitação",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'ombros' in localizacao_geral and (dor_elevacao_braco == true or dor_rotacao_externa == true or dor_noturna_ombro == true)",
+              "conteudo": "<p><strong>💪 RECUPERANDO SEU OMBRO - UM PROCESSO QUE FUNCIONA</strong></p><p><strong>O que está acontecendo:</strong></p><ul><li>Os tendões que movem seu ombro estão inflamados ou lesionados</li><li>É como se fossem 'cordas' que controlam o movimento do braço</li><li>Com paciência e exercícios corretos, a grande maioria se recupera completamente</li></ul><p><strong>🏠 CUIDADOS IMEDIATOS EM CASA:</strong></p><ul><li><strong>⛔ EVITE ABSOLUTAMENTE:</strong></li><li>Levantar braços acima da linha dos ombros</li><li>Movimentos bruscos ou forçados</li><li>Carregar peso com o braço afetado</li><li>Dormir sobre o lado machucado</li><li><strong>✅ PREFIRA:</strong></li><li>Movimentos suaves à frente do corpo</li><li>Apoiar o braço com travesseiros ao dormir</li><li>Atividades no nível do peito ou abaixo</li></ul><p><strong>🎯 EXERCÍCIOS DE RECUPERAÇÃO:</strong></p><ul><li><strong>FASE 1 - ALÍVIO DA DOR (1-2 semanas):</strong></li><li><strong>Pêndulo:</strong> Incline-se e deixe o braço balançar como um pêndulo</li><li>5 minutos, 3-4 vezes por dia</li><li><strong>FASE 2 - MOVIMENTO (2-6 semanas):</strong></li><li>Exercícios suaves de flexibilidade</li><li>Movimentos assistidos (ajuda com o outro braço)</li><li><strong>FASE 3 - FORTALECIMENTO (6-12 semanas):</strong></li><li>Exercícios com elástico</li><li>Fortalecimento gradual dos músculos do ombro</li></ul><p><strong>�� CONTROLE DA DOR:</strong></p><ul><li><strong>GELO:</strong> 15-20 minutos após atividades</li><li><strong>CALOR:</strong> Antes dos exercícios para relaxar</li><li><strong>ANTI-INFLAMATÓRIOS:</strong> Se prescritos, use conforme orientação</li></ul><p><strong>⏰ EXPECTATIVAS REALISTAS:</strong></p><ul><li><strong>2-4 semanas:</strong> Diminuição da dor</li><li><strong>6-8 semanas:</strong> Melhora do movimento</li><li><strong>3-6 meses:</strong> Recuperação da força completa</li><li>Alguns casos podem levar mais tempo - seja paciente</li></ul><p><strong>🚨 QUANDO ME PROCURAR:</strong></p><ul><li>Dor piora muito ou não melhora em 2-3 semanas</li><li>Perda total da força no braço</li><li>Dormência ou formigamento</li><li>Dúvidas sobre os exercícios</li></ul>",
+              "categoria": "Reabilitação",
+              "nivel_evidencia": "I-B"
+            },
+            {
+              "id": "orientacao-capsulite-adesiva-cuidados",
+              "nome": "CAPSULITE ADESIVA - Entendendo a Evolução Natural",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "restricao_global_ombro == true",
+              "conteudo": "<p><strong>🔒 OMBRO CONGELADO - A JORNADA DA RECUPERAÇÃO</strong></p><p><strong>Entendendo sua condição:</strong></p><ul><li>A 'cápsula' que envolve seu ombro ficou inflamada e depois rígida</li><li>É como se fosse um 'casulo' apertado ao redor da articulação</li><li>A boa notícia: na maioria dos casos, se resolve sozinha com o tempo</li><li>Nosso papel é acelerar a recuperação e diminuir o sofrimento</li></ul><p><strong>📅 A JORNADA DA RECUPERAÇÃO (seja paciente):</strong></p><ul><li><strong>🔥 FASE 1 - DOLOROSA (2-9 meses):</strong></li><li>Dor intensa, especialmente à noite</li><li>Movimento começa a ficar limitado</li><li>Foco: controlar a dor e manter movimento possível</li><li><strong>🧊 FASE 2 - RÍGIDA (4-12 meses):</strong></li><li>Dor diminui, mas rigidez é máxima</li><li>Dificuldade para vestir roupas, pentear cabelo</li><li>Foco: exercícios suaves para manter mobilidade</li><li><strong>🌅 FASE 3 - RECUPERAÇÃO (12-42 meses):</strong></li><li>Movimento volta gradualmente</li><li>Dor praticamente desaparece</li><li>Foco: exercícios progressivos para recuperar amplitude total</li></ul><p><strong>🎯 O QUE VOCÊ PODE FAZER EM CADA FASE:</strong></p><ul><li><strong>FASE DOLOROSA:</strong></li><li>Use gelo após atividades</li><li>Tome os medicamentos prescritos</li><li>Exercícios muito suaves - não force</li><li><strong>FASE RÍGIDA:</strong></li><li>Exercícios de mobilização mais intensos</li><li>Fisioterapia é fundamental nesta fase</li><li>Seja persistente, mas sem causar dor intensa</li><li><strong>FASE DE RECUPERAÇÃO:</strong></li><li>Exercícios progressivos de fortalecimento</li><li>Retome atividades gradualmente</li></ul><p><strong>💪 EXERCÍCIOS DOMICILIARES:</strong></p><ul><li><strong>Pêndulo:</strong> Deixe o braço balançar livremente</li><li><strong>Alongamento na parede:</strong> 'Escale' a parede com os dedos</li><li><strong>Toalha nas costas:</strong> Puxe uma toalha atrás das costas</li><li><strong>Bastão/cabo de vassoura:</strong> Use para ajudar nos movimentos</li><li>Faça 2-3 vezes por dia, todos os dias</li></ul><p><strong>🏥 TRATAMENTOS ADICIONAIS:</strong></p><ul><li><strong>Fisioterapia:</strong> Essencial para acelerar recuperação</li><li><strong>Infiltrações:</strong> Podem ajudar muito na fase dolorosa</li><li><strong>Hidrodilatação:</strong> Procedimento para casos mais resistentes</li></ul><p><strong>💡 DICAS IMPORTANTES:</strong></p><ul><li>90% das pessoas recuperam movimento normal</li><li>Pode levar 2-4 anos, mas a melhora É constante</li><li>Diabetes pode tornar o processo mais lento</li><li>Paciência é fundamental - forçar pode piorar</li></ul>",
+              "categoria": "Reabilitação",
+              "nivel_evidencia": "I-A"
+            }
+          ],
+          "exame": [
+            {
+              "id": "fator-reumatoide-fr",
+              "nome": "Fator reumatóide, quantitativo - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40306860",
+                  "iid": "fr-tuss-id"
+                }
+              ],
+              "categoria": "Imunologia",
+              "cid": "M79.3",
+              "indicacao": "Suspeita de Artrite Reumatoide - critérios ACR/EULAR",
+              "alerta": "Pode ser positivo em outras condições. Integra score diagnóstico",
+              "material": "Sangue"
+            },
+            {
+              "id": "anti-ccp-acpa",
+              "nome": "Anticorpos anti peptídeo cíclico citrulinado - IgG",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40308804",
+                  "iid": "anti-ccp-tuss-id"
+                }
+              ],
+              "categoria": "Imunologia",
+              "cid": "M79.3",
+              "indicacao": "Suspeita de Artrite Reumatoide - maior especificidade",
+              "alerta": "Preditor de erosões articulares. Integra score diagnóstico",
+              "material": "Sangue"
+            },
+            {
+              "id": "pcr-vhs-inflamatorios",
+              "nome": "Proteína C reativa, quantitativa - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "caracteristica_inflamatoria == true or 'febre' in sintomas_sistemicos or 'rigidez_prolongada' in rigidez_matinal_duracao",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40308391",
+                  "iid": "pcr-vhs-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Marcadores inflamatórios - artrite inflamatória",
+              "alerta": "Inespecíficos. Integram score ACR/EULAR (+1 se elevados)",
+              "material": "Sangue"
+            },
+            {
+              "id": "vhs-inflamatorio",
+              "nome": "Hemossedimentação, (VHS) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "caracteristica_inflamatoria == true or 'febre' in sintomas_sistemicos or 'rigidez_prolongada' in rigidez_matinal_duracao",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40304370",
+                  "iid": "vhs-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Marcadores inflamatórios - artrite inflamatória",
+              "alerta": "Inespecíficos. Integram score ACR/EULAR (+1 se elevados)",
+              "material": "Sangue"
+            },
+            {
+              "id": "acido-urico-serico",
+              "nome": "Ácido úrico - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'monoarticular' in numero_articulacoes and ('halux_mtf' in localizacao_especifica_gota or 'tornozelo' in localizacao_especifica_gota)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40301150",
+                  "iid": "acido-urico-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M10.9",
+              "indicacao": "Suspeita de gota - pode estar normal na crise",
+              "alerta": "Não confirma nem exclui gota durante crise aguda. Repetir após resolução",
+              "material": "Sangue"
+            },
+            {
+              "id": "hemograma-completo-monitorizacao",
+              "nome": "Hemograma com contagem de plaquetas ou frações (eritrograma, leucograma, plaquetas)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('dmards_uso' in medicamentos_atuais) or ('biologicos_uso' in medicamentos_atuais) or ('fadiga' in sintomas_sistemicos and ('febre' in sintomas_sistemicos or 'perda_peso' in sintomas_sistemicos)) or ('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40304361",
+                  "iid": "hemograma-tuss-id"
+                }
+              ],
+              "categoria": "Hematologia",
+              "cid": "M79.3",
+              "indicacao": "Monitorização DMARDs ou investigação sistêmica",
+              "alerta": "Obrigatório antes de iniciar/monitorar DMARDs. Repetir mensalmente nos primeiros 3 meses",
+              "material": "Sangue"
+            },
+            {
+              "id": "creatinina-funcao-renal",
+              "nome": "Creatinina - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'dmards_uso' in medicamentos_atuais or 'biologicos_uso' in medicamentos_atuais or 'doenca_renal' in comorbidades or ('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40301630",
+                  "iid": "creatinina-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Segurança para DMARDs e AINEs",
+              "alerta": "Essencial para monitorização de toxicidade",
+              "material": "Sangue"
+            },
+            {
+              "id": "tgo-ast-hepatica",
+              "nome": "Transaminase oxalacética (amino transferase aspartato) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'dmards_uso' in medicamentos_atuais or 'biologicos_uso' in medicamentos_atuais or ('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40302504",
+                  "iid": "tgo-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Segurança hepática para DMARDs",
+              "alerta": "TGO/TGP >2x LSN = suspender DMARD",
+              "material": "Sangue"
+            },
+            {
+              "id": "tgp-alt-hepatica",
+              "nome": "Transaminase pirúvica (amino transferase de alanina) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'dmards_uso' in medicamentos_atuais or 'biologicos_uso' in medicamentos_atuais or ('rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40302512",
+                  "iid": "tgp-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Segurança hepática para DMARDs",
+              "alerta": "TGO/TGP >2x LSN = suspender DMARD",
+              "material": "Sangue"
+            },
+            {
+              "id": "sorologia-hepatite-b",
+              "nome": "Hepatite B - HBSAG (AU, antígeno austrália) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'dmards_uso' in medicamentos_atuais",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40307018",
+                  "iid": "hbsag-tuss-id"
+                }
+              ],
+              "categoria": "Imunologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreamento pré-biológicos AR - risco reativação",
+              "alerta": "Obrigatório antes bDMARD. Tratar hepatite ativa antes imunossupressão",
+              "material": "Sangue"
+            },
+            {
+              "id": "sorologia-hepatite-c",
+              "nome": "Hepatite C - anti-HCV - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'dmards_uso' in medicamentos_atuais",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40307026",
+                  "iid": "anti-hcv-tuss-id"
+                }
+              ],
+              "categoria": "Imunologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreamento pré-biológicos AR - risco reativação",
+              "alerta": "Obrigatório antes bDMARD. Confirmar com RNA se positivo",
+              "material": "Sangue"
+            },
+            {
+              "id": "sorologia-hiv",
+              "nome": "HIV1 ou HIV2, pesquisa de anticorpos",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'dmards_uso' in medicamentos_atuais",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40307174",
+                  "iid": "hiv-tuss-id"
+                }
+              ],
+              "categoria": "Imunologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreamento pré-biológicos AR - imunossupressão",
+              "alerta": "Obrigatório antes bDMARD. Ajustar terapia se positivo",
+              "material": "Sangue"
+            },
+            {
+              "id": "igra-tuberculose",
+              "nome": "Ensaio para dosagem da liberação de interferon gama (IGRA)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'dmards_uso' in medicamentos_atuais",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40324648",
+                  "iid": "igra-tuss-id"
+                }
+              ],
+              "categoria": "Microbiologia",
+              "cid": "M79.3",
+              "indicacao": "Triagem TB latente pré-biológicos AR",
+              "alerta": "Obrigatório antes bDMARD. Tratar TB latente ≥1 mês antes imunossupressão",
+              "material": "Sangue"
+            },
+            {
+              "id": "perfil-lipidico-ar",
+              "nome": "Colesterol (HDL) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and age >= 40",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40301583",
+                  "iid": "perfil-lipidico-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Estratificação risco CV em AR ≥40 anos",
+              "alerta": "AR aumenta risco CV. Repetir anualmente",
+              "material": "Sangue"
+            },
+            {
+              "id": "uc6zak3b",
+              "nome": "Colesterol (LDL) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and age >= 40",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40301591",
+                  "iid": "perfil-lipidico-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Estratificação risco CV em AR ≥40 anos",
+              "alerta": "AR aumenta risco CV. Repetir anualmente",
+              "material": "Sangue"
+            },
+            {
+              "id": "nni2vpzt",
+              "nome": "Colesterol total - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and age >= 40",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40301605",
+                  "iid": "perfil-lipidico-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Estratificação risco CV em AR ≥40 anos",
+              "alerta": "AR aumenta risco CV. Repetir anualmente",
+              "material": "Sangue"
+            },
+            {
+              "id": "yb2fueya",
+              "nome": "Triglicerídeos - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and age >= 40",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40302547",
+                  "iid": "perfil-lipidico-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.3",
+              "indicacao": "Estratificação risco CV em AR ≥40 anos",
+              "alerta": "AR aumenta risco CV. Repetir anualmente",
+              "material": "Sangue"
+            },
+            {
+              "id": "tsh-t4-fibromialgia",
+              "nome": "Tireoestimulante, hormônio (TSH) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and ('perda_peso' in sintomas_sistemicos or 'disturbio_sono' in sintomas_sistemicos)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40316521",
+                  "iid": "tsh-t4-tuss-id"
+                }
+              ],
+              "categoria": "Endocrinologia",
+              "cid": "M79.7",
+              "indicacao": "Exclusão disfunção tireoidiana em fadiga",
+              "alerta": "Sintomas de hipo/hipertireoidismo podem mimetizar fibromialgia",
+              "material": "Sangue"
+            },
+            {
+              "id": "vgneo58y",
+              "nome": "T4 livre - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and ('perda_peso' in sintomas_sistemicos or 'disturbio_sono' in sintomas_sistemicos)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40316491",
+                  "iid": "tsh-t4-tuss-id"
+                }
+              ],
+              "categoria": "Endocrinologia",
+              "cid": "M79.7",
+              "indicacao": "Exclusão disfunção tireoidiana em fadiga",
+              "alerta": "Sintomas de hipo/hipertireoidismo podem mimetizar fibromialgia",
+              "material": "Sangue"
+            },
+            {
+              "id": "ferritina-ferro-fibromialgia",
+              "nome": "Ferritina - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40316270",
+                  "iid": "ferritina-ferro-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.7",
+              "indicacao": "Exclusão deficiência ferro em fadiga",
+              "alerta": "Deficiência ferro pode causar fadiga desproporcional",
+              "material": "Sangue"
+            },
+            {
+              "id": "5ne3zrqv",
+              "nome": "Ferro sérico - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40301842",
+                  "iid": "ferritina-ferro-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.7",
+              "indicacao": "Exclusão deficiência ferro em fadiga",
+              "alerta": "Deficiência ferro pode causar fadiga desproporcional",
+              "material": "Sangue"
+            },
+            {
+              "id": "vitamina-b12-fibromialgia",
+              "nome": "Vitamina B12 - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and age >= 50",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40316572",
+                  "iid": "b12-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.7",
+              "indicacao": "Exclusão deficiência B12 em fadiga/neuropatia",
+              "alerta": "Deficiência comum em >50a. Pode causar fadiga e dor neuropática",
+              "material": "Sangue"
+            },
+            {
+              "id": "vitamina-d-fibromialgia",
+              "nome": "Vitamina \"D\" 25 HIDROXI, pesquisa e/ou dosagem (Vitamina D3)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'dor_difusa' in localizacao_geral",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40302830",
+                  "iid": "vitd-tuss-id"
+                }
+              ],
+              "categoria": "Bioquímica",
+              "cid": "M79.7",
+              "indicacao": "Exclusão deficiência vitamina D em dor difusa",
+              "alerta": "Deficiência pode causar dor muscular difusa",
+              "material": "Sangue"
+            },
+            {
+              "id": "ana-fibromialgia",
+              "nome": "Fator antinúcleo, (FAN) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'febre' in sintomas_sistemicos",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40306852",
+                  "iid": "ana-tuss-id"
+                }
+              ],
+              "categoria": "Imunologia",
+              "cid": "M79.7",
+              "indicacao": "Exclusão doença autoimune em sintomas sistêmicos",
+              "alerta": "Solicitar apenas se sinais claros de autoimunidade",
+              "material": "Sangue"
+            },
+            {
+              "id": "densitometria-ossea-giop",
+              "nome": "Densitometria óssea - rotina: coluna e fêmur (ou dois segmentos)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "duracao_corticoides_meses >= 3 and age >= 50",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40808130",
+                  "iid": "dmo-giop-id"
+                }
+              ],
+              "categoria": "Densitometria",
+              "cid": "M81.4",
+              "indicacao": "Osteoporose induzida por glicocorticoides (GIOP) - ACR 2022",
+              "alerta": "Obrigatória para GC ≥3 meses. Calcular FRAX. Iniciar Cálcio+VitD+Bisfosfonato se indicado",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "radiografia-maos-punhos-pes",
+              "nome": "Radiografia da mão e punho - carpal",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "81000367",
+                  "iid": "rx-maos-punhos-pes-tuss-id"
+                }
+              ],
+              "categoria": "Radiologia",
+              "cid": "M79.3",
+              "indicacao": "Documentar dano estrutural basal - suspeita AR",
+              "alerta": "Pode ser normal no início da doença (<6 meses). Repetir em 6-12 meses",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "rm-ombro",
+              "nome": "RM - Articular (ombro)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'ombros' in localizacao_geral and 'cronico' in duracao_sintomas and (dor_elevacao_braco == true or dor_rotacao_externa == true or dor_noturna_ombro == true)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "41101316",
+                  "iid": "rm-ombro-tuss-id"
+                }
+              ],
+              "categoria": "Ressonância",
+              "cid": "M75.3",
+              "indicacao": "Suspeita ruptura manguito/capsulite refratária",
+              "alerta": "Reservar para casos refratários ou pré-operatório",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "rx-ombro",
+              "nome": "RX - Articulação escapuloumeral (ombro)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'ombros' in localizacao_geral and 'cronico' in duracao_sintomas",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40803074",
+                  "iid": "rx-ombro-tuss-id"
+                }
+              ],
+              "categoria": "Radiologia",
+              "cid": "M75.3",
+              "indicacao": "Dor crônica ombro - exclusão artrose, calcificações",
+              "alerta": "Avaliação basal. Repetir apenas se mudança clínica",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-ombro",
+              "nome": "US - Articular (ombro)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'ombros' in localizacao_geral and (dor_elevacao_braco == true and dor_rotacao_externa == true and dor_noturna_ombro == true)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901220",
+                  "iid": "us-ombro-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M75.3",
+              "indicacao": "Suspeita ruptura manguito - 3 critérios positivos",
+              "alerta": "Alta suspeita ruptura. Avaliar integridade tendínea",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-punho",
+              "nome": "US - Articular (punho)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_radial_punho == true",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901220",
+                  "iid": "us-punho-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M65.4",
+              "indicacao": "De Quervain - diagnóstico duvidoso ou guia infiltração",
+              "alerta": "Confirmar diagnóstico e planejamento terapêutico",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-cotovelo",
+              "nome": "US - Articular (cotovelo)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_epicondilo_lateral == true and 'cronico' in duracao_sintomas",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901220",
+                  "iid": "us-cotovelo-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M77.1",
+              "indicacao": "Epicondilite refratária >3 meses",
+              "alerta": "Avaliar se indicação para infiltração ou outras lesões",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "rx-joelho",
+              "nome": "RX - Joelho",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'joelhos' in localizacao_geral and not(caracteristica_inflamatoria == true) and 'cronico' in duracao_sintomas",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40804054",
+                  "iid": "rx-joelho-tuss-id"
+                }
+              ],
+              "categoria": "Radiologia",
+              "cid": "M17.9",
+              "indicacao": "Osteoartrite joelho - diagnóstico incerto",
+              "alerta": "Não obrigatório para OA. Considerar se planejamento cirúrgico",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-dedo",
+              "nome": "US - Articular (dedo)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "travamento_dedo == true",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901220",
+                  "iid": "us-dedo-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M65.3",
+              "indicacao": "Dedo em gatilho - dúvida diagnóstica ou guia infiltração",
+              "alerta": "Avaliar espessamento polia A1",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-quadril",
+              "nome": "US - Articular (quadril)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_lateral_quadril == true",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901220",
+                  "iid": "us-quadril-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M70.6",
+              "indicacao": "Síndrome grande trocânter - diagnóstico/guia infiltração",
+              "alerta": "Avaliar bursa e tendões glúteos",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "rm-quadril",
+              "nome": "RM - Articular (quadril)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_lateral_quadril == true and 'cronico' in duracao_sintomas and (dor_deitar_lado == true and dor_subir_escadas == true)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "41101316",
+                  "iid": "rm-quadril-tuss-id"
+                }
+              ],
+              "categoria": "Ressonância",
+              "cid": "M70.6",
+              "indicacao": "Síndrome grande trocânter refratária >3 meses",
+              "alerta": "Avaliar ruptura tendínea glútea",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-joelho",
+              "nome": "US - Articular (joelho)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_medial_joelho == true",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901046",
+                  "iid": "us-joelho-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M70.5",
+              "indicacao": "Bursite anserina - diagnóstico/guia infiltração",
+              "alerta": "Avaliar bursa pata de ganso",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "us-pe",
+              "nome": "US - Articular (pé)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_plantar_medial == true and 'cronico' in duracao_sintomas",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40901047",
+                  "iid": "us-pe-tuss-id"
+                }
+              ],
+              "categoria": "Ultrassonografia",
+              "cid": "M72.2",
+              "indicacao": "Fasciíte plantar persistente >6-12 semanas",
+              "alerta": "Avaliar espessamento fáscia plantar",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "rx-torax",
+              "nome": "RX - Tórax - 2 incidências",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'dmards_uso' in medicamentos_atuais",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40805026",
+                  "iid": "rx-torax-tuss-id"
+                }
+              ],
+              "categoria": "Radiologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreio TB pré-biológicos AR",
+              "alerta": "Obrigatório antes bDMARD. Avaliar tuberculose latente",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "rx-pe",
+              "nome": "RX - Pé",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_plantar_medial == true",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40804070",
+                  "iid": "rx-pe-tuss-id"
+                }
+              ],
+              "categoria": "Radiologia",
+              "cid": "M72.2",
+              "indicacao": "Fasciíte plantar - diferencial fratura/esporão",
+              "alerta": "Exclusão outras causas de dor plantar",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "puncao-articular-gota",
+              "nome": "Punção articular diagnóstica ou terapêutica (infiltração) - orientada ou não por método de imagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'monoarticular' in numero_articulacoes and 'febre' in sintomas_sistemicos",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "30713137",
+                  "iid": "puncao-articular-tuss-id"
+                }
+              ],
+              "categoria": "Procedimento",
+              "cid": "M10.9",
+              "indicacao": "Suspeita artrite séptica vs gota - monoartrite febril",
+              "alerta": "URGENTE se febre. Confirmar cristais urato vs infecção",
+              "material": "Líquido sinovial"
+            },
+            {
+              "id": "tc-dupla-energia-gota",
+              "nome": "TC - Segmento apendicular (braço ou antebraço ou mão ou coxa ou perna ou pé) - unilateral",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'monoarticular' in numero_articulacoes and 'cronico' in duracao_sintomas and not('halux_mtf' in localizacao_especifica_gota)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "41001150",
+                  "iid": "tc-dupla-energia-tuss-id"
+                }
+              ],
+              "categoria": "Tomografia",
+              "cid": "M10.9",
+              "indicacao": "Gota duvidosa - detecção depósitos urato",
+              "alerta": "Não rotineiro. Apenas se diagnóstico incerto",
+              "material": "Exame de imagem"
+            },
+            {
+              "id": "polissonografia-fibromialgia",
+              "nome": "Polissonografia de noite inteira (PSG) (inclui polissonogramas)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'disturbio_sono' in sintomas_sistemicos and sono_nao_reparador == true",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40103528",
+                  "iid": "polissonografia-tuss-id"
+                }
+              ],
+              "categoria": "Neurofisiologia",
+              "cid": "M79.7",
+              "indicacao": "Distúrbio sono grave em fibromialgia - suspeita apneia",
+              "alerta": "Indicar se sonolência diurna ou suspeita apneia do sono",
+              "material": "Exame funcional"
+            },
+            {
+              "id": "avaliacao-oftalmologica",
+              "nome": "Tomografia de coerência óptica - monocular",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "41501144",
+                  "iid": "oftalmo-tuss-id"
+                }
+              ],
+              "categoria": "Oftalmologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreio retinopatia por hidroxicloroquina",
+              "alerta": "Obrigatório se uso HCQ. Repetir anualmente",
+              "material": "Exame funcional"
+            },
+            {
+              "id": "o12stq6v",
+              "nome": "Campimetria computadorizada - monocular",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "40103137",
+                  "iid": "oftalmo-tuss-id"
+                }
+              ],
+              "categoria": "Oftalmologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreio retinopatia por hidroxicloroquina",
+              "alerta": "Obrigatório se uso HCQ. Repetir anualmente",
+              "material": "Exame funcional"
+            },
+            {
+              "id": "bkne0z20",
+              "nome": "Fundoscopia sob medríases - binocular",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "TUSS",
+                  "valor": "41301439",
+                  "iid": "oftalmo-tuss-id"
+                }
+              ],
+              "categoria": "Oftalmologia",
+              "cid": "M79.3",
+              "indicacao": "Rastreio retinopatia por hidroxicloroquina",
+              "alerta": "Obrigatório se uso HCQ. Repetir anualmente",
+              "material": "Exame funcional"
+            }
+          ],
+          "medicamento": [
+            {
+              "id": "naproxeno-aine-primeira-linha",
+              "nome": "Naproxeno 550mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_articular_presente == true and not('alergia_aines' in alergias_medicamentos) and not('ulcera_peptica' in contraindicacoes_relativas) and not('doenca_renal' in comorbidades) and not('insuficiencia_renal' in contraindicacoes_relativas)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 20,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "37432",
+                  "iid": "naproxeno-mevo-id"
+                }
+              ],
+              "categoria": "Anti-inflamatório",
+              "nomeMed": "Naproxeno",
+              "posologia": "<p><strong>550mg VO 12/12h</strong><br>Tomar com alimentos<br>Uso por 7-14 dias<br>Associar protetor gástrico se necessário</p>",
+              "mensagemMedico": "<p>AINE primeira linha - perfil cardiovascular favorável<br/><strong>⚠️ BLOQUEADO EM DRC/INSUF. RENAL</strong><br/><strong>Evidência:</strong> Grau I-A (ACR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "paracetamol-alternativa-drc",
+              "nome": "Paracetamol 750mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "dor_articular_presente == true and ('doenca_renal' in comorbidades or 'insuficiencia_renal' in contraindicacoes_relativas or 'alergia_aines' in alergias_medicamentos)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 20,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "21354",
+                  "iid": "paracetamol-mevo-id"
+                }
+              ],
+              "categoria": "Analgésico",
+              "nomeMed": "Paracetamol",
+              "posologia": "<p><strong>750mg-1g VO 6/6h ou 8/8h</strong><br/>Máximo 4g/dia<br/>Uso intermitente preferível</p>",
+              "mensagemMedico": "<p>Alternativa segura em DRC ou alergia a AINEs<br/><strong>Evidência:</strong> Grau I-A (ACR 2019 - OA)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "metotrexato-ar-dmard",
+              "nome": "Metotrexato 2,5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento and not('alergia_metotrexato' in alergias_medicamentos) and not('insuficiencia_hepatica' in contraindicacoes_relativas) and not('gravidez_lactacao' in contraindicacoes_relativas)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 24,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "18474",
+                  "iid": "metotrexato-mevo-id"
+                }
+              ],
+              "categoria": "DMARD sintético",
+              "nomeMed": "Metotrexato",
+              "posologia": "<p><strong>7,5-15mg VO 1x/semana</strong><br/>Dia fixo da semana<br/>Suplementar ácido fólico 5mg 24h após<br/>Monitorização obrigatória: hemograma + TGO/TGP mensal (primeiros 3 meses)</p>",
+              "mensagemMedico": "<p>DMARD primeira linha para AR. Iniciar 7,5mg/sem, titular conforme resposta<br/><strong>⚠️ OBRIGATÓRIO:</strong> Hemograma + TGO/TGP basal e mensal<br/><strong>Evidência:</strong> Grau I-A (ACR/EULAR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "leflunomida-ar-dmard",
+              "nome": "Leflunomida 20mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and ('alergia_metotrexato' in alergias_medicamentos or 'insuficiencia_hepatica' in contraindicacoes_relativas or 'dmards_uso' in medicamentos_atuais)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "3168",
+                  "iid": "leflunomida-mevo-id"
+                }
+              ],
+              "categoria": "DMARD sintético",
+              "nomeMed": "Leflunomida",
+              "posologia": "<p><strong>20mg VO 1x/dia</strong><br/>Pode iniciar dose de ataque 100mg x3 dias<br/>Monitorização: hemograma + TGO/TGP mensal<br/>Washout necessário se descontinuar</p>",
+              "mensagemMedico": "<p>DMARD alternativa quando MTX CI/intolerado. Pode combinar com MTX<br/><strong>⚠️ TERATOGÊNICO:</strong> Contraceptivo eficaz obrigatório<br/><strong>Evidência:</strong> Grau I-A (ACR/EULAR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "sulfassalazina-ar-dmard",
+              "nome": "Sulfassalazina 500mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'dmards_uso' in medicamentos_atuais",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 120,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "4010",
+                  "iid": "sulfassalazina-mevo-id"
+                }
+              ],
+              "categoria": "DMARD sintético",
+              "nomeMed": "Sulfassalazina",
+              "posologia": "<p><strong>500mg VO 2x/dia por 1 sem, depois 1g 2x/dia</strong><br/>Titular gradualmente até 3g/dia se necessário<br/>Tomar com alimentos<br/>Monitorização: hemograma mensal inicial</p>",
+              "mensagemMedico": "<p>DMARD para combinação (dupla/tripla terapia) em AR<br/><strong>⚠️ ALERGIA:</strong> Contraindicado se alergia sulfa<br/><strong>Evidência:</strong> Grau I-A (ACR/EULAR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "hidroxicloroquina-ar-dmard",
+              "nome": "Hidroxicloroquina 400mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and not('febre' in sintomas_sistemicos)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 60,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "25274",
+                  "iid": "hidroxicloroquina-mevo-id"
+                }
+              ],
+              "categoria": "Antimalárico",
+              "nomeMed": "Hidroxicloroquina",
+              "posologia": "<p><strong>400mg VO 1x/dia ou 200mg 2x/dia</strong><br/>Máximo 5mg/kg/dia<br/>Tomar com alimentos<br/>Avaliação oftalmológica anual obrigatória</p>",
+              "mensagemMedico": "<p>DMARD para AR leve ou em combinação. Perfil segurança favorável<br/><strong>⚠️ OFTÁLMICO:</strong> Rastreio retinal anual obrigatório<br/><strong>Evidência:</strong> Grau I-A (ACR/EULAR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "prednisona-ponte-ar",
+              "nome": "Prednisolona 20mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "32630",
+                  "iid": "prednisona-mevo-id"
+                }
+              ],
+              "categoria": "Corticoide",
+              "nomeMed": "Prednisolona",
+              "posologia": "<p><strong>Meio comprimido VO 1x/dia pela manhã</strong><br>Usar como ponte até DMARD fazer efeito<br>Reduzir gradualmente em 6-12 semanas<br>Máximo 3 meses de uso</p>",
+              "mensagemMedico": "<p>Ponte terapêutica para AR até DMARD agir. Evitar uso crônico<br/><strong>⚠️ GIOP:</strong> Profilaxia osteoporose se ≥3 meses<br/><strong>Evidência:</strong> Grau I-A (ACR/EULAR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "acido-folico-mtx",
+              "nome": "Ácido Fólico 5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "1515",
+                  "iid": "acido-folico-mevo-id"
+                }
+              ],
+              "categoria": "Suplemento",
+              "nomeMed": "Ácido Fólico",
+              "posologia": "<p><strong>5mg VO 1x/semana</strong><br/>24h após o metotrexato<br/>Reduz toxicidade hematológica e GI</p>",
+              "mensagemMedico": "<p>Obrigatório com metotrexato. Reduz efeitos adversos sem comprometer eficácia<br/><strong>Evidência:</strong> Grau I-A (ACR 2021)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "colchicina-gota-aguda",
+              "nome": "Colchicina 0,5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'monoarticular' in numero_articulacoes and ('halux_mtf' in localizacao_especifica_gota or 'tornozelo' in localizacao_especifica_gota) and 'agudo' in duracao_sintomas and not('doenca_renal' in comorbidades)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "34790",
+                  "iid": "colchicina-mevo-id"
+                }
+              ],
+              "categoria": "Antigotoso",
+              "nomeMed": "Colchicina",
+              "posologia": "<p><strong>1mg inicial + 0,5mg após 1h</strong><br/>Depois 0,5mg 2x/dia até melhora<br/>Máximo 1,5mg no primeiro dia<br/>Ajustar dose em DRC</p>",
+              "mensagemMedico": "<p>Primeira linha para crise aguda de gota. Iniciar nas primeiras 24h<br/>⚠️ Ajustar dose em DRC. Evitar em ClCr <30ml/min<br/><strong>Evidência:</strong> Grau I-A (ACR 2020)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "alopurinol-gota-cronica",
+              "nome": "Alopurinol 100mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('duas_tres_crises' in frequencia_crises or 'quatro_ou_mais_crises' in frequencia_crises or tofos_presentes == true) and not('insuficiencia_renal' in contraindicacoes_relativas)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "28553",
+                  "iid": "alopurinol-mevo-id"
+                }
+              ],
+              "categoria": "Urato-redutor",
+              "nomeMed": "Alopurinol",
+              "posologia": "<p><strong>100mg VO 1x/dia</strong><br/>Iniciar após crise aguda<br/>Titular gradualmente até ácido úrico <6mg/dL<br/>Colchicina profilática 0,5mg/dia por 3-6 meses</p>",
+              "mensagemMedico": "<p>Indicado: ≥2 crises/ano ou tofos. Meta: AU <6mg/dL (ou <5mg/dL se tofos)<br/>⚠️ Iniciar APÓS resolução da crise + profilaxia colchicina<br/><strong>Evidência:</strong> Grau I-A (ACR 2020)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "benzobromarona-gota-alternativa",
+              "nome": "Benzobromarona 50mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('duas_tres_crises' in frequencia_crises or 'quatro_ou_mais_crises' in frequencia_crises) and 'insuficiencia_renal' in contraindicacoes_relativas",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "30083",
+                  "iid": "benzobromarona-mevo-id"
+                }
+              ],
+              "categoria": "Uricosúrico",
+              "nomeMed": "Benzobromarona",
+              "posologia": "<p><strong>50mg VO 1x/dia, titular até 200mg/dia</strong><br/>Ajustar conforme ácido úrico<br/>Hidratação abundante obrigatória<br/>Monitorização hepática</p>",
+              "mensagemMedico": "<p>Alternativa quando alopurinol CI/DRC. Requer função renal preservada<br/><strong>⚠️ HEPATOTOXICIDADE:</strong> Monitorizar TGO/TGP<br/><strong>Evidência:</strong> Grau I-B (ACR 2020)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "amitriptilina-fibromialgia",
+              "nome": "Amitriptilina 25mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and sono_nao_reparador == true",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "44297",
+                  "iid": "amitriptilina-mevo-id"
+                }
+              ],
+              "categoria": "Antidepressivo tricíclico",
+              "nomeMed": "Amitriptilina",
+              "posologia": "<p><strong>10-25mg à noite</strong><br/>Iniciar 10mg, titular gradualmente<br/>Melhora dor e sono<br/>Efeito máximo em 4-6 semanas</p>",
+              "mensagemMedico": "<p>Primeira linha para fibromialgia - efeito analgésico e hipnótico<br/><strong>Evidência:</strong> Grau I-A (ACR 2016 - Fibromialgia)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "duloxetina-fibromialgia",
+              "nome": "Duloxetina 60mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "35537",
+                  "iid": "duloxetina-mevo-id"
+                }
+              ],
+              "categoria": "Antidepressivo IRSN",
+              "nomeMed": "Duloxetina",
+              "posologia": "<p><strong>60mg VO 1x/dia</strong><br/>Iniciar 30mg x1 sem, depois 60mg<br/>Tomar pela manhã<br/>Reavaliar em 12 semanas</p>",
+              "mensagemMedico": "<p>Fibromialgia com dor intensa ou depressão. Também indicado em OA neuropática<br/><strong>Evidência:</strong> Grau I-A (ACR 2016 - Fibromialgia)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "pregabalina-fibromialgia",
+              "nome": "Pregabalina 150mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 60,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "43947",
+                  "iid": "pregabalina-mevo-id"
+                }
+              ],
+              "categoria": "Anticonvulsivante",
+              "nomeMed": "Pregabalina",
+              "posologia": "<p><strong>150mg VO 2x/dia</strong><br/>Iniciar 75mg 2x/dia por 1 sem<br/>Titular até 300-450mg/dia se necessário<br/>Reduzir dose em DRC</p>",
+              "mensagemMedico": "<p>Fibromialgia com dor neuropática e distúrbio sono marcantes<br/><strong>⚠️ DEPENDÊNCIA:</strong> Redução gradual obrigatória<br/><strong>Evidência:</strong> Grau I-A (ACR 2016 - Fibromialgia)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "gabapentina-fibromialgia",
+              "nome": "Gabapentina 300mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and not('doenca_renal' in comorbidades)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 90,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "14140",
+                  "iid": "gabapentina-mevo-id"
+                }
+              ],
+              "categoria": "Anticonvulsivante",
+              "nomeMed": "Gabapentina",
+              "posologia": "<p><strong>300mg VO à noite, titular até 1800mg/dia</strong><br/>Dividir em 3 doses<br/>Titular lentamente ao longo de 2-4 semanas<br/>Ajustar dose em DRC</p>",
+              "mensagemMedico": "<p>Alternativa à pregabalina para fibromialgia. Perfil tolerância similar<br/><strong>Evidência:</strong> Grau I-B (ACR 2016 - Fibromialgia)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "ciclobenzaprina-fibromialgia",
+              "nome": "Ciclobenzaprina 10mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "47583",
+                  "iid": "ciclobenzaprina-mevo-id"
+                }
+              ],
+              "categoria": "Relaxante muscular",
+              "nomeMed": "Ciclobenzaprina",
+              "posologia": "<p><strong>10mg VO à noite</strong><br/>Iniciar 5mg, titular conforme tolerância<br/>Uso por curto prazo (2-24 semanas)<br/>Melhora sono e espasmo</p>",
+              "mensagemMedico": "<p>Fibromialgia com componente espástico e distúrbio do sono<br/><strong>⚠️ SEDAÇÃO:</strong> Evitar condução de veículos<br/><strong>Evidência:</strong> Grau I-A (ACR 2016 - Fibromialgia)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "tramadol-dor-refrataria",
+              "nome": "Tramadol 50mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos) or (not(caracteristica_inflamatoria == true) and 'cronico' in duracao_sintomas and not('alergia_aines' in alergias_medicamentos))",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 20,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "26481",
+                  "iid": "tramadol-mevo-id"
+                }
+              ],
+              "categoria": "Analgésico opioide",
+              "nomeMed": "Tramadol",
+              "posologia": "<p><strong>50-100mg VO 6/6h ou 8/8h</strong><br/>Máximo 400mg/dia<br/>Uso intermitente, menor tempo possível<br/>Reduzir dose em idosos e DRC</p>",
+              "mensagemMedico": "<p>Reserva para dor refratária em fibromialgia/OA. Uso prudente<br/><strong>⚠️ DEPENDÊNCIA:</strong> Risco moderado. Monitorar uso<br/><strong>Evidência:</strong> Grau I-B (fibromialgia), II-B (OA)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "sulfato-condroitina-oa",
+              "nome": "Condroflex",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'maos_punhos' in localizacao_geral and not(caracteristica_inflamatoria == true) and 'cronico' in duracao_sintomas",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 90,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "50905",
+                  "iid": "condroitina-mevo-id"
+                }
+              ],
+              "categoria": "Condroprotector",
+              "nomeMed": "Sulfato de Condroitina",
+              "posologia": "<p><strong>1200mg VO 1x/dia ou 400mg 3x/dia</strong><br/>Uso por 3-6 meses<br/>Reavaliar benefício<br/>Tomar com alimentos</p>",
+              "mensagemMedico": "<p>OA de mãos - evidência moderada. Trial terapêutico justificável<br/><strong>Evidência:</strong> Grau II-B (EULAR 2019)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "calcio-vitamina-d-giop",
+              "nome": "Carbonato de Cálcio 500mg + Vitamina D 400UI",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "duracao_corticoides_meses >= 3 and age >= 50",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 60,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "49499",
+                  "iid": "calcio-vitd-mevo-id"
+                }
+              ],
+              "categoria": "Suplemento",
+              "nomeMed": "Cálcio + Vitamina D",
+              "posologia": "<p><strong>1-2 comprimidos VO 2x/dia</strong><br/>Total: Cálcio 1000-1200mg/dia + VitD 800-1000UI/dia<br/>Tomar com alimentos</p>",
+              "mensagemMedico": "<p>OBRIGATÓRIO em glicocorticoides ≥3 meses (prevenção GIOP)<br/>Solicitar DMO + calcular FRAX. Considerar bisfosfonato conforme risco<br/><strong>Evidência:</strong> Grau I-A (ACR 2022 - GIOP)</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "omeprazol-gastroprotecao",
+              "nome": "Omeprazol 20mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('ulcera_peptica' in contraindicacoes_relativas or age >= 65) and dor_articular_presente == true and not('alergia_aines' in alergias_medicamentos)",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 30,
+              "codigo": [
+                {
+                  "sistema": "MEVO",
+                  "valor": "17527",
+                  "iid": "omeprazol-mevo-id"
+                }
+              ],
+              "categoria": "Inibidor bomba prótons",
+              "nomeMed": "Omeprazol",
+              "posologia": "<p><strong>20mg VO 1x/dia</strong><br/>30 min antes do café<br/>Proteção gástrica</p>",
+              "mensagemMedico": "<p>Gastroproteção obrigatória em pacientes de risco usando AINEs<br/>(idade ≥65, úlcera prévia, corticoides concomitantes)<br/><strong>Evidência:</strong> Grau I-A (ACR 2019)</p>",
+              "via": "Oral"
+            }
+          ],
+          "encaminhamento": [
+            {
+              "id": "reumatologia-ar-urgente",
+              "nome": "Reumatologia - URGENTE (<2 semanas)",
+              "descricao": "<p>Encaminhamento urgente para reumatologia</p>",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "indicacao": "Suspeita de AR - janela terapêutica <12 semanas",
+              "codigo": "",
+              "cid": "M79.3",
+              "destino": "Reumatologia"
+            },
+            {
+              "id": "fisioterapia-partes-moles",
+              "nome": "Fisioterapia",
+              "descricao": "<p>Programa de reabilitação fisioterápica</p>",
+              "condicional": "visivel",
+              "condicao": "'ombros' in localizacao_geral or 'cotovelos' in localizacao_geral or dor_lateral_quadril == true",
+              "indicacao": "Reabilitação de lesões de partes moles",
+              "codigo": "",
+              "cid": "M75.3",
+              "destino": "Fisioterapia"
+            },
+            {
+              "id": "psicologia-fibromialgia",
+              "nome": "Psicologia/TCC",
+              "descricao": "<p>Terapia cognitivo-comportamental</p>",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral",
+              "indicacao": "Fibromialgia - manejo de dor crônica e estratégias de enfrentamento",
+              "codigo": "",
+              "cid": "M79.7",
+              "destino": "Psicologia"
+            },
+            {
+              "id": "ortopedia-partes-moles-refratario",
+              "nome": "Ortopedia",
+              "descricao": "<p>Avaliação ortopédica especializada</p>",
+              "condicional": "visivel",
+              "condicao": "('cronico' in duracao_sintomas) or (dor_epicondilo_lateral == true and dor_extensao_punho == true) or (travamento_dedo == true)",
+              "indicacao": "Lesões de partes moles refratárias ou necessidade de procedimentos",
+              "codigo": "",
+              "cid": "M75.3",
+              "destino": "Ortopedia"
+            }
+          ],
+          "mensagem": [
+            {
+              "id": "msg-ar-suspeita-forte-score",
+              "nome": "SUSPEITA FORTE DE ARTRITE REUMATOIDE",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'rigidez_prolongada' in rigidez_matinal_duracao and 'poliarticular' in numero_articulacoes and 'simetrico' in simetria_envolvimento",
+              "conteudo": "<p><strong>🚨 PROTOCOLO AR - JANELA TERAPÊUTICA CRÍTICA</strong></p><p><strong>CRITÉRIOS DIAGNÓSTICOS PRESENTES (ACR/EULAR 2010):</strong></p><ul><li>✅ Rigidez matinal >60min = +1 ponto</li><li>✅ Poliarticular (≥5 articulações) = +5 pontos</li><li>✅ Padrão simétrico típico</li><li>✅ Duração >6 semanas = +1 ponto</li><li><strong>SCORE ESTIMADO: ≥6/10 (≥6 = AR altamente provável)</strong></li></ul><p><strong>CONDUTA IMEDIATA OBRIGATÓRIA:</strong></p><ul><li><strong>LABORATÓRIO HOJE:</strong> FR + anti-CCP + PCR + VHS + hemograma + TGO/TGP + creatinina</li><li><strong>IMAGEM BASAL:</strong> RX mãos/punhos bilaterais + RX pés</li><li><strong>SE DISPONÍVEL:</strong> US articular (detecta sinovite subclínica)</li><li><strong>ENCAMINHAMENTO:</strong> Reumatologia URGENTE (<2 semanas)</li></ul><p><strong>TERAPIA PONTE (considerar):</strong></p><ul><li><strong>Prednisona 5-10mg/dia</strong> até avaliação reumatológica</li><li>Não adia início DMARD e melhora qualidade vida</li><li>Contraindicações: DM descompensado, infecção ativa, HAS grave</li></ul><p><strong>EVIDÊNCIAS SUPORTIVAS:</strong></p><ul><li><strong>Janela terapêutica:</strong> Diagnóstico <12 semanas = melhor prognóstico funcional</li><li><strong>Início precoce DMARD:</strong> Reduz dano erosivo em 70% (EULAR 2023)</li><li><strong>Meta treat-to-target:</strong> Remissão possível em 60-70% casos</li></ul><p><strong>ALERTAS CRÍTICOS:</strong></p><ul><li>⚠️ <strong>NÃO aguardar</strong> confirmação sorológica para encaminhar</li><li>⚠️ <strong>AR seronegativa</strong> = 30% dos casos (anti-CCP/FR negativos)</li><li>⚠️ <strong>Radiografias normais</strong> não excluem AR inicial</li></ul><p><strong>REFERÊNCIAS:</strong> ACR/EULAR Guidelines 2021, EULAR Strategy Update 2023</p>",
+              "observacao": ""
+            },
+            {
+              "id": "msg-gota-aguda-manejo",
+              "nome": "CRISE AGUDA DE GOTA - PROTOCOLO PADRÃO-OURO",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'monoarticular' in numero_articulacoes and ('halux_mtf' in localizacao_especifica_gota) and 'agudo' in duracao_sintomas",
+              "conteudo": "<p><strong>⚡ GOTA TÍPICA - TRATAMENTO BASEADO EM EVIDÊNCIAS</strong></p><p><strong>DIAGNÓSTICO CLÍNICO SUFICIENTE:</strong></p><ul><li>✅ Monoartrite aguda + 1ª MTF = 95% probabilidade gota</li><li>✅ Início súbito, dor máxima <24h</li><li>✅ Eritema, edema, limitação funcional</li></ul><p><strong>LINHA DE TRATAMENTO (escolher 1):</strong></p><ul><li><strong>1ª ESCOLHA - COLCHICINA:</strong></li><li>1mg VO inicial + 0,5mg após 1h, depois 0,5mg 2x/dia</li><li>Máximo 1,5mg primeiro dia</li><li>Eficácia máxima se iniciada <24h</li><li><strong>2ª ESCOLHA - AINE dose plena:</strong></li><li>Naproxeno 500mg 2x/dia OU Indometacina 50mg 3x/dia</li><li>Contraindicado: DRC, úlcera ativa, IC descompensado</li><li><strong>3ª ESCOLHA - CORTICOIDE:</strong></li><li>Prednisona 30-40mg/dia x5-7 dias OU infiltração IA</li><li>Indicado se CI aos anteriores</li></ul><p><strong>INVESTIGAÇÃO LABORATÓRIO:</strong></p><ul><li><strong>Ácido úrico:</strong> Colher, mas pode estar normal na crise (50% casos)</li><li><strong>Repetir AU</strong> 2-4 sem após resolução para avaliar hiperuricemia</li><li><strong>PCR/VHS:</strong> Confirmam processo inflamatório</li><li><strong>⚠️ NÃO solicitar punção articular</strong> se quadro típico</li></ul><p><strong>CONTRAINDICAÇÕES ABSOLUTAS:</strong></p><ul><li>❌ <strong>NÃO iniciar alopurinol</strong> durante crise aguda</li><li>❌ <strong>NÃO suspender alopurinol</strong> se já em uso</li><li>❌ <strong>NÃO usar aspirina</strong> (piora hiperuricemia)</li></ul><p><strong>FOLLOW-UP ESTRUTURADO:</strong></p><ul><li><strong>48-72h:</strong> Reavaliar resposta ao tratamento</li><li><strong>7-14 dias:</strong> Resolução esperada da crise</li><li><strong>4-6 sem:</strong> Reavaliar AU e discutir terapia urato-redutora</li></ul><p><strong>EVIDÊNCIAS:</strong> ACR Guidelines 2020 (Grau I-A), EULAR Guidelines 2023</p>",
+              "observacao": ""
+            },
+            {
+              "id": "msg-gota-cronica-terapia",
+              "nome": "GOTA CRÔNICA - INDICAÇÃO TERAPIA URATO-REDUTORA",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('duas_tres_crises' in frequencia_crises or 'quatro_ou_mais_crises' in frequencia_crises or tofos_presentes == true)",
+              "conteudo": "<p><strong>📊 INDICAÇÃO FORMAL TERAPIA URATO-REDUTORA (ACR 2020)</strong></p><p><strong>CRITÉRIOS DE INDICAÇÃO PRESENTES:</strong></p><ul><li>✅ Frequência: ≥2 crises/ano OU</li><li>✅ Presença de tofos (depósitos cristais)</li><li>✅ Outras indicações: DRC ≥3, nefrolitíase, AU >9mg/dL</li></ul><p><strong>PROTOCOLO TERAPÊUTICO PADRÃO:</strong></p><ul><li><strong>MEDICAÇÃO BASE - ALOPURINOL:</strong></li><li>Dose inicial: 100mg/dia (50mg se DRC)</li><li>Titulação: Aumentar 100mg a cada 2-4 semanas</li><li>META TERAPÊUTICA: AU <6mg/dL (ou <5mg/dL se tofos)</li><li>Dose máxima: 800mg/dia (ajustar por ClCr)</li></ul><p><strong>PROFILAXIA ANTI-INFLAMATÓRIA OBRIGATÓRIA:</strong></p><ul><li><strong>Colchicina 0,5mg/dia</strong> por 3-6 meses mínimo</li><li>Alternativa: AINE dose baixa (se CI colchicina)</li><li>⚠️ <strong>NUNCA iniciar</strong> urato-redutor sem profilaxia</li></ul><p><strong>MONITORIZAÇÃO ESTRUTURADA:</strong></p><ul><li><strong>Semanas 2-4:</strong> AU + função renal + segurança hepática</li><li><strong>Mensalmente</strong> até atingir meta, depois trimestral</li><li><strong>Anualmente:</strong> AU + perfil metabólico completo</li></ul><p><strong>ALTERNATIVAS TERAPÊUTICAS:</strong></p><ul><li><strong>Benzobromarona (uricosúrico):</strong> Se alopurinol CI/intolerância</li><li><strong>Febuxostat:</strong> Se alopurinol falha ou DRC grave</li><li><strong>Terapia combinada:</strong> Casos refratários</li></ul><p><strong>EDUCAÇÃO OBRIGATÓRIA PACIENTE:</strong></p><ul><li>✅ Medicação é para VIDA TODA</li><li>✅ Não suspender durante novas crises</li><li>✅ Hidratação 2-3L/dia</li><li>✅ Moderação álcool (especialmente cerveja)</li><li>✅ Controle peso e comorbidades</li></ul><p><strong>METAS TERAPÊUTICAS EVIDENCIADAS:</strong></p><ul><li><strong>AU <6mg/dL:</strong> Previne novas crises em 85% (ACR 2020)</li><li><strong>AU <5mg/dL:</strong> Resolução tofos em 70% casos/2 anos</li><li><strong>Adesão >80%:</strong> Redução 90% crises/ano</li></ul>",
+              "observacao": ""
+            },
+            {
+              "id": "msg-fibromialgia-diagnostico-multimodal",
+              "nome": "FIBROMIALGIA - ABORDAGEM DIAGNÓSTICA E TERAPÊUTICA",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'fadiga' in sintomas_sistemicos and 'disturbio_sono' in sintomas_sistemicos and 'dor_difusa' in localizacao_geral",
+              "conteudo": "<p><strong>🎯 FIBROMIALGIA - CRITÉRIOS ACR 2016 SUGESTIVOS</strong></p><p><strong>TRÍADE DIAGNÓSTICA PRESENTE:</strong></p><ul><li>✅ Dor difusa/generalizada</li><li>✅ Fadiga significativa</li><li>✅ Distúrbio do sono</li></ul><p><strong>DIAGNÓSTICO DIFERENCIAL NECESSÁRIO:</strong></p><ul><li><strong>LABORATÓRIO DIRIGIDO:</strong></li><li>TSH/T4 (hipertireoidismo), VitD, B12, ferro/ferritina</li><li>VHS/PCR apenas se sinais inflamatórios</li><li>ANA apenas se sinais autoimunes claros</li><li><strong>⚠️ EVITAR</strong> baterias laboratoriais extensas desnecessárias</li></ul><p><strong>ABORDAGEM TERAPÊUTICA MULTIMODAL (ACR 2016):</strong></p><ul><li><strong>1ª LINHA - NÃO FARMACOLÓGICA (OBRIGATÓRIA):</strong></li><li>Educação estruturada sobre síndrome</li><li>Exercício aeróbico graduado (Grau I-A)</li><li>TCC - Terapia Cognitivo-Comportamental (Grau I-A)</li><li>Técnicas relaxamento/mindfulness</li></ul><ul><li><strong>2ª LINHA - FARMACOLÓGICA (ADJUVANTE):</strong></li><li><strong>Amitriptilina 10-25mg noite</strong> (dor + sono) - Grau I-A</li><li><strong>Duloxetina 60mg/dia</strong> (dor + depressão) - Grau I-A</li><li><strong>Pregabalina 150-450mg/dia</strong> (dor neuropática) - Grau I-A</li></ul><p><strong>CONTRAINDICAÇÕES TERAPÊUTICAS:</strong></p><ul><li>❌ <strong>Opioides NÃO recomendados</strong> (Grau I-C)</li><li>❌ <strong>AINEs baixa eficácia</strong> (não há inflamação)</li><li>❌ <strong>Corticoides contraindicados</strong> (piora sono/fadiga)</li></ul><p><strong>PROGNÓSTICO E SEGUIMENTO:</strong></p><ul><li><strong>Resposta esperada:</strong> 30-50% melhora em 3-6 meses</li><li><strong>Follow-up:</strong> Mensal inicial, depois trimestral</li><li><strong>Reavaliação:</strong> Eficácia em 12 semanas farmacoterapia</li><li><strong>Comorbidades:</strong> Depressão (40%), ansiedade (60%), SII (30%)</li></ul><p><strong>RED FLAGS (reavaliar diagnóstico):</strong></p><ul><li>⚠️ Sinovite objetiva, febre, perda peso significativa</li><li>⚠️ Fraqueza muscular assimétrica</li><li>⚠️ Rigidez matinal >1 hora</li><li>⚠️ Sintomas neurológicos focais</li></ul><p><strong>REFERÊNCIAS:</strong> ACR 2016 Fibromyalgia Guidelines, EULAR 2017 Recommendations</p>",
+              "observacao": ""
+            },
+            {
+              "id": "msg-osteoartrite-evidencia-conservador",
+              "nome": "OSTEOARTRITE - TRATAMENTO BASEADO EM EVIDÊNCIAS",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not(caracteristica_inflamatoria == true) and ('cronico' in duracao_sintomas) and (selected_count(caracter_mecanico_dor, 'piora_atividade', 'melhora_repouso') >= 2 or crepitacao_presente == true)",
+              "conteudo": "<p><strong>🦴 OA - ALGORITMO TERAPÊUTICO ACR/OARSI 2019</strong></p><p><strong>CARACTERÍSTICAS MECÂNICAS CONFIRMADAS:</strong></p><ul><li>✅ Dor piora atividade/melhora repouso</li><li>✅ Padrão crônico progressivo</li><li>✅ Rigidez matinal <30 min</li><li>✅ Crepitação articular presente</li></ul><p><strong>PIRAMIDE TERAPÊUTICA (EVIDÊNCIA GRAU I-A):</strong></p><ul><li><strong>BASE - MEDIDAS CORE (OBRIGATÓRIAS):</strong></li><li>Educação estruturada + autogestão</li><li>Exercício supervisionado: aeróbico + fortalecimento</li><li>Controle peso (meta IMC <25) - cada kg = 3kg menos joelhos</li><li>Fisioterapia inicial 6-8 semanas</li></ul><ul><li><strong>NÍVEL 2 - FARMACOLÓGICO:</strong></li><li><strong>1ª escolha:</strong> AINEs tópicos (diclofenaco gel)</li><li><strong>2ª escolha:</strong> Paracetamol intermitente ≤4g/dia</li><li><strong>3ª escolha:</strong> AINEs orais curto prazo + IBP</li><li><strong>4ª escolha:</strong> Duloxetina 60mg (se neuropático)</li></ul><p><strong>PROCEDIMENTOS INTRA-ARTICULARES:</strong></p><ul><li><strong>Corticoide IA:</strong> Exacerbação com sinovite/derrame</li><li>Triancinolona 40mg (joelho) ou 20mg (pequenas)</li><li>Benefício 4-6 semanas, evitar >3-4 injeções/ano</li><li><strong>Ác. Hialurônico:</strong> OA joelho leve-moderada (evidência I-B)</li><li>Série 3-5 injeções, benefício 3-6 meses</li></ul><p><strong>TRATAMENTOS NÃO RECOMENDADOS:</strong></p><ul><li>❌ <strong>Glucosamina/Condroitina:</strong> Evidência inconsistente</li><li>❌ <strong>Opioides:</strong> Risco/benefício desfavorável</li><li>❌ <strong>Artroscopia:</strong> OA degenerativa (exceto corpo livre)</li></ul><p><strong>INDICADORES CIRÚRGICOS (ortopedia):</strong></p><ul><li>Dor incapacitante refratária >6 meses tratamento otimizado</li><li>Limitação funcional grave (dificuldade AVD)</li><li>Exame radiográfico: espaço articular <2mm ou exposto</li><li>Idade/comorbidades compatíveis com procedimento</li></ul><p><strong>SEGUIMENTO ESTRUTURADO:</strong></p><ul><li><strong>Inicial:</strong> Reavaliação mensal x3 (adesão exercício)</li><li><strong>Manutenção:</strong> Semestral (dor, função, força, farmacoterapia)</li><li><strong>Anual:</strong> Revisão global + reavaliar metas terapêuticas</li></ul><p><strong>REFERÊNCIAS:</strong> ACR/AF 2019 OA Guidelines, OARSI 2019 Recommendations</p>",
+              "observacao": ""
+            },
+            {
+              "id": "msg-giop-prevencao-protocolo",
+              "nome": "OSTEOPOROSE INDUZIDA POR GLICOCORTICOIDES - PROTOCOLO ACR 2022",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "duracao_corticoides_meses >= 3 and age >= 50",
+              "conteudo": "<p><strong>🦴 GIOP - PROTOCOLO PREVENÇÃO OBRIGATÓRIO</strong></p><p><strong>RISCO DETECTADO:</strong> GC ≥7,5mg prednisona ≥3 meses + idade ≥50a</p><p><strong>MEDIDAS UNIVERSAIS (TODOS OS PACIENTES):</strong></p><ul><li><strong>Suplementação:</strong></li><li>Cálcio 1000-1200mg/dia + Vitamina D 800-1000UI/dia</li><li>PRESCREVER HOJE - não aguardar DMO</li><li><strong>Estilo vida:</strong></li><li>Exercícios resistidos 3x/sem</li><li>Cessar tabagismo</li><li>Moderar álcool (<2 doses/dia)</li></ul><p><strong>AVALIAÇÃO RISCO OBRIGATÓRIA:</strong></p><ul><li><strong>DMO:</strong> DEXA coluna lombar + colo femoral</li><li><strong>FRAX:</strong> Calcular risco fratura 10 anos</li><li><strong>VFA:</strong> Rastreio fraturas vertebrais silenciosas</li><li>Solicitar em 30 dias - não atrasar cálcio/vitD</li></ul><p><strong>INDICAÇÃO ANTIREABSORTIVO (ACR 2022):</strong></p><ul><li><strong>FORTE RECOMENDAÇÃO:</strong></li><li>Idade ≥40a + FRAX fratura maior ≥20%</li><li>Idade ≥40a + FRAX quadril ≥3%</li><li>Idade ≥40a + fratura vertebral prévia</li><li><strong>CONSIDERAR FORTEMENTE:</strong></li><li>Toda idade ≥50a em GC ≥3 meses (independente FRAX)</li></ul><p><strong>ESCOLHA ANTIREABSORTIVO:</strong></p><ul><li><strong>1ª LINHA - BISFOSFONATO:</strong></li><li>Alendronato 70mg/sem VO OU Risedronato 35mg/sem</li><li>Ácido zoledrônico 5mg IV anual (se CI oral)</li><li><strong>2ª LINHA:</strong> Denosumab 60mg SC 6/6m (se CI bisfosfonato)</li></ul><p><strong>MONITORIZAÇÃO:</strong></p><ul><li><strong>DMO:</strong> 12 meses após início, depois 2-3 anos</li><li><strong>Marcadores:</strong> CTX, P1NP se disponível</li><li><strong>Segurança:</strong> Função renal, cálcio, vitamina D anual</li></ul><p><strong>CRITÉRIOS DESCONTINUAÇÃO GC:</strong></p><ul><li>Se GC suspenso + DMO normal + baixo risco: parar em 2-3 anos</li><li>Se GC mantido: continuar enquanto GC + reavaliar anualmente</li></ul><p><strong>REFERÊNCIA:</strong> ACR 2022 GIOP Guidelines (Strong Recommendation - Grade A)</p>",
+              "observacao": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-node-identificacao-paciente-node-triagem-sintomas",
+      "source": "node-identificacao-paciente",
+      "target": "node-triagem-sintomas",
+      "data": {}
+    },
+    {
+      "id": "e-node-triagem-sintomas-node-investigacao-ar",
+      "source": "node-triagem-sintomas",
+      "target": "node-investigacao-ar",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-ar-node-investigacao-gota",
+      "source": "node-investigacao-ar",
+      "target": "node-investigacao-gota",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-gota-node-investigacao-fibromialgia",
+      "source": "node-investigacao-gota",
+      "target": "node-investigacao-fibromialgia",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-fibromialgia-node-investigacao-osteoartrite",
+      "source": "node-investigacao-fibromialgia",
+      "target": "node-investigacao-osteoartrite",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-osteoartrite-node-investigacao-manguito-rotador",
+      "source": "node-investigacao-osteoartrite",
+      "target": "node-investigacao-manguito-rotador",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-manguito-rotador-node-investigacao-capsulite",
+      "source": "node-investigacao-manguito-rotador",
+      "target": "node-investigacao-capsulite",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-capsulite-node-investigacao-epicondilite",
+      "source": "node-investigacao-capsulite",
+      "target": "node-investigacao-epicondilite",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-epicondilite-node-investigacao-dequervain",
+      "source": "node-investigacao-epicondilite",
+      "target": "node-investigacao-dequervain",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-dequervain-node-investigacao-dedogatilho",
+      "source": "node-investigacao-dequervain",
+      "target": "node-investigacao-dedogatilho",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-dedogatilho-node-investigacao-grandetrocanter",
+      "source": "node-investigacao-dedogatilho",
+      "target": "node-investigacao-grandetrocanter",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-grandetrocanter-node-investigacao-bursiteanserina",
+      "source": "node-investigacao-grandetrocanter",
+      "target": "node-investigacao-bursiteanserina",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-bursiteanserina-node-investigacao-fasciiteplantar",
+      "source": "node-investigacao-bursiteanserina",
+      "target": "node-investigacao-fasciiteplantar",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-fasciiteplantar-node-historia-medicamentos",
+      "source": "node-investigacao-fasciiteplantar",
+      "target": "node-historia-medicamentos",
+      "data": {}
+    },
+    {
+      "id": "e-node-historia-medicamentos-conduta-final-reumatologia",
+      "source": "node-historia-medicamentos",
+      "target": "conduta-final-reumatologia",
+      "data": {}
+    }
+  ]
+};

@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_orl_v1.0.0_FIXED_20251201_073725.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\Sobre a ficha de atendimento em Otorrinolaringolog 29d6587d2ef5800ba358f9c1b2236875.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Corrigir a expressão condicional para as perguntas Q-exames-avaliacao e P57ff95d6-7efd-4af9-8346-731f3382b3e1 (sintomas_hoje) no 'node-tipo-consulta'. O campo 'motivo_consulta' é 'choice', não 'multiChoice'. Mudar 'retorno_consulta' in motivo_consulta' para 'motivo_consulta == 'retorno_consulta''.
+2. [High] Adicionar uma verificação de contraindicação para Prednisolona (corticoide sistêmico) em pacientes com 'ulcera_peptica' ou 'insuficiencia_hepatica' (comorbidades_relevantes). A Prednisolona (id: prednisolona-corticoide-sistemico) só verifica alergia e gravidez.
+3. [High] A Budesonida (id: budesonida-nasal-spray) e Mometasona (id: mometasona-nasal-spray) são contraindicadas em gravidez (Categoria C/D, dependendo da dose e via). A condição de prescrição deve ser mais explícita: 'and not(gravidez_lactacao == 'gravida' or gravidez_lactacao == 'gravida_lactante')'. Esta verificação já está implementada, mas deve ser mantida e revisada para todos os corticoides (incluindo Fluticasona e Budesonida irrigação).
+4. [Medium] Adicionar um tratamento para Otite Média Aguda (OMA), que é implicitamente coberta pela mensagem 'msg-otite-media-pediatrica'. O tratamento de primeira linha (Amoxicilina) deve ser incluído com posologia pediátrica (mg/kg).
+5. [Medium] Simplificar as condições de visibilidade ('condicao') para 'node-cronologia-fatores' e 'node-alergias-contraindicacoes'. Em vez de verificar a ausência de 'nenhum' em seis listas, usar uma variável de resumo que indique se 'qualquer_sintoma_presente' é verdadeiro.
+6. [Low] Adicionar uma orientação de acompanhamento específico para pacientes em uso de IBP (Pantoprazol) para Refluxo Laringofaríngeo, indicando que o tratamento deve ser mantido por 8-12 semanas e reavaliado.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_orl_v1.0.0_FIXED_20251201_073725_20251201_082803.json
+============================================================

@@ -1,0 +1,23 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\UNIMED_FORTALEZA_protocolo_solicitacao_testosterona_v0.1.2_22-09-2025-1840.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\Sobre o protocolo de Testosterona (solicitação) -  1c76587d2ef581a6ad3ac9cc3e3f290a.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Add a direct edge from 'node-2' (Identificação) to '52484c01-e863-4dca-a875-c3cc0502feb9' (Reavaliação) to handle the 'Consulta de retorno' path. Currently, this path is structurally broken, leading to an incomplete flow if 'retorno_atendimento' is selected.
+2. [High] The indication for DHT ('b0148caa-ea6a-4147-9be7-d24ad7c13c9e') is too broad. It currently fires if the patient is indicated for any test (not(desejo_solicitacao_sem_indicacao == False) or testo_serica < 300). It should be conditional on 'suspeita_defeito_dev_enzimatico' being True, as stated in its own indication text.
+3. [Medium] Refactor question 'suspeita_defeito_dev_enzimatico' (Node 52484c01-e863-4dca-a875-c3cc0502feb9). Change type from Checkbox ('C') without options to a proper Boolean (Yes/No) type or explicitly define options [True, False] to ensure reliable data capture.
+4. [Medium] The protocol defines a threshold for Testosterona Total (<300 ng/dL) but does not specify the required timing (e.g., morning sample) or context (e.g., fasting status) for the initial measurement, which is crucial for accurate diagnosis of hypogonadism. Add an orientation/alert regarding proper collection time.
+5. [Low] Review the sequential placement of nodes 'node-3' and 'feec4651-0d95-462a-a865-a5bb440eba81' in the JSON 'nodes' array, as they are both conditional on 'primeiro_atendimento'. While the logic works, the visual flow implied by the edges is confusing due to the missing direct jump for 'retorno'. Ensure the visual representation matches the logical branching.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\UNIMED_FORTALEZA_protocolo_solicitacao_testosterona_v0.1.2_22-09-2025-1840_20251129_190647.json
+============================================================

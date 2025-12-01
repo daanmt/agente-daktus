@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\athena_hipoacusia_e_acusia_v0.1.1_21-11-2025-1308.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\[ATHENA] Hipoacusia e acusia 2256587d2ef5800ba8aac10cbff8f29c.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Correct all invalid variable references (e.g., '[] Subita em P6', '[] Sim em P8') in the 'Conduta' node (conduta-1751742650452) with the correct UID and syntax (e.g., "'perda_subita' in tipo_perda_auditiva"). This affects all orientations, messages, and medication prescriptions.
+2. [High] Rework the decision flow to properly branch based on 'motivo_consulta'. If 'retorno_atendimento' is selected, the flow should skip 'Anamnese' and 'Exame Físico' and go directly to 'Retorno/acompanhamento' (node-1751739241405). Add a direct edge from 'Identificação' to 'Retorno/acompanhamento'.
+3. [High] Review conditional visibility for 'sinais_alarme' and 'sintomas_associados'. Red flags ('sinais_alarme') should be visible regardless of the 72-hour cutoff, as they indicate severe pathology requiring urgent attention (e.g., tumor, infection).
+4. [High] Invert or remove the conditional logic for the 'Exames' node (node-1751739501342). If this node is meant to detail results of recent exams, it should be visible when 'retorno_atendimento' is selected AND the user indicates they brought specific exams (e.g., 'audiometria' in exames_recentes). The current condition ('exames_recentes_none' in exames_recentes) is contradictory.
+5. [Medium] Add a specific condition to recommend Audiometria (eeca9f20-e61e-4b02-84e8-d60030ded2a6) for all 'primeiro_atendimento' cases, unless a clear contraindication exists. The current logic hides it on 'retorno' and if contraindicated, but doesn't explicitly show it when needed.
+6. [Medium] Review the logic for ordering RM and TC. The current condition for both is identical and very broad. Refine the RM indication to focus on retrocochlear suspicion (unilateral, neurossensorial, zumbido > 6m, ABR changes) and TC for conductive loss suspicion (otosclerose, otoscopia changes, conductive deficit on Rinne/Weber).
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\athena_hipoacusia_e_acusia_v0.1.1_21-11-2025-1308_20251129_190435.json
+============================================================

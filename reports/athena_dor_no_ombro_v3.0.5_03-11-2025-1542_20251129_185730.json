@@ -1,0 +1,313 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+          "issue": "The node 'Primeira avaliação' is only visible if 'primeiro_atendimento' is selected. However, the subsequent node 'Ruptura manguito' (3aba4dda-0ca3-41db-9a7a-7be5dd261cf0) depends on questions answered in this node, creating a potential gap if 'retorno_atendimento' is selected.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4",
+          "issue": "The node 'Resultados de exames' is conditional on 'exames_avaliacao is True'. If False, the flow skips directly to 'Tratamento atual' (node-historia-social), which is conditional on 'retorno_atendimento'. If 'primeiro_atendimento' was selected and 'exames_avaliacao' is False, the flow skips 'Resultados de exames' and 'Tratamento atual', leading to 'Exames de imagem'. This is a valid path but complex.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3",
+          "issue": "The node 'Detalhamento de sintomas' is conditional on the negation of all three red flag/imaging indicators: (trauma_limitacao_agudo_ombro is False) and (manguito_cronico_ombro is False) and (slap_ombro is False). However, the question title suggests the opposite: 'Você marcou que o paciente possui indicações de exame de imagem.' This is a critical logical contradiction.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-5b23d4d0-fb9b-47f5-893e-8cb040cd9eb1",
+          "issue": "The 'Artro-RM' exam indication condition is identical to the 'RM de Ombro' condition, suggesting redundancy or a potential error in differentiating when Artro-RM is specifically required over standard RM.",
+          "severity": "Low"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": [
+        {
+          "path": [
+            "90266016-b3bc-4104-8032-1adade711513",
+            "ef52d1b5-8ce2-4294-84f3-7da26488b645"
+          ],
+          "reason": "If 'primeiro_atendimento' is selected, the flow enters 'Primeira avaliação' (ef52d1b5-8ce2-4294-84f3-7da26488b645). If the condition for 'Ruptura manguito' (3aba4dda-0ca3-41db-9a7a-7be5dd261cf0) is False (i.e., 'none_teste_manguito' is selected), the flow stops here as there is no edge connecting 'ef52d1b5-8ce2-4294-84f3-7da26488b645' directly to '56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4' or 'node-8734ab9e-d0ed-4157-b634-608fa6e7b745'. This is a critical structural break."
+        },
+        {
+          "path": [
+            "90266016-b3bc-4104-8032-1adade711513",
+            "node-historia-social"
+          ],
+          "reason": "If 'primeiro_atendimento' is selected, the node 'Tratamento atual' (node-historia-social) is skipped due to its condition ('retorno_atendimento' in motivo_consulta). The flow must be routed around this node for 'primeiro_atendimento' cases."
+        }
+      ]
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Síndrome do manguito rotador",
+          "description": "Tendões inflamados ou enfraquecidos.",
+          "symptoms": [
+            "Dor no ombro",
+            "Perda de função importante (ruptura aguda)",
+            "Perda de função leve a moderada (ruptura crônica)"
+          ]
+        },
+        {
+          "name": "Síndrome do impacto subacromial",
+          "description": "Compressão dos tendões ao movimentar o ombro.",
+          "symptoms": [
+            "Dor no ombro"
+          ]
+        },
+        {
+          "name": "Capsulite adesiva",
+          "description": "Ombro congelado, com rigidez e limitação de movimento.",
+          "symptoms": [
+            "Dor no ombro",
+            "Rigidez",
+            "Limitação de movimento"
+          ]
+        },
+        {
+          "name": "Instabilidade do ombro (glenoumeral)",
+          "description": "Sensação de deslocamento ou fraqueza articular.",
+          "symptoms": [
+            "Sensação de deslocamento",
+            "Fraqueza articular"
+          ]
+        },
+        {
+          "name": "Tendinite Calcária",
+          "description": "Não especificada, classificada como Leve a Moderada ou Grave.",
+          "symptoms": [
+            "Dor no ombro"
+          ]
+        },
+        {
+          "name": "Artrose de Ombro",
+          "description": "Não especificada.",
+          "symptoms": [
+            "Dor no ombro"
+          ]
+        }
+      ],
+      "exams": [
+        {
+          "name": "RX de Ombro",
+          "type": "Imaging",
+          "indication": "Avaliação inicial da dor aguda no ombro, suspeita de fratura, luxação, desalinhamento, avaliação de anormalidades ósseas.",
+          "normalized_name": "Radiografia de Articulação escapuloumeral (ombro)"
+        },
+        {
+          "name": "USG de Ombro",
+          "type": "Imaging",
+          "indication": "Suspeita de lesão do manguito rotador (especialmente rupturas completas), patologia do tendão do bíceps, contraindicação à RM.",
+          "normalized_name": "Ultrassonografia Articular (por articulação)"
+        },
+        {
+          "name": "RM de Ombro",
+          "type": "Imaging",
+          "indication": "Avaliação de lesões de partes moles (manguito rotador, lesões labrais, cartilagem), fraturas ocultas, radiografias inconclusivas.",
+          "normalized_name": "Ressonância Magnética Articular (por articulação)"
+        },
+        {
+          "name": "Artro-RM (incluir a punção articular) - por articulação",
+          "type": "Imaging/Procedure",
+          "indication": "Suspeita de lesão do lábio glenoidal (lesão de Bankart, SLAP), investigação de instabilidade do ombro (instabilidade anterior, posterior ou multidirecional, especialmente em atletas ou pós-trauma), avaliação de lesões parciais do manguito rotador, reavaliação pós-cirúrgica, dúvida diagnóstica após RM convencional.",
+          "normalized_name": "Artro-Ressonância Magnética"
+        },
+        {
+          "name": "Teste de Apreensão",
+          "type": "Functional/Physical Exam",
+          "indication": "Avaliação de instabilidade glenoumeral.",
+          "normalized_name": "Teste de Instabilidade (Apreensão)"
+        },
+        {
+          "name": "Teste de Realocação",
+          "type": "Functional/Physical Exam",
+          "indication": "Avaliação de instabilidade glenoumeral.",
+          "normalized_name": "Teste de Instabilidade (Realocação)"
+        },
+        {
+          "name": "Teste de Surpresa",
+          "type": "Functional/Physical Exam",
+          "indication": "Avaliação de instabilidade glenoumeral.",
+          "normalized_name": "Teste de Instabilidade (Surpresa)"
+        },
+        {
+          "name": "Testes de supraespinhal",
+          "type": "Functional/Physical Exam",
+          "indication": "Detecção de tendinite/ruptura do supraespinhal.",
+          "normalized_name": "Testes para Supraespinhal"
+        },
+        {
+          "name": "Testes de infraespinhal",
+          "type": "Functional/Physical Exam",
+          "indication": "Detecção de tendinite/ruptura do infraespinhal.",
+          "normalized_name": "Testes para Infraespinhal"
+        },
+        {
+          "name": "Testes de subescapular",
+          "type": "Functional/Physical Exam",
+          "indication": "Detecção de tendinite/ruptura do subescapular.",
+          "normalized_name": "Testes para Subescapular"
+        }
+      ],
+      "treatments": [
+        {
+          "name": "Fisioterapia",
+          "type": "Rehabilitation",
+          "indication": "Tendinopatias do manguito rotador, bursite, síndrome do impacto, instabilidade glenoumeral, capsulite adesiva."
+        },
+        {
+          "name": "Terapia manual",
+          "type": "Rehabilitation Adjuvant",
+          "indication": "Aliviar dor e rigidez, ganho de amplitude."
+        },
+        {
+          "name": "Alongamentos",
+          "type": "Rehabilitation Adjuvant",
+          "indication": "Melhorar a mobilidade, capsulite adesiva."
+        },
+        {
+          "name": "Laser de baixa intensidade",
+          "type": "Rehabilitation Adjuvant",
+          "indication": "Adjuvante na intensificação conservadora (2ª linha)."
+        },
+        {
+          "name": "Ondas de choque",
+          "type": "Rehabilitation Adjuvant",
+          "indication": "Adjuvante na intensificação conservadora (2ª linha)."
+        },
+        {
+          "name": "Kinesiotaping ou eletroterapia analgésica",
+          "type": "Rehabilitation Adjuvant",
+          "indication": "Adjuvante na intensificação conservadora (2ª linha)."
+        },
+        {
+          "name": "Infiltração de Corticoide (Triancinolona Hexacetonida 20mg/ml)",
+          "type": "Procedure/Pharmacological",
+          "indication": "Dor intensa limitando reabilitação, dor refratária, capsulite adesiva (intra-articular)."
+        },
+        {
+          "name": "Manejo Conservador Inicial (1ª Linha)",
+          "type": "Protocol",
+          "indication": "Todos os pacientes sem sinais de alarme ou limitação funcional grave."
+        },
+        {
+          "name": "Intensificação Conservadora (2ª Linha)",
+          "type": "Protocol",
+          "indication": "Resposta parcial ou dor persistente após ≥4 semanas de 1ª linha."
+        },
+        {
+          "name": "Avaliação Especializada / Cirurgia (3ª Linha)",
+          "type": "Protocol/Referral",
+          "indication": "Ausência de melhora após ≥6–8 semanas de tratamento conservador otimizado, ruptura significativa, falha funcional grave."
+        },
+        {
+          "name": "Reparo tendíneo / Acromioplastia",
+          "type": "Surgical",
+          "indication": "Casos refratários (3ª linha)."
+        }
+      ],
+      "red_flags": [
+        {
+          "flag": "Dor súbita e intensa após trauma",
+          "urgency": "Imediato",
+          "action": "Procurar atendimento imediato (Solicitar RX e RM/USG se suspeita de ruptura aguda)"
+        },
+        {
+          "flag": "Perda súbita de força no braço",
+          "urgency": "Imediato",
+          "action": "Procurar atendimento imediato (Suspeita de ruptura aguda do manguito rotador)"
+        },
+        {
+          "flag": "Febre, vermelhidão ou inchaço na região",
+          "urgency": "Imediato",
+          "action": "Procurar atendimento imediato (Suspeita de infecção/artrite séptica)"
+        },
+        {
+          "flag": "Dor que não melhora mesmo com medicação e fisioterapia",
+          "urgency": "Alto",
+          "action": "Procurar atendimento imediato (Reavaliação, escalonamento do tratamento)"
+        },
+        {
+          "flag": "Limitação súbita de movimento ou deformidade evidente",
+          "urgency": "Alto",
+          "action": "Solicitar RX (trauma_limitacao_agudo_ombro is True)"
+        }
+      ],
+      "signs_symptoms": [
+        "Idade do paciente",
+        "Sexo do paciente",
+        "História prévia de luxação",
+        "Teste de instabilidade positivo (apreensão, realocação, surpresa)",
+        "Testes de supraespinhal positivos",
+        "Testes de infraespinhal positivos",
+        "Testes de subescapular positivos",
+        "Sinais de ruptura de manguito aguda e perda de função importante",
+        "Sinais de ruptura de manguito crônica e/ou com perda de função leve a moderada",
+        "Trauma recente",
+        "Limitação súbita de movimento",
+        "Deformidade evidente",
+        "Dor crônica (> 6 semanas)",
+        "Sinais clínicos de lesão do manguito rotador",
+        "Suspeita de instabilidade glenoumeral",
+        "Suspeita de lesão labral",
+        "Suspeita de SLAP"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Structural",
+      "description": "Fix the critical dead-end path after 'Primeira avaliação' (ef52d1b5-8ce2-4294-84f3-7da26488b645). Add an edge from 'ef52d1b5-8ce2-4294-84f3-7da26488b645' to '56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4' (if exames_avaliacao is True) or directly to 'node-8734ab9e-d0ed-4157-b634-608fa6e7b745' (if exames_avaliacao is False or if 3aba4dda-0ca3-41db-9a7a-7be5dd261cf0 is skipped).",
+      "impact": "High - Ensures all 'Primeira consulta' patients complete the protocol."
+    },
+    {
+      "priority": "Critical",
+      "category": "Logic/Safety",
+      "description": "Correct the conditional logic for 'Detalhamento de sintomas' (node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3). The condition should be the OR of the red flags/imaging indicators (e.g., trauma_limitacao_agudo_ombro is True OR manguito_cronico_ombro is True OR slap_ombro is True) to align with the question title asking for detailing when indications exist. Currently, it is conditional on the absence of indications.",
+      "impact": "High - Corrects a major logical error and ensures necessary clinical detail is captured when red flags are present."
+    },
+    {
+      "priority": "High",
+      "category": "Structural",
+      "description": "Implement proper routing for 'retorno_atendimento' cases. Add an edge from '90266016-b3bc-4104-8032-1adade711513' directly to 'node-historia-social' (Tratamento atual) conditional on 'retorno_atendimento' being selected, bypassing 'Primeira avaliação' (ef52d1b5-8ce2-4294-84f3-7da26488b645).",
+      "impact": "Medium - Improves flow efficiency for return visits."
+    },
+    {
+      "priority": "High",
+      "category": "Clinical Content",
+      "description": "Add specific questions regarding the duration and characteristics of pain (e.g., onset, location, radiation, severity (VAS/NRS)) to 'Primeira avaliação' or a dedicated 'Anamnese' node. Currently, pain is only implicitly covered by chronic/acute flags.",
+      "impact": "High - Essential for clinical rigor and differential diagnosis."
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Content",
+      "description": "Clarify the differentiation between RM and Artro-RM indications in the 'Conduta' node. Artro-RM is typically reserved for specific indications like labral tears (SLAP/Bankart) or subtle instability. The current identical conditions are confusing.",
+      "impact": "Medium - Improves diagnostic accuracy and resource utilization."
+    },
+    {
+      "priority": "Medium",
+      "category": "Question Optimization",
+      "description": "In 'Resultados de exames' (56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4), ensure that the 'none' options (e.g., 'none_rx_ombro') are exclusive only to the 'normal' option, but not to the pathological findings (e.g., 'cal_levemod_rx_ombro'). The current setup allows 'none' to be exclusive to all, which is correct, but if the user selects a pathological finding, they should not be able to select 'normal' or 'none'. The current structure seems to handle this via 'exclusive: true' on 'none' and 'normal', but this needs careful testing.",
+      "impact": "Low - Ensures accurate recording of existing exam results."
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\athena_dor_no_ombro_v3.0.5_03-11-2025-1542.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\Sobre o protocolo de Dor no Ombro - ambulatorial 2806587d2ef580199815cdf37c4a5bb4.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 85.0,
+      "structural_quality": 55.0,
+      "safety_implementation": 70.0,
+      "overall_quality": 70.0
+    }
+  }
+}

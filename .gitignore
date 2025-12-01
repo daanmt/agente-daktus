@@ -18,9 +18,6 @@ venv/
 logs/
 *.log
 
-# Reports
-reports/
-
 # IDE
 .vscode/
 .idea/
@@ -31,5 +28,6 @@ reports/
 .DS_Store
 Thumbs.db
 
-# Models (opcional - remover se quiser incluir)
-models_json/
+# Large files or sensitive data (uncomment if needed)
+# models_json/*.json
+# reports/*.json

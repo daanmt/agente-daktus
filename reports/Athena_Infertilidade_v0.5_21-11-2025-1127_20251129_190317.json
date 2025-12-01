@@ -1,0 +1,308 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "node-1753729145202",
+          "issue": "Conditional logic for 'Anamnese - Casal' ('consulta_primeira_vez' in motivo_consulta) is incomplete. It should also be accessible if 'consulta_acompanhamento_exames' is selected, as anamnesis is generally required regardless of the consultation type, unless the protocol intends to skip anamnesis on follow-up.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3",
+          "issue": "Node 'Anamnese - Mulher' has no explicit condition, meaning it runs for both 'consulta_primeira_vez' and 'consulta_acompanhamento_exames'. This is inconsistent with the previous node's condition.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "68d86fb7-a70e-490a-8c78-4229339145ab",
+          "issue": "Node 'Anamnese - Homem' has no explicit condition, meaning it runs for both 'consulta_primeira_vez' and 'consulta_acompanhamento_exames'. This is inconsistent with the previous node's condition.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "node-1754012471696",
+          "issue": "Conditional logic for 'Resultado de exames - Mulher' ('consulta_acompanhamento_exames' in motivo_consulta) is too restrictive. If 'consulta_primeira_vez' is selected, the user cannot input existing exam results, which is a common scenario.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-1754015105787",
+          "issue": "Conditional logic for 'Resultado de exames - Homem' ('consulta_acompanhamento_exames' in motivo_consulta) is too restrictive. If 'consulta_primeira_vez' is selected, the user cannot input existing exam results.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "Exam condition for 'Espermograma' is complex and uses placeholder text ('Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas') which is not a valid expression. Needs conversion to executable logic.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "Exam condition for 'Hormônio antimülleriano' uses placeholder text ('Cond_aparece: > 35 anos E/OU [ ] historico_menopausa_precoce E/OU [...]') which is not a valid expression. Needs conversion to executable logic.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "Exam condition for 'FSH' uses complex placeholder text which is not a valid expression. Needs conversion to executable logic.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "Exam condition for 'Estradiol' is marked as 'oculto' but has a complex placeholder condition. If it's meant to be ordered, the condition must be valid.",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "Message condition for 'Sua paciente apresenta fatores de risco...' is marked as 'oculto' and uses 'Cond_desaparece' logic, which is non-standard and likely invalid ('Cond_desaparece: [ ] sem_fatores_risco em fatores_risco_reserva_ovariana E [ ] consulta_acompanhamento_exames em motivo_consulta').",
+          "severity": "Critical"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "The condition for 'Pesquisa de espermatozóide na urina' ('('concentracao_alterada' or 'numero_alterado' in espermograma) and ('nenhum_exame' in urina_ejaculacao)') uses 'espermograma' and 'urina_ejaculacao' variables which are only available if 'consulta_acompanhamento_exames' was selected. This creates a dependency issue if the path is 'consulta_primeira_vez'.",
+          "severity": "High"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "The condition for 'Histeroscopia' ('cotte_positiva' in histerossalpingografia) seems contradictory. Histeroscopia is indicated for non-patent tubes (cotte_negativa) or uterine abnormalities, not patent tubes (cotte_positiva). The condition should likely be 'cotte_negativa'.",
+          "severity": "High"
+        },
+        {
+          "node_id": "conduta-1754016398362",
+          "issue": "The condition for 'Reprodução Assistida' referral is overly complex and uses variables from the 'Resultado de exames' nodes, making it dependent on the 'consulta_acompanhamento_exames' path. If 'consulta_primeira_vez' is selected, this referral logic will fail unless the variables are initialized or handled.",
+          "severity": "High"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": []
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Infertilidade",
+          "description": "Consideramos que há um quadro de infertilidade quando um casal tem relações sexuais regulares, sem usar métodos contraceptivos, por pelo menos um ano (ou seis meses, se a mulher tiver 35 anos ou mais), e ainda não conseguiu engravidar.",
+          "symptoms": [
+            "Dismenorreia",
+            "Galactorreia",
+            "Sinais de hiperandrogenismo (hirsutismo, acne, calvície de padrão masculino, virilização)",
+            "Dor abdominal",
+            "Dor pélvica",
+            "Dispareunia",
+            "Sintomas de molimina antes da menstruação (sensibilidade mamária, inchaço, fadiga, etc.)",
+            "Disfunção ejaculatória (Ejaculação prematura, Anenjaculação, Ejaculação retrógrada)"
+          ]
+        },
+        {
+          "name": "Reserva Ovariana Diminuída",
+          "description": "Fatores de risco para diminuição da reserva ovariana: Idade > 35 anos, História familiar de menopausa precoce, Presença de ovário único, Cirurgia ovariana prévia, Quimioterapia ou radioterapia pélvica prévia, ISCA, Baixa resposta à estimulação com gonadotrofinas exógenas, Alterações genéticas (ex: Síndrome de Turner, mosaicismos), Endometriose, Miomatose, Tabagismo, Infecção pélvica, Doença inflamatória pélvica (DIP).",
+          "symptoms": []
+        },
+        {
+          "name": "Fator Ovulatório",
+          "description": "Suspeita em casos de ciclos irregulares (amenorreia ou oligomenorreia) e/ou ausência de pico de LH ou progesterona baixa.",
+          "symptoms": [
+            "Ciclos irregulares com períodos de amenorreia",
+            "Ciclos irregulares com oligomenorreia"
+          ]
+        },
+        {
+          "name": "Infertilidade Masculina",
+          "description": "Fatores de risco: Varicocele, Alterações genéticas (ex: Síndrome de Klinefelter ou outras anormalidades cromossômicas), Procedimentos cirúrgicos ou traumas significativos envolvendo a pelve e a área genital.",
+          "symptoms": [
+            "Concentração alterada (espermograma)",
+            "Número total de espermatozoides alterado",
+            "Motilidade alterada",
+            "Morfologia alterada",
+            "Vitalidade alterada",
+            "Disfunção ejaculatória"
+          ]
+        }
+      ],
+      "exams": [
+        {
+          "name": "Espermograma",
+          "type": "Laboratorial",
+          "indication": "Infertilidade masculina",
+          "normalized_name": "espermograma"
+        },
+        {
+          "name": "LH urinário",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "lh_urinario"
+        },
+        {
+          "name": "Progesterona",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "progesterona"
+        },
+        {
+          "name": "Hormônio antimülleriano",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "amh"
+        },
+        {
+          "name": "FSH",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "fsh"
+        },
+        {
+          "name": "Estradiol",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "estradiol"
+        },
+        {
+          "name": "TSH",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina e masculina",
+          "normalized_name": "tsh"
+        },
+        {
+          "name": "Prolactina",
+          "type": "Laboratorial",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "prolactina"
+        },
+        {
+          "name": "Testosterona total",
+          "type": "Laboratorial",
+          "indication": "Infertilidade masculina",
+          "normalized_name": "testosterona_total"
+        },
+        {
+          "name": "Pesquisa de espermatozóide na urina",
+          "type": "Laboratorial",
+          "indication": "Infertilidade masculina",
+          "normalized_name": "pesquisa_espermatozoide_urina"
+        },
+        {
+          "name": "Ultrassonografia transvaginal - contagem de folículos antrais",
+          "type": "Imagem",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "usg_tv_foliculos_antrais"
+        },
+        {
+          "name": "Histerossalpingografia",
+          "type": "Imagem",
+          "indication": "Infertilidade feminina",
+          "normalized_name": "histerossalpingografia"
+        },
+        {
+          "name": "Histeroscopia",
+          "type": "Procedimento",
+          "indication": "Infertilidade (Fator tubário, baixa reserva ovariana)",
+          "normalized_name": "histeroscopia"
+        },
+        {
+          "name": "Cariótipo",
+          "type": "Laboratorial/Genético",
+          "indication": "Infertilidade (Mulher e Homem)",
+          "normalized_name": "cariotipo"
+        }
+      ],
+      "treatments": [
+        {
+          "name": "Citrato de clomifeno 50mg",
+          "type": "Medicamento (Indução de Ovulação)",
+          "indication": "Fator ovulatório (sem pico de LH ou progesterona inferior)"
+        },
+        {
+          "name": "Letrozol 2,5mg",
+          "type": "Medicamento (Indução de Ovulação)",
+          "indication": "Fator ovulatório (sem pico de LH ou progesterona inferior)"
+        },
+        {
+          "name": "Metformina 850mg",
+          "type": "Medicamento (Indução de Ovulação/SOP)",
+          "indication": "Fator ovulatório (sem pico de LH ou progesterona inferior)"
+        },
+        {
+          "name": "Terapia com Gonadotrofinas",
+          "type": "Medicamento (Indução de Ovulação)",
+          "indication": "Fator ovulatório (sem pico de LH ou progesterona inferior)"
+        },
+        {
+          "name": "Inositol 4g",
+          "type": "Suplemento/Medicamento (SOP)",
+          "indication": "Fator ovulatório (sem pico de LH ou progesterona inferior)"
+        }
+      ],
+      "red_flags": [],
+      "signs_symptoms": [
+        "Dismenorreia",
+        "Galactorreia",
+        "Hiperandrogenismo (hirsutismo, acne, calvície de padrão masculino, virilização)",
+        "Dor abdominal",
+        "Dor pélvica",
+        "Dispareunia",
+        "Molimina (sensibilidade mamária, inchaço, fadiga)",
+        "Ejaculação prematura",
+        "Anenjaculação (ausência de emissão de sêmen)",
+        "Ejaculação retrógrada"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Structural Logic",
+      "description": "Convert all placeholder conditions (e.g., 'Cond_ aparece: se < 35 anos E [ ] um_ano_mais...') in the 'Conduta' node (exams, medications, referrals) into valid, executable JSON logic expressions. This is the single most critical structural flaw.",
+      "impact": "Protocol functionality and reliability"
+    },
+    {
+      "priority": "High",
+      "category": "Clinical Logic",
+      "description": "Correct the indication logic for 'Histeroscopia' in the 'Conduta' node. It should be indicated for 'cotte_negativa' (non-patent tubes) or uterine abnormalities, not 'cotte_positiva'.",
+      "impact": "Patient safety and correct diagnostic pathway"
+    },
+    {
+      "priority": "High",
+      "category": "Workflow/UX",
+      "description": "Adjust the conditional logic for 'Anamnese - Casal' (node-1753729145202) to be visible for both 'consulta_primeira_vez' and 'consulta_acompanhamento_exames', as anamnesis review is essential for follow-up.",
+      "impact": "Clinical completeness and user experience"
+    },
+    {
+      "priority": "High",
+      "category": "Workflow/UX",
+      "description": "Modify the conditional logic for 'Resultado de exames - Mulher' and 'Resultado de exames - Homem' to be visible regardless of the consultation type, allowing users to input existing exam results even on a 'consulta_primeira_vez'.",
+      "impact": "Data capture completeness and clinical utility"
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Content",
+      "description": "Add a question to capture the female patient's age explicitly, as age is a critical variable (35 years) used in multiple conditional logic statements (e.g., exam ordering).",
+      "impact": "Enabling executable age-based logic"
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Content",
+      "description": "The 'Termo de ciência' node (5f312f2f-258b-41d8-a463-d50d9c25ff41) should include a mandatory selection to proceed, ensuring legal compliance is met before data entry.",
+      "impact": "Legal compliance and data integrity"
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Logic",
+      "description": "Review and simplify the complex referral logic for 'Reprodução Assistida' to ensure it functions correctly across all pathways (first consultation vs. follow-up). Consider using a clinical score or simpler criteria.",
+      "impact": "Reliable referral process"
+    },
+    {
+      "priority": "Low",
+      "category": "Data Integrity",
+      "description": "Ensure the 'outros' option in 'muc_mulher' and 'muc_homem' is exclusive to prevent simultaneous selection with 'sem_medicacao', or ensure 'sem_medicacao' is exclusive to all other options.",
+      "impact": "Data accuracy"
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\Athena_Infertilidade_v0.5_21-11-2025-1127.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\Sobre o protocolo de Infertilidade - Athena (ambul 23c6587d2ef580f4916bd486be04e63f.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 85.0,
+      "structural_quality": 40.0,
+      "safety_implementation": 60.0,
+      "overall_quality": 61.7
+    }
+  }
+}

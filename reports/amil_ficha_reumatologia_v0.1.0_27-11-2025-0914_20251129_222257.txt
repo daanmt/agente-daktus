@@ -1,0 +1,33 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\playbook reumato.md
+Model: anthropic/claude-sonnet-4.5
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [high] Implementar cálculo formal do score ACR/EULAR 2010 para AR (0-10 pontos) com feedback visual ao médico
+2. [high] Expandir WPI de fibromialgia de 12 para 19 áreas corporais conforme critérios ACR 2016 completos
+3. [high] Adicionar prescrição automática de colchicina profilática ao prescrever alopurinol para gota crônica
+4. [high] Implementar coleta de variáveis para cálculo de FRAX score em pacientes com indicação de DMO
+5. [medium] Adicionar instrumentos validados de avaliação funcional (WOMAC para OA joelho, HAQ para AR)
+6. [medium] Implementar coleta estruturada de critérios cirúrgicos para OA (dor VAS, limitação AVD, falha tratamento conservador)
+7. [medium] Adicionar questões sobre história familiar de doenças reumatológicas (AR, espondiloartrites, gota)
+8. [medium] Implementar alerta para ajuste de dose de colchicina em DRC (ClCr <50ml/min)
+9. [medium] Adicionar questões sobre tabagismo e quantificação (maços-ano) para estratificação de risco em AR
+10. [low] Considerar ramificação alternativa para AR seronegativa (FR e anti-CCP negativos mas clínica sugestiva)
+11. [low] Adicionar questões sobre uso de calçados inadequados e atividades ocupacionais para fasciíte plantar
+12. [low] Adicionar imagens anatômicas para auxiliar paciente na identificação de localizações articulares
+13. [low] Implementar lembretes automáticos de follow-up baseados em condição (mensal para DMARDs, trimestral para gota crônica)
+14. [critical] Adicionar questão sobre possibilidade de gravidez em mulheres em idade fértil antes de prescrever metotrexato/leflunomida
+15. [critical] Implementar questão sobre sinais de artrite séptica (febre + monoartrite aguda + sinais inflamatórios intensos) com alerta de emergência
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\amil_ficha_reumatologia_v0.1.0_27-11-2025-0914_20251129_222257.json
+============================================================

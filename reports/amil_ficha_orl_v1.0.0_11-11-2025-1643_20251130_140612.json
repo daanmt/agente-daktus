@@ -1,0 +1,356 @@
+{
+  "protocol_analysis": {
+    "structural": {
+      "json_valid": true,
+      "logic_issues": [
+        {
+          "node_id": "node-cronologia-fatores",
+          "issue": "A condição de visibilidade ('condicao') é complexa e redundante. A negação de múltiplas opções 'nenhum' é funcionalmente equivalente a 'selected_any' em qualquer grupo de sintomas. Isso aumenta a chance de erro de digitação.",
+          "severity": "Medium"
+        },
+        {
+          "node_id": "node-resultados-exames",
+          "issue": "A condição de visibilidade ('condicao') depende de 'exames_avaliacao == true', que é uma pergunta condicional ('expressao': \"'retorno_consulta' in motivo_consulta\"). Se o paciente não estiver em 'retorno_consulta', 'exames_avaliacao' pode ser nulo/indefinido, potencialmente quebrando a lógica de exibição do nó.",
+          "severity": "High"
+        },
+        {
+          "node_id": "Q-exames-avaliacao",
+          "issue": "A expressão condicional \"'retorno_consulta' in motivo_consulta\" é correta, mas se 'motivo_consulta' não for preenchido, a pergunta pode não aparecer corretamente, embora o fluxo garanta que 'motivo_consulta' seja preenchido antes.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "Q-escala-epworth",
+          "issue": "A expressão condicional 'selected_any(sintomas_sono, 'ronco_habitual', 'pausas_respiratorias', 'sonolencia_diurna')' é correta, mas a Escala de Epworth é usada na conduta para determinar a gravidade da SAHOS (escala_epworth >= 10 ou >= 15). Se o paciente tiver sintomas de sono, mas não preencher a escala, a conduta pode ser incompleta.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "conduta-final-otorrinolaringologia",
+          "issue": "A conduta 'audiometria-infantil' usa a variável 'age' (idade), que é definida como 'number' no nó 'node-identificacao-paciente'. A condição 'age >= 0.5 and age <= 4' é clinicamente específica e correta, mas a dependência de 'age' deve ser verificada em todos os sistemas de execução.",
+          "severity": "Low"
+        },
+        {
+          "node_id": "conduta-final-otorrinolaringologia",
+          "issue": "A conduta 'prednisolona-corticoide-sistemico' tem uma condição complexa que mistura indicações nasais e vestibulares: \"(duracao_sintomas == 'cronico' and selected_any(sintomas_nasossinusais, 'obstrucao_nasal', 'hiposmia_anosmia') and 'corticoide_spray_nasal' in tratamento_atual) or ('vertigem_rotatoria' in sintomas_vestibulares and duracao_sintomas == 'agudo')\". Isso é clinicamente válido (RSC refratária ou Neurite Vestibular aguda), mas a complexidade aumenta o risco de erro de implementação.",
+          "severity": "Medium"
+        }
+      ],
+      "unreachable_nodes": [],
+      "dead_end_paths": []
+    },
+    "clinical_extraction": {
+      "syndromes": [
+        {
+          "name": "Rinite Alérgica",
+          "description": "Condição inflamatória crônica da mucosa nasal mediada por IgE, desencadeada por alérgenos.",
+          "symptoms": [
+            "Prurido nasal",
+            "Espirros frequentes",
+            "Rinorreia clara/aquosa",
+            "Obstrução nasal"
+          ]
+        },
+        {
+          "name": "Rinossinusite Crônica (RSC)",
+          "description": "Inflamação dos seios da face e cavidade nasal com duração superior a 12 semanas.",
+          "symptoms": [
+            "Obstrução nasal",
+            "Rinorreia purulenta/espessa",
+            "Dor/pressão facial",
+            "Diminuição/perda do olfato (Hiposmia/Anosmia)"
+          ]
+        },
+        {
+          "name": "Rinossinusite Bacteriana Aguda (ABRS)",
+          "description": "Infecção bacteriana dos seios da face, geralmente após infecção viral, com sintomas graves ou persistentes.",
+          "symptoms": [
+            "Rinorreia purulenta/espessa",
+            "Dor/pressão facial",
+            "Febre",
+            "Mal-estar geral"
+          ]
+        },
+        {
+          "name": "Doença do Refluxo Laringofaríngeo (DRGE-LF)",
+          "description": "Refluxo de conteúdo gástrico para a laringe e faringe, causando sintomas extra-esofágicos.",
+          "symptoms": [
+            "Pigarro crônico",
+            "Sensação de globo faríngeo",
+            "Tosse seca persistente",
+            "Ardor faríngeo",
+            "Rouquidão"
+          ]
+        },
+        {
+          "name": "Síndrome da Apneia Obstrutiva do Sono (SAHOS)",
+          "description": "Distúrbio caracterizado por episódios recorrentes de obstrução parcial ou total das vias aéreas superiores durante o sono.",
+          "symptoms": [
+            "Ronco habitual",
+            "Pausas respiratórias observadas",
+            "Sonolência diurna excessiva",
+            "Cefaleia matinal",
+            "Déficit de concentração/memória"
+          ]
+        },
+        {
+          "name": "Vertigem Periférica/Doença de Ménière",
+          "description": "Distúrbio do sistema vestibular periférico, causando tontura rotatória.",
+          "symptoms": [
+            "Vertigem rotatória",
+            "Tontura/instabilidade",
+            "Desequilíbrio",
+            "Náusea/vômitos",
+            "Diminuição da audição (Hipoacusia)",
+            "Zumbido (Tinnitus)"
+          ]
+        },
+        {
+          "name": "Otite Média Aguda (OMA)",
+          "description": "Infecção aguda da orelha média.",
+          "symptoms": [
+            "Dor de ouvido (otalgia)",
+            "Febre",
+            "Plenitude auricular"
+          ]
+        },
+        {
+          "name": "Otite Externa (OE)",
+          "description": "Inflamação ou infecção do canal auditivo externo.",
+          "symptoms": [
+            "Secreção no ouvido (otorreia)",
+            "Coceira no ouvido (prurido auricular)",
+            "Dor de ouvido (otalgia)"
+          ]
+        }
+      ],
+      "exams": [
+        {
+          "name": "Audiometria tonal limiar + discriminação vocal",
+          "type": "Funcional",
+          "indication": "Quantificação da perda auditiva e avaliação da função coclear em pacientes com hipoacusia, plenitude auricular ou zumbido",
+          "normalized_name": "Audiometria Tonal e Vocal"
+        },
+        {
+          "name": "Audiometria vocal - discriminação",
+          "type": "Funcional",
+          "indication": "Paciente com perda auditiva confirmada na audiometria tonal, especialmente neurossensorial",
+          "normalized_name": "Audiometria Vocal Discriminatória"
+        },
+        {
+          "name": "Audiometria infantil condicionada (Peep-show)",
+          "type": "Funcional",
+          "indication": "Avaliação auditiva em crianças de 6 meses a 4 anos com suspeita de perda auditiva",
+          "normalized_name": "Audiometria Infantil Condicionada"
+        },
+        {
+          "name": "Timpanometria / Impedanciometria",
+          "type": "Funcional",
+          "indication": "Diagnóstico de efusão da orelha média, disfunção tubária e integridade da membrana timpânica",
+          "normalized_name": "Impedanciometria"
+        },
+        {
+          "name": "Vectoeletronistagmografia (VNG)",
+          "type": "Funcional",
+          "indication": "Registro e análise objetiva do nistagmo em síndromes vestibulares periféricas e centrais",
+          "normalized_name": "VNG"
+        },
+        {
+          "name": "Testes vestibulares com prova calórica",
+          "type": "Funcional",
+          "indication": "Avaliação da função vestibular periférica em casos de vertigem unilateral ou suspeita de neurite vestibular",
+          "normalized_name": "Prova Calórica"
+        },
+        {
+          "name": "Vídeo-endoscopia nasal flexível",
+          "type": "Visual/Procedimento",
+          "indication": "Diagnóstico e seguimento de rinossinusite crônica, pólipos nasais e avaliação da mucosa nasossinusal",
+          "normalized_name": "Endoscopia Nasal Flexível"
+        },
+        {
+          "name": "Polissonografia de noite inteira",
+          "type": "Sono",
+          "indication": "Diagnóstico de síndrome da apneia obstrutiva do sono (SAHOS) em pacientes com ronco e sintomas sugestivos ou Escala de Epworth ≥10",
+          "normalized_name": "Polissonografia"
+        }
+      ],
+      "treatments": [
+        {
+          "name": "Irrigação nasal com soro fisiológico 0,9%",
+          "type": "Terapia de Suporte",
+          "indication": "Todas as condições nasossinusais"
+        },
+        {
+          "name": "Budesonida spray nasal 64mcg/dose",
+          "type": "Corticosteroide Intranasal",
+          "indication": "Rinite alérgica e rinossinusite crônica"
+        },
+        {
+          "name": "Mometasona spray nasal 50mcg/dose",
+          "type": "Corticosteroide Intranasal",
+          "indication": "Rinossinusite crônica com pólipos, recuperação do olfato"
+        },
+        {
+          "name": "Furoato de Fluticasona spray nasal 27,5mcg/dose",
+          "type": "Corticosteroide Intranasal",
+          "indication": "Rinite alérgica persistente ou rinossinusite crônica leve"
+        },
+        {
+          "name": "Budesonida irrigação nasal 0,5mg em 250mL",
+          "type": "Corticosteroide Irrigação",
+          "indication": "Rinossinusite crônica com pólipos nasais e anosmia, refratária ao spray"
+        },
+        {
+          "name": "Fexofenadina 120mg",
+          "type": "Anti-histamínico Oral",
+          "indication": "Rinite alérgica (prurido, espirros)"
+        },
+        {
+          "name": "Loratadina 10mg",
+          "type": "Anti-histamínico Oral",
+          "indication": "Rinite alérgica leve sazonal"
+        },
+        {
+          "name": "Azelastina spray nasal 0,1%",
+          "type": "Anti-histamínico Intranasal",
+          "indication": "Rinite vasomotora e mista, obstrução nasal por irritantes"
+        },
+        {
+          "name": "Amoxicilina + Clavulanato 875mg + 125mg",
+          "type": "Antibiótico Oral",
+          "indication": "Rinossinusite bacteriana aguda (ABRS)"
+        },
+        {
+          "name": "Azitromicina 500mg",
+          "type": "Antibiótico Oral",
+          "indication": "Rinossinusite bacteriana aguda em pacientes alérgicos à penicilina"
+        },
+        {
+          "name": "Prednisolona 20mg",
+          "type": "Corticosteroide Sistêmico",
+          "indication": "Rinossinusite crônica com pólipos refratária, vertigem aguda"
+        },
+        {
+          "name": "Pantoprazol 40mg",
+          "type": "Inibidor da Bomba de Prótons (IBP)",
+          "indication": "Refluxo Laringofaríngeo (pigarro, globo faríngeo, tosse seca)"
+        },
+        {
+          "name": "Betaistina 24mg",
+          "type": "Vasodilatador Labiríntico",
+          "indication": "Vertigem periférica recorrente e doença de Ménière (fase não aguda)"
+        }
+      ],
+      "red_flags": [
+        {
+          "flag": "Sintomas neurológicos (diplopia, disartria, fraqueza) associados à vertigem rotatória",
+          "urgency": "Urgente",
+          "action": "Encaminhamento para Neurologia/Emergência, neuroimagem"
+        },
+        {
+          "flag": "Dificuldade para respirar ou falta de ar, chiado no peito, lábios/unhas azulados, sufocamento",
+          "urgency": "Urgente",
+          "action": "Procurar ajuda médica imediatamente"
+        },
+        {
+          "flag": "Febre alta (acima de 39°C), dor de cabeça muito forte, rigidez no pescoço, saída de sangue pelo nariz ou ouvido, inchaço no rosto ou pescoço",
+          "urgency": "Urgente",
+          "action": "Procurar ajuda médica imediatamente"
+        },
+        {
+          "flag": "Rouquidão que dura mais de 2 semanas",
+          "urgency": "Alta",
+          "action": "Procurar ajuda médica"
+        },
+        {
+          "flag": "Não houver melhora em 7-10 dias de tratamento, piora dos sintomas, surgimento de novos sintomas",
+          "urgency": "Média",
+          "action": "Retorno à consulta"
+        }
+      ],
+      "signs_symptoms": [
+        "Obstrução nasal",
+        "Rinorreia clara/aquosa",
+        "Rinorreia purulenta/espessa",
+        "Prurido nasal",
+        "Espirros frequentes",
+        "Dor/pressão facial",
+        "Diminuição/perda do olfato (Hiposmia/Anosmia)",
+        "Dor de ouvido (otalgia)",
+        "Secreção no ouvido (otorreia)",
+        "Diminuição da audição (hipoacusia)",
+        "Sensação de ouvido tampado (plenitude auricular)",
+        "Zumbido no ouvido (tinnitus)",
+        "Coceira no ouvido (prurido auricular)",
+        "Vertigem rotatória",
+        "Tontura/instabilidade",
+        "Desequilíbrio",
+        "Náusea/vômitos",
+        "Pigarro crônico",
+        "Rouquidão",
+        "Sensação de globo faríngeo",
+        "Tosse seca persistente",
+        "Halitose (mau hálito)",
+        "Ardor faríngeo",
+        "Ronco habitual",
+        "Pausas respiratórias observadas",
+        "Sonolência diurna excessiva",
+        "Cefaleia matinal",
+        "Déficit de concentração/memória",
+        "Febre",
+        "Mal-estar geral",
+        "Cefaleia",
+        "Sintomas neurológicos (diplopia, disartria, fraqueza)"
+      ]
+    }
+  },
+  "improvement_suggestions": [
+    {
+      "priority": "Critical",
+      "category": "Safety/Clinical Logic",
+      "description": "Implementar uma pergunta obrigatória sobre 'Gravidez/Lactação' no nó 'node-alergias-contraindicacoes' ou 'node-identificacao-paciente' para pacientes do sexo feminino em idade fértil. A Prednisolona e alguns antibióticos/anti-histamínicos têm restrições ou exigem avaliação de risco/benefício.",
+      "impact": "Patient Safety"
+    },
+    {
+      "priority": "High",
+      "category": "Clinical Coverage",
+      "description": "Adicionar opções de tratamento tópico para Otite Externa (OE) e Otite Média Aguda (OMA) na seção de medicamentos (ex: gotas otológicas de Ciprofloxacino/Dexametasona ou Amoxicilina para OMA). Atualmente, o protocolo apenas diagnostica OE/OMA, mas não prescreve o tratamento de primeira linha.",
+      "impact": "Clinical Completeness"
+    },
+    {
+      "priority": "High",
+      "category": "Structural Optimization",
+      "description": "Simplificar a condição de visibilidade do nó 'node-cronologia-fatores' e 'node-alergias-contraindicacoes' usando uma função agregadora de sintomas (ex: 'sintomas_presentes == true') ou garantindo que pelo menos um grupo de sintomas não tenha a opção 'nenhum' selecionada. A expressão atual é muito longa e propensa a erros.",
+      "impact": "Maintainability/Reliability"
+    },
+    {
+      "priority": "Medium",
+      "category": "Question Optimization",
+      "description": "Dividir a 'Q-sintomas-nasossinusais' em duas: uma para sintomas alérgicos/vasomotores (prurido, espirros, rinorreia clara) e outra para sintomas infecciosos/estruturais (rinorreia purulenta, dor facial, hiposmia). Isso pode refinar a lógica de encaminhamento e prescrição.",
+      "impact": "Clinical Accuracy"
+    },
+    {
+      "priority": "Medium",
+      "category": "Clinical Coverage",
+      "description": "Adicionar a opção de 'Tomografia Computadorizada (TC) de Seios da Face' como exame a ser solicitado, com indicação clara (RSC refratária, pré-operatório, suspeita de complicação). Atualmente, o exame é mencionado como 'trazido' mas não como 'solicitado'.",
+      "impact": "Clinical Completeness"
+    },
+    {
+      "priority": "Low",
+      "category": "Data Integrity",
+      "description": "Garantir que a variável 'escala_epworth' seja obrigatória se os sintomas de sono estiverem presentes, ou que o sistema trate o valor nulo como 0 para evitar que a conduta de SAHOS seja ignorada se o campo opcional não for preenchido.",
+      "impact": "Data Quality"
+    }
+  ],
+  "metadata": {
+    "protocol_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\amil_ficha_orl_v1.0.0_11-11-2025-1643.json",
+    "playbook_path": "C:\\Users\\daanm\\AgenteV2\\models_json\\Sobre a ficha de atendimento em Otorrinolaringolog 29d6587d2ef5800ba358f9c1b2236875.md",
+    "model_used": "google/gemini-2.5-flash-preview-09-2025",
+    "timestamp": "",
+    "processing_time_ms": 0,
+    "quality_scores": {
+      "clinical_coverage": 85.0,
+      "structural_quality": 95.0,
+      "safety_implementation": 80.0,
+      "overall_quality": 86.7
+    }
+  }
+}

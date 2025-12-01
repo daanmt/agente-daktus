@@ -1,0 +1,2023 @@
+{
+  "metadata": {
+    "company": "Athena",
+    "name": "Infertilidade",
+    "version": "0.5"
+  },
+  "nodes": [
+    {
+      "id": "5f312f2f-258b-41d8-a463-d50d9c25ff41",
+      "type": "custom",
+      "position": {
+        "x": 900,
+        "y": 100
+      },
+      "data": {
+        "label": "Termo de ciência",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "2aadeecc-d48c-496a-a9ef-180812a88f6c",
+            "nodeId": "node-1753729004303",
+            "uid": "ciencia",
+            "titulo": "Toda informação inserida neste atendimento será gravada no prontuário e não poderá ser alterada após a conclusão do mesmo.   Este protocolo é uma ferramenta institucional de registro junto ao prontuário do paciente. Em concordância com a resolução do CFM nº 1.638/2002, este documento possui valor médico legal.",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "af21d1e4-b812-4007-8918-392ced6fc465",
+                "id": "ciente",
+                "label": "Ciente de que as informações preenchidas neste protocolo serão registradas no prontuário.",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "c717fe61-9912-4572-b4b4-76ab6596da22",
+      "type": "custom",
+      "position": {
+        "x": 1800,
+        "y": 100
+      },
+      "data": {
+        "label": "TIpo de consulta",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "97463456-13ec-4144-84ff-aaa092205434",
+            "nodeId": "node-1753729004303",
+            "uid": "motivo_consulta",
+            "titulo": "<p><strong>Motivo da consulta:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "66939c9f-2308-48fe-ad02-c92eb20d700b",
+                "id": "consulta_primeira_vez",
+                "label": "Consulta de primeira vez ",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "aaa382fe-3f6f-4354-ae10-78984cc5943b",
+                "id": "consulta_acompanhamento_exames",
+                "label": "Consulta de acompanhamento / análise de exames",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-1753729145202",
+      "type": "custom",
+      "position": {
+        "x": 2700,
+        "y": 100
+      },
+      "data": {
+        "label": "Anamnese - Casal",
+        "condicao": "'consulta_primeira_vez' in motivo_consulta",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Pa7dd4e86-e126-4d71-bba4-b9b0ca499957",
+            "nodeId": "node-1753729145202",
+            "uid": "tempo_relacoes_desprotegidas",
+            "titulo": "<p><strong>Há quanto tempo o casal tem relações desprotegidas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "a309d6d5-4afa-4441-ae2d-b963293b8553",
+                "id": "um_ano_mais",
+                "label": "Há 1 ano ou mais",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "02341c14-5100-443c-9058-f4e7730d5f95",
+                "id": "um_ano_menos",
+                "label": "Há menos de 1 ano",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "c56a2f10-42f6-447f-8bb7-69911f98944e",
+                "id": "seis_meses_mais",
+                "label": "Há 6 meses ou mais",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "36a1970e-0a7a-4f01-8803-2bdb0803d2b9",
+                "id": "seis_meses_menos",
+                "label": "Há menos de 6 meses",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P4629e5b3-9ebf-4c61-af42-2d8100b8a681",
+            "nodeId": "node-1753729145202",
+            "uid": "frequencia_relacoes",
+            "titulo": "<p><strong>Frequência de relações sexuais desprotegidas:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "5e903293-3f5e-421b-b97b-ef402e3eaf3c",
+                "id": "ideal_dois_dias",
+                "label": "Ideal, a cada 2 a 3 dias",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "192bbf6b-4c1f-4866-923f-d581f80a86b2",
+                "id": "nao_ideal",
+                "label": "Não ideal",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3",
+      "type": "custom",
+      "position": {
+        "x": 3600,
+        "y": 100
+      },
+      "data": {
+        "label": "Anamnese - Mulher",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "7cb0d1fc-09a3-4805-a1b1-73dddbf91fbe",
+            "nodeId": "node-1753729145202",
+            "uid": "menarca",
+            "titulo": "<p><strong>Qual a idade da primeira menstruação?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "string",
+            "options": []
+          },
+          {
+            "id": "8cdd21bb-2733-462d-9bec-957e252ab811",
+            "nodeId": "node-1753729145202",
+            "uid": "regularidade_ciclo_menstrual",
+            "titulo": "<p><strong>Como são os ciclos menstruais?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "41031714-d1ff-4bb6-a3b8-58a174d57460",
+                "id": "ciclos_regulares",
+                "label": "Regulares",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "8521d254-d599-476a-ab32-76a7ef05d44b",
+                "id": "ciclos_irregulares_amenorreia",
+                "label": "Irregulares com períodos de amenorreia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "8f1b9e8e-3da0-4409-a6ed-76c04211fd89",
+                "id": "ciclos_irregulares_oligomenorreia",
+                "label": "Irregulares com oligomenorreia",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "24034bdb-62d3-4506-88fc-69ae5321397d",
+            "nodeId": "node-1753729145202",
+            "uid": "duracao_ciclo_menstrual",
+            "titulo": "<p><strong>Quanto tempo duram os ciclos menstruais:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "c676acbb-ab78-48b3-93b1-14b6e4fa80bd",
+                "id": "curta_duracao_ciclo",
+                "label": "Curta duração do ciclo menstrual (21 a 27 dias)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "96e7d4c4-5091-4cc3-80e4-aaea9301ba96",
+                "id": "duracao_normal_ciclo",
+                "label": "Durações de ciclo normais (28 a 31 dias)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "6fc6139a-7149-4291-9305-efe6b6ef8c38",
+                "id": "duracao_ciclo_longa",
+                "label": "Durações de ciclo longas (32 a 35 dias)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "cb52fff0-d4d3-4f1a-8931-c4dcd130ed1f",
+            "nodeId": "node-1753729145202",
+            "uid": "gravida",
+            "titulo": "<p><strong>Gestações/Partos/Abortos</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "3c233ae9-1b08-4f90-ae11-e9013e22bbba",
+            "nodeId": "node-1753729145202",
+            "uid": "parceiros_previos",
+            "titulo": "<p><strong>Número de parceiros prévios:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "naSelecionado": true
+          },
+          {
+            "id": "229362ba-5d32-4d61-8b4d-0df1e4f8646d",
+            "nodeId": "node-1753729145202",
+            "uid": "filhos_outro_parceiro",
+            "titulo": "<p><strong>Filhos com outro parceiro:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "01b8c605-9440-4f14-875e-2f400f186342",
+                "id": "nuligesta",
+                "label": "Nuligesta",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b29012c1-14e0-446d-862b-039424648ce3",
+                "id": "filhos_outro_parceiro",
+                "label": "Um ou mais filhos com outro parceiro",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "30aa9b33-9713-4a1d-a5c2-c20bd00c45d9",
+            "nodeId": "node-1753729145202",
+            "uid": "fatores_risco_reserva_ovariana",
+            "titulo": "<p><strong>Fatores de risco para diminuição da reserva ovariana:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "61d831d1-d914-45b1-b295-8a73afc68801",
+                "id": "sem_comorbidade",
+                "label": "Sem fatores de risco",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "35b3322c-4bd6-4793-b517-c17dd665c374",
+                "id": "idade_maior_35",
+                "label": "Idade > 35 anos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4daa3bb7-c395-4208-b13f-8c9c459cb2d2",
+                "id": "historico_menopausa_precoce",
+                "label": "História familiar de menopausa precoce",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "6e561bb0-412f-4eb0-97e9-1fde5aec4552",
+                "id": "ovario_unico",
+                "label": "Presença de ovário único",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e885128c-3a46-4cc5-aaca-7f55046b5534",
+                "id": "cirurgia_ovario",
+                "label": "Cirurgia ovariana prévia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "0c288c05-0d4e-4973-b617-8071f531ab25",
+                "id": "quimioterapia_radioterapia",
+                "label": "Quimioterapia ou radioterapia pélvica prévia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "ae7e1a22-c010-4060-ad5e-71f76ca4a102",
+                "id": "infertilidade_sem_causa",
+                "label": "ISCA (infertilidade sem causa aparente)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "278d9ac8-4bed-4fd0-9d71-7c8870ce8a0b",
+                "id": "baixa_resposta_gonadotrofinas",
+                "label": "Baixa resposta à estimulação com gonadotrofinas exógenas",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e6262b7e-4727-4e53-b2cd-db0c638eb8e7",
+                "id": "alteracoes_geneticas",
+                "label": "Alterações genéticas (ex: Síndrome de Turner, mosaicismos)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "bd849e14-8f32-48d2-97e0-7d51d31b9a72",
+                "id": "endometriose",
+                "label": "Endometriose",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f8854358-475a-4f39-b6fc-65020178bcb6",
+                "id": "miomatose",
+                "label": "Miomatose",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "2fd7c6c4-795c-42b6-a5b3-d655ec927a85",
+                "id": "tabagismo",
+                "label": "Tabagismo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "09ab2d7e-b272-4ba7-bb14-d6fc9857f5a7",
+                "id": "infeccao_pelvica",
+                "label": "Infecção pélvica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e36e7001-c2e5-4ada-b70c-6b9cbe47d8c5",
+                "id": "doenca_inflamatoria_pelvica",
+                "label": "Doença inflamatória pélvica (DIP)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "3d8a20e6-eceb-43f9-bf73-fcaba70ae7f1",
+            "nodeId": "node-1753729145202",
+            "uid": "historia_social",
+            "titulo": "<p><strong>História social:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "c58f4d36-25a5-474d-ba99-96e8a7a394cf",
+                "id": "exercicio_fisico_regular",
+                "label": "Prática regular de exercício físico",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "379e17d3-d03f-44d3-a7c5-2dea3358c065",
+                "id": "sedentarismo",
+                "label": "Sedentarismo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "3fac640b-25f3-49dc-8398-b4b37e46e127",
+                "id": "alimentacao_saudavel",
+                "label": "Alimentação saudável",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "95959422-72f3-47c8-acfb-1b966f03c936",
+                "id": "obesidade",
+                "label": "Obesidade (IMC > 35)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "944fc792-2c27-4b9c-b027-d5f0f4de6efb",
+                "id": "baixo_peso",
+                "label": "Baixo peso (IMC <19)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4bad716f-2708-43cb-896e-8b24669709c4",
+                "id": "consumo_alcool",
+                "label": "Consumo de álcool (> 2 drinques/dia)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "3a590912-c34f-464e-a976-c333641de247",
+                "id": "consumo_cafeina",
+                "label": "Cafeína (> 250 mg/dia)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "bd9a6886-0ac6-46cf-b83e-ab774b8bcc85",
+                "id": "drogas_ilicitas",
+                "label": "Consumo de drogas ilícitas",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "3dfc8be5-e944-4d3b-8ce5-10e80fa1daf8",
+            "nodeId": "node-1753729145202",
+            "uid": "sinais_sintomas_infertilidade",
+            "titulo": "<p><strong>Sinais ou sintomas relacionados à infertilidade:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "20110f13-7a41-449c-8066-ea28f40eee18",
+                "id": "none_sintomas_gineco",
+                "label": "Sem sintomas ginecológicos",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "a3dd0e09-91e5-4786-9c57-93f9cbd85cdc",
+                "id": "dismenorreia",
+                "label": "Dismenorreia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "bd49c8c4-3cce-4daf-a4c8-e9b6b328e01c",
+                "id": "galactorreia",
+                "label": "Galactorreia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "050dc5ff-7537-4939-a439-6f7fe8fc8101",
+                "id": "hiperandrogenismo",
+                "label": "Sinais de hiperandrogenismo (hirsutismo, acne, calvície de padrão masculino, virilização)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "103c84a6-ee04-45e8-9966-f7ea38518465",
+                "id": "dor_abd",
+                "label": "Dor abdominal",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d04898ae-e3fa-4b50-87f3-a6083d56c419",
+                "id": "dor_pelvica",
+                "label": "Dor pélvica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "0b6f8574-8e5f-4504-bf8c-69a74e7429db",
+                "id": "dispareunia",
+                "label": "Dispareunia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "fd4eb4bc-cf5f-4000-8713-966d29dc7217",
+                "id": "molimia",
+                "label": "Sintomas de molimina antes da menstruação (sensibilidade mamária, inchaço, fadiga, etc.)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "a742df17-937c-4fa6-914e-ef1d89be9d61",
+            "nodeId": "node-1753729145202",
+            "uid": "muc_mulher",
+            "titulo": "<p><strong>Medicações de uso contínuo:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "7ec020ea-b4d8-4f88-bb2a-ca72d93f3a02",
+                "id": "sem_medicacao",
+                "label": "Nenhuma medicação em uso",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "8583de82-5f9c-4f8e-8647-f30f0a3e2494",
+                "id": "anti_hipertensivos",
+                "label": "Antihipertensivos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "482b5317-107d-426d-b468-7edee7f90b51",
+                "id": "antidiabeticos_orais",
+                "label": "Antidiabéticos orais",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "fb91f697-dfb0-4831-a272-edc073b652c4",
+                "id": "psicotropicos",
+                "label": "Psicotrópicos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d27bdad8-e63b-4d51-81b2-be0415348715",
+                "id": "outros",
+                "label": "Outros medicamentos",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "P14f273e3-601a-4d2a-9147-253722c234be",
+            "nodeId": "c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3",
+            "uid": "outros_muc",
+            "titulo": "<p><strong>Outros medicamentos:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'outros' in muc_mulher",
+            "select": "string",
+            "options": [],
+            "opcional": true,
+            "naSelecionado": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "68d86fb7-a70e-490a-8c78-4229339145ab",
+      "type": "custom",
+      "position": {
+        "x": 4500,
+        "y": 100
+      },
+      "data": {
+        "label": "Anamnese - Homem",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "2e45cf41-60ca-4ef6-b584-ead3b1ff45d2",
+            "nodeId": "node-1753729145202",
+            "uid": "fatores_risco_infertilidade",
+            "titulo": "<p><strong>Fatores de risco masculino para infertilidade:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "e4a2d8aa-49fc-4bca-84a3-5dc5e55f729e",
+                "id": "sem_comorbidade",
+                "label": "Sem fatores de risco",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f25b54f5-4ba9-4110-800b-59901348c815",
+                "id": "varicocele",
+                "label": "Varicocele",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "88e9853c-3a4a-4696-b482-26337a3655c8",
+                "id": "alteracoes_geneticas",
+                "label": "Alterações genéticas (ex: Síndrome de Klinefelter ou outras anormalidades cromossômicas)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b16f3dbf-29fa-4acb-a9de-009e43901b54",
+                "id": "procedimentos_traumas_genital",
+                "label": "Procedimentos cirúrgicos ou traumas significativos envolvendo a pelve e a área genital",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "a568e3b5-5c76-45fb-947e-a82313217b03",
+            "nodeId": "node-1753729145202",
+            "uid": "filhos_outra_parceira",
+            "titulo": "<p><strong>Filhos com outra parceira:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "7c3217e6-cc7d-4634-9191-9dec62e5845d",
+            "nodeId": "node-1753729145202",
+            "uid": "filhos_atual_parceira",
+            "titulo": "<p><strong>Filhos com atual parceira:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "2d1adecd-883e-4f8c-b2d8-53eb53aae23f",
+            "nodeId": "node-1753729145202",
+            "uid": "historia_social",
+            "titulo": "<p><strong>História social:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "f689e523-539b-4b37-9476-48a9119b54c0",
+                "id": "tabagismo",
+                "label": "Tabagismo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "934e4915-9791-4887-9876-30803e3ff86c",
+                "id": "alcoolismo",
+                "label": "Alcoolismo",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "31bb7efb-0f88-4d12-a69e-3162b3be38c2",
+                "id": "drogas_ilicitas",
+                "label": "Consumo de drogas ilícitas",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "dd095e76-eda7-48a1-b83c-0325fbcc2e1a",
+                "id": "exposição_ocupacional",
+                "label": "Exposição significativa ocupacional",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "162b56f4-788b-4d26-99bf-0e5da31b120f",
+                "id": "sem_comorbidade",
+                "label": "Sem fatores de risco",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "b54d5bc8-8f37-49f0-a6ac-58943e51d619",
+            "nodeId": "node-1753729145202",
+            "uid": "muc_homem",
+            "titulo": "<p><strong>Medicações de uso contínuo:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "fab39bbe-c965-483e-9d6c-dedb879f74f9",
+                "id": "sem_medicacao",
+                "label": "Nenhuma medicação em uso",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "1f4f515b-c6f2-4b12-a4e2-e0abf2bfbc14",
+                "id": "opioides_masculino",
+                "label": "Opioides",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "37f66a8e-4e0f-4657-b391-053306a744ea",
+                "id": "anabolizantes",
+                "label": "Esteroides anabolizantes",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "0368480f-75c0-4320-8d6b-10addd8e00d8",
+                "id": "corticoides",
+                "label": "Glicocorticoides",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "a72766c6-100b-4103-b418-a6dd4aecf4fd",
+                "id": "quimioterapia_radioterapia",
+                "label": "Quimioterapia ou radioterapia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "5e59c9c5-2005-4fe4-8b9e-ba9f92de80e0",
+                "id": "outros",
+                "label": "Outras medicações",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pccb4e253-4cc1-42cb-8405-51352d044a72",
+            "nodeId": "68d86fb7-a70e-490a-8c78-4229339145ab",
+            "uid": "outros_muc_homem",
+            "titulo": "<p><strong>Outros medicamentos</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'outros' in muc_homem",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "f286d0f8-96e4-4e17-8dee-4d978965cc08",
+            "nodeId": "node-1753729145202",
+            "uid": "disfuncao_ejaculatoria",
+            "titulo": "<p><strong>Disfunção ejaculatória:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "cc39db4f-f427-4859-938f-5fc5ce6316f5",
+                "id": "sem_disfuncao_ejaculatoria",
+                "label": "Sem disfunção ejaculatória",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "fdf68309-2f49-43a2-a7c4-554eaede4788",
+                "id": "ejaculacao_prematura",
+                "label": "Ejaculação prematura",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "7baf94c8-fce7-45eb-8a27-2df9b79ca4e1",
+                "id": "ausencia_semen",
+                "label": "Anenjaculação (ausência de emissão de sêmen) ",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "9ca2b4ae-5f0a-46e0-ad8c-9233c27493c6",
+                "id": "ejaculacao_retrograda",
+                "label": "Ejaculação retrógrada",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-1754012471696",
+      "type": "custom",
+      "position": {
+        "x": 5400,
+        "y": 100
+      },
+      "data": {
+        "label": "Resultado de exames - Mulher",
+        "condicao": "'consulta_acompanhamento_exames' in motivo_consulta",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P3d8bfcf6-5330-45bd-bdc4-79fc9127c13f",
+            "nodeId": "node-1754012471696",
+            "uid": "lh",
+            "titulo": "<p><strong>LH urinário:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "13a34971-3176-4443-971c-a36d77b0dd23",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "7570255e-8285-4a1f-838c-ad832b58e4ee",
+                "id": "sem_pico_lh",
+                "label": "Sem pico de LH",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "ae62ac8f-0eb7-4fcc-8864-dae62fbc39ba",
+                "id": "pico_lh",
+                "label": "Com pico de LH",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P8168695d-8b12-4d54-b926-c8837569d197",
+            "nodeId": "node-1754012471696",
+            "uid": "progesterona",
+            "titulo": "<p><strong>Progesterona:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "6b5ac187-46cc-4b80-bcd6-958b245ff849",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d242f5b6-16f4-4bba-b7e0-ffa26c76df29",
+                "id": "progesterona_inferior",
+                "label": "Inferior a 3 ou 5 ng/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e05b7d1f-41c5-467e-bb96-351c3cf25d29",
+                "id": "acima_progesterona",
+                "label": "Acima de 3 ou 5 ng/mL",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pde19267c-8063-4b1d-89dd-750ddf92f90b",
+            "nodeId": "node-1754012471696",
+            "uid": "hormonio_amh",
+            "titulo": "<p><strong>Hormônio antimülleriano (AMH):</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "1bfb28db-0166-4302-9bfa-256b3e4be1c2",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "e6ac0b7f-fcf9-495c-a40f-9964cab415fd",
+                "id": "menor_meio_amh",
+                "label": "AMH <0,5 ng/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "db1148c6-0a9d-4762-b496-6b47f623a09b",
+                "id": "menor_um_amh",
+                "label": "AMH <1,0 ng/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b3f6ad6e-0482-4518-b6ba-c6724699a2e2",
+                "id": "maior_um_menor_tres",
+                "label": "AMH >1,0 ng/mL, mas <3,5 ng/mL ",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b24c4dee-cbfc-40b5-bc5b-6dd0abf685ec",
+                "id": "maior_tres_meio",
+                "label": "AMH >3,5 ng/mL",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pc220ef5d-15b7-4436-953c-32744a193ef0",
+            "nodeId": "node-1754012471696",
+            "uid": "fsh",
+            "titulo": "<p><strong>FSH:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "02e14931-599d-4dc7-83e6-7f8a8df4c693",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "93cbabe0-c054-43cc-b02d-e9ae83253736",
+                "id": "inferior_dez_fsh",
+                "label": "Inferior a 10 miliunidades internacionais/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "0b20e224-3687-4867-a7bc-77613bf2bd23",
+                "id": "dez_a_quinze_fsh",
+                "label": "10 a 15 miliunidades internacionais/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f9284177-9079-43b8-a854-005f04d823a0",
+                "id": "acima_quinze_fsh",
+                "label": "Acima de 15 mili-unidades internacionais/mL",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pcb445441-bdfe-47b6-bf43-d45abbc7b707",
+            "nodeId": "node-1754012471696",
+            "uid": "estradiol",
+            "titulo": "<p><strong>Estradiol</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "73df99e7-3067-4c56-b046-174b1abf187b",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "23340672-a965-474e-866b-0e1e944f6f99",
+                "id": "menor_oitenta_estradiol",
+                "label": "< 80 pg/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "edad6f95-fe48-4cc6-9e7b-148db429f8ec",
+                "id": "maior_oitenta_estradiol",
+                "label": "> 80 pg/mL",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4cb9c145-ffdb-403f-8975-d3bbcce16d5a",
+                "id": "maior_cem_estradiol",
+                "label": " > 100 pg/mL",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P976e09ca-cab6-4c33-b424-7d57fc8c72c9",
+            "nodeId": "node-1754012471696",
+            "uid": "tsh",
+            "titulo": "<p><strong>TSH:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "9532e9f3-ae04-46d2-a909-06431de89039",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "34cd8438-8ffd-4515-955a-765641c8b4f7",
+                "id": "sem_alteracoes",
+                "label": "Sem alterações",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "25c496df-8786-4d67-9f67-cb43f3f6f1d7",
+                "id": "abaixo_referencia",
+                "label": "Abaixo do valor de referência",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "98100ff1-d657-429a-b9dd-f17d15610ad0",
+                "id": "acima_referencia",
+                "label": "Acima do valor de referência",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pe34910ab-4219-4337-b331-fbb7dfc0ab17",
+            "nodeId": "node-1754012471696",
+            "uid": "prolactina",
+            "titulo": "<p><strong>Prolactina</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "05240b50-b829-4e11-a5f9-41f37c616659",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f5a2e135-3a0c-4fc5-9314-ea9eb236201d",
+                "id": "sem_alteracoes",
+                "label": "Sem alterações",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "75a3aa87-3a76-48a7-afdb-278110c2963f",
+                "id": "abaixo_referencia",
+                "label": "Abaixo do valor de referência",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "1fd8f169-3c87-4789-8de1-66013f94e58e",
+                "id": "acima_referencia",
+                "label": "Acima do valor de referência",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pcd387822-6fad-48d3-8d5a-5294d709c671",
+            "nodeId": "node-1754012471696",
+            "uid": "usg_tv_foliculos_antrais",
+            "titulo": "<p><strong>Ultrassonografia transvaginal - Contagem de folículos antrais</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "1165a333-983d-4487-8efa-2cecf37905b3",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "6c2e5a10-f885-47b5-8484-03bce0fbdfe5",
+                "id": "menor_cinco",
+                "label": "< 5 folículos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "8fedf123-ef5d-455b-a580-9dd8f5e1efbb",
+                "id": "cinco_dezesseis",
+                "label": "5 a 16 folículos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "c2bbc6a5-a746-42c8-b2c4-4e54796d07a5",
+                "id": "maior_dezesseis",
+                "label": "> 16 folículos",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P7c8b65ec-97fb-42bf-9c00-33dbe9d76101",
+            "nodeId": "node-1754012471696",
+            "uid": "histerossalpingografia",
+            "titulo": "<p><strong>Histerossalpingografia</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "6fb0ab4f-e5fe-4eed-8e6c-4e3a71469d51",
+                "id": "nenhum_exame",
+                "label": "Nenhuma exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "1fcb1499-f461-4f2a-8a97-97fa78f9d1b2",
+                "id": "cotte_positiva",
+                "label": "Trompa pérvia (Prova de Cotte positiva)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "195763fa-960e-4a6d-8bbf-e07599e13464",
+                "id": "cotte_negativa",
+                "label": "Trompa não pérvia (Prova de Cotte negativa)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P582fa3dd-117f-47b7-8efd-da749dac7896",
+            "nodeId": "node-1754012471696",
+            "uid": "cariotipo",
+            "titulo": "<p><strong>Cariotipo:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "string",
+            "options": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-1754015105787",
+      "type": "custom",
+      "position": {
+        "x": 6300,
+        "y": 100
+      },
+      "data": {
+        "label": "Resultado de exames - Homem",
+        "condicao": "'consulta_acompanhamento_exames' in motivo_consulta",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P106dbc82-8ce0-4c32-a0c8-a8c02474deb1",
+            "nodeId": "node-1754015105787",
+            "uid": "espermograma",
+            "titulo": "<p><strong>Espermograma</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "ac88ca9f-6ad2-43e0-a5b4-27afaf23ef87",
+                "id": "sem_alteracoes",
+                "label": "Sem alterações",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "caf9784f-58c1-482d-bc8a-1054eac31e97",
+                "id": "concentracao_alterada",
+                "label": "Concentração alterada",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "95b842fa-78e7-487c-a976-7fea2203a940",
+                "id": "numero_alterado",
+                "label": "Número total de espermatozoides alterado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d9607ad0-f03d-4159-834f-89260bc64d6d",
+                "id": "motilidade_alterada",
+                "label": "Motilidade alterada",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f66c22ad-6ba8-4406-a770-b67100769498",
+                "id": "morfologia_alterada",
+                "label": "Morfologia alterada",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "08b8b4bb-4b54-44bd-8f90-ad41dc2fd4e0",
+                "id": "vitalidade_alterada",
+                "label": "Vitalidade alterada",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P301077b4-18b9-4a4b-9570-4d7d14aea3c9",
+            "nodeId": "node-1754015105787",
+            "uid": "testosterona",
+            "titulo": "<p><strong>Testosterona total:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "41f3b3d2-28de-4a65-881c-26c281ece847",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "9e8c093f-2b09-40ed-8977-c164af5c4e32",
+                "id": "sem_alteracoes",
+                "label": "Sem alterações",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "c5414ba4-45ff-4a46-8a2a-529b8a794eca",
+                "id": "abaixo_referencia",
+                "label": "Abaixo do valor de referência",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "31fed8e5-438b-4ae0-8539-6754f087dfae",
+                "id": "acima_referencia",
+                "label": "Acima do valor de referência",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pff672dba-c555-4f02-9771-9aee20fcbf1d",
+            "nodeId": "node-1754015105787",
+            "uid": "urina_ejaculacao",
+            "titulo": "<p><strong>Urina após ejaculação:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "46ea4e10-5783-4f9e-b6a3-d77aa54af15e",
+                "id": "nenhum_exame",
+                "label": "Nenhum exame realizado",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "04728a70-4325-4eb4-9c4e-b793090caeec",
+                "id": "espermatozoides_urina",
+                "label": "Presença de espermatozoides",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "50fe870d-7e84-412c-92c1-c71e2a969f14",
+                "id": "ausencia_sptz_urina",
+                "label": "Ausência de espermatozoides",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pd6eebdd8-c6b2-4caf-9e6e-1603fc43e034",
+            "nodeId": "node-1754015105787",
+            "uid": "cariotipo",
+            "titulo": "<p><strong>Cariótipo:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "string",
+            "options": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "summary-0c97c194-3df7-4ec9-9431-746f71488758",
+      "type": "summary",
+      "position": {
+        "x": 7200,
+        "y": 100
+      },
+      "data": {
+        "label": "Resumo de atendimento",
+        "condicao": "",
+        "descricao": "<p>Consulta de primeira vez OU Consulta de acompanhamento / análise de exames</p><p></p><p>Paciente xx, xx anos</p><p></p><p>Perguntas em ordem</p>",
+        "condicional": "visivel",
+        "clinicalExpressions": [
+          {
+            "id": "expr-7bd5da9b-97fd-43b0-b6ab-aa83f68f86bc",
+            "name": "",
+            "formula": "",
+            "description": "",
+            "template": ""
+          }
+        ],
+        "templateMarkdown": ""
+      }
+    },
+    {
+      "id": "conduta-1754016398362",
+      "type": "conduct",
+      "position": {
+        "x": 8100,
+        "y": 100
+      },
+      "data": {
+        "label": "Conduta",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "conduta": "pausa",
+        "condutaDataNode": {
+          "orientacao": [
+            {
+              "id": "f55017db-2460-4b02-8acf-58251bd4bb1d",
+              "nome": "Orientções sobre Infertilidade",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "SEMPRE",
+              "conteudo": "<p>Infertilidade não significa esterilidade. Muitos casais têm dificuldades temporárias para engravidar e, com orientação adequada, conseguem alcançar o objetivo da gestação. Consideramos que há um quadro de infertilidade quando um casal tem relações sexuais regulares, sem usar métodos contraceptivos, por pelo menos um ano (ou seis meses, se a mulher tiver 35 anos ou mais), e ainda não conseguiu engravidar.</p><p>O primeiro passo é investigar, de forma simples e objetiva, se existe algum fator que esteja dificultando a concepção. A avaliação básica inclui a análise dos ciclos menstruais da mulher, alguns exames hormonais, uma ultrassonografia pélvica e o espermograma do parceiro. Isso nos ajuda a entender se há problemas ovulatórios, alterações uterinas, obstrução das tubas ou questões relacionadas à qualidade dos espermatozoides.</p><p>Na maioria das vezes, essa avaliação pode ser feita de forma segura e eficiente no próprio consultório, sem necessidade imediata de tratamentos complexos ou exames caros. É comum que pequenos ajustes no estilo de vida (como redução do estresse, alimentação balanceada, atividade física e controle de peso) já melhorem bastante as chances de engravidar. Em alguns casos, indicamos o uso de medicamentos simples para induzir a ovulação, sempre com acompanhamento adequado.</p><p>Lembre-se: não existe uma solução única para todos os casais. Cada situação será analisada com cuidado, respeitando o tempo, os valores e o contexto de cada um. O mais importante é entender que há um caminho a ser seguido, e que com paciência, informação clara e acompanhamento contínuo, aumentamos muito as chances de alcançar o que vocês estão buscando — uma gravidez segura e desejada.</p><p>Caso seja necessário, encaminharemos vocês para avaliação com especialistas em reprodução humana, mas boa parte das situações pode — e deve — ser tratada com resolutividade já no atendimento ambulatorial inicial.</p>"
+            }
+          ],
+          "exame": [
+            {
+              "id": "0821dca0-aa3a-4af7-be56-c2d92ae6e0d0",
+              "nome": "Espermograma",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40309312"
+                }
+              ],
+              "categoria": "",
+              "cid": "N46",
+              "indicacao": "Infertilidade masculina",
+              "alerta": "",
+              "material": ""
+            },
+            {
+              "id": "75bbc4b8-5f22-4f2c-9f88-fe232bc5c657",
+              "nome": "LH urinário",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('ciclos_irregulares_amenorreia' in regularidade_ciclo_menstrual) or ('ciclos_irregulares_oligomenorreia' in regularidade_ciclo_menstrual) and ('molimia' in sinais_sintomas_infertilidade)",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316408"
+                }
+              ],
+              "categoria": "Urina",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": ""
+            },
+            {
+              "id": "5f302647-571d-4966-a3ba-fc90dec12a10",
+              "nome": "Progesterona",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316408"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "87bbd28a-f498-44b3-aa6a-631263a92754",
+              "nome": "Hormônio antimülleriano",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: > 35 anos E/OU [ ] historico_menopausa_precoce E/OU [ ] ovario_unico E/OU [ ] cirurgia_ovario E/OU [ ] quimioterapia_radioterapia E/OU [ ] infertilidade_sem_causa E/OU [ ] baixa_resposta_gonadotrofinas em fatores_risco_reserva_ovariana",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316890"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "52885ce8-8d12-4119-beb1-ed5053b30af9",
+              "nome": "FSH",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas E/OU > 35 anos E/OU [ ] historico_menopausa_precoce E/OU [ ] ovario_unico E/OU [ ] cirurgia_ovario E/OU [ ] quimioterapia_radioterapia E/OU [ ] infertilidade_sem_causa E/OU [ ] baixa_resposta_gonadotrofinas em fatores_risco_reserva_ovariana",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316289"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "a11b65ec-4523-4791-8aa6-036f7e55038f",
+              "nome": "Estradiol",
+              "descricao": "",
+              "condicional": "oculto",
+              "condicao": "Cond_aparece: > 35 anos E/OU [ ] historico_menopausa_precoce E/OU [ ] ovario_unico E/OU [ ] cirurgia_ovario E/OU [ ] quimioterapia_radioterapia E/OU [ ] infertilidade_sem_causa E/OU [ ] baixa_resposta_gonadotrofinas em fatores_risco_reserva_ovariana",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316246"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "c0eab467-3ee0-483a-a3a9-ac1e806646c8",
+              "nome": "TSH",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316521"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N97 e N46",
+              "indicacao": "Infertilidade feminina e masculina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "c61c43ff-de3a-4575-939c-e9982826467f",
+              "nome": "Prolactina ",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316416"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "ccbb0287-907c-4d0b-9747-f5ce43f84817",
+              "nome": "Testosterona total",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] concentracao_alterada em espermograma",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316505"
+                }
+              ],
+              "categoria": "Sangue",
+              "cid": "N46",
+              "indicacao": "Infertilidade masculina",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "1af51487-f4f9-4e43-b5f3-161cc12aff83",
+              "nome": "Pesquisa de espermatozóide na urina",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "('concentracao_alterada' or 'numero_alterado' in espermograma) and ('nenhum_exame' in urina_ejaculacao)\n",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40311457"
+                }
+              ],
+              "categoria": "Urina",
+              "cid": "N46",
+              "indicacao": "Infertilidade masculina",
+              "alerta": "",
+              "material": "Urina"
+            },
+            {
+              "id": "9a785a8d-1e57-4bc1-87cf-0250e8dc7a64",
+              "nome": "Ultrassonografia transvaginal - contagem de folículos antrais",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40901319"
+                }
+              ],
+              "categoria": "Imagem",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": ""
+            },
+            {
+              "id": "3bca5648-4e0a-4dad-bd4f-34b73c02655f",
+              "nome": "Histerossalpingografia",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40809030"
+                }
+              ],
+              "categoria": "Imagem",
+              "cid": "N97",
+              "indicacao": "Infertilidade feminina",
+              "alerta": "",
+              "material": ""
+            },
+            {
+              "id": "53737cfc-fdc5-4137-a9db-7c21ed2784e1",
+              "nome": "Histeroscopia",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] cotte_positiva em histerossalpingografia E/OU [ ] menor_cinco em usg_tv_foliculos_antrais",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40201155"
+                }
+              ],
+              "categoria": "",
+              "cid": "N97",
+              "indicacao": "Infertilidade.",
+              "alerta": "",
+              "material": ""
+            },
+            {
+              "id": "9842a958-c069-4425-974a-09a175d2e03e",
+              "nome": "Progesterona",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] ciclos_irregulares_amenorreia  E/OU [ ] ciclos_irregulares_oligomenorreia em regularidade_ciclo_menstrual E [ ] molimia em sinais em sinais_sintomas_infertilidade",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40316408"
+                }
+              ],
+              "categoria": "",
+              "cid": "N97",
+              "indicacao": "Infertilidade",
+              "alerta": "",
+              "material": ""
+            }
+          ],
+          "medicamento": [
+            {
+              "id": "0088d283-8cb9-4504-8598-6b44891773e1",
+              "nome": "Citrato de clomifeno 50mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece:[ ] sem_pico_lh em lh E/OU [ ] progesterona_inferior em progesterona",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": ""
+                }
+              ],
+              "categoria": "",
+              "nomeMed": "Citrato de clomifeno 50mg",
+              "posologia": "<p>Tomar 1 comprimido por 5 dias a partir do 3° ao 5° dia do ciclo menstrual.</p>",
+              "mensagemMedico": "",
+              "via": ""
+            },
+            {
+              "id": "9e2e1c3a-40f5-4e91-b541-f34a08935382",
+              "nome": "Letrozol 2,5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] sem_pico_lh em lh E/OU [ ] progesterona_inferior em progesterona",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": "1",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": ""
+                }
+              ],
+              "categoria": "",
+              "nomeMed": "Letrozol 2,5mg",
+              "posologia": "<p>Tomar 1 comprimido ao dia.</p>",
+              "mensagemMedico": "",
+              "via": ""
+            },
+            {
+              "id": "9c13c938-50d9-419d-bf44-1a10d5795bf3",
+              "nome": "Metformina 850mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece:[ ] sem_pico_lh em lh E/OU [ ] progesterona_inferior em progesterona",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": ""
+                }
+              ],
+              "categoria": "",
+              "nomeMed": "Metformina 850mg",
+              "posologia": "<p>Tomar 1 comprimido de 8/8 horas.</p>",
+              "mensagemMedico": "",
+              "via": ""
+            },
+            {
+              "id": "4035ec77-6127-417d-bc79-5a1f60f719ed",
+              "nome": "Terapia com Gonadotrofinas",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece:[ ] sem_pico_lh em lh E/OU [ ] progesterona_inferior em progesterona",
+              "condicionalMedicamento": "intra-hospitalar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": ""
+                }
+              ],
+              "categoria": "",
+              "nomeMed": "Terapia com gonadotrofinas",
+              "posologia": "<p>Injetar 75UI por via IM uma vez ao dia por 14 dias.</p>",
+              "mensagemMedico": "<p>Iniciar a estimulação com dose baixa de gonadotrofina (37,5 a 75 UI) e mantê-la por 14 dias; quando necessário, fazer pequenos incrementos de dose (25 a 37,5 UI) em intervalos de, no mínimo, sete dias, até o início do crescimento folicular (folículo com 12 mm de diâmetro médio). A partir de então, manter a dose de estímulo até que a maturidade folicular seja alcançada (18 mm de diâmetro médio).</p>",
+              "via": ""
+            },
+            {
+              "id": "9ee238be-9c54-4a69-a911-9d060479d725",
+              "nome": "Inositol 4g",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece:[ ] sem_pico_LH em dosagem_lh E/OU [ ] progesterona_inferior em dosagem_progesterona",
+              "condicionalMedicamento": "intra-hospitalar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": ""
+                }
+              ],
+              "categoria": "",
+              "nomeMed": "Inositol 4g",
+              "posologia": "<p>Misturar o conteúdo de 1 sachê em 200ml de água uma vez ao dia. Beber imediatamente após o preparo.</p>",
+              "mensagemMedico": "",
+              "via": ""
+            }
+          ],
+          "encaminhamento": [
+            {
+              "id": "5e10e29a-342a-4021-baab-1efe44741c61",
+              "nome": "Nutricionista",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] obesidade E/OU [ ] baixo_peso em historia_social",
+              "indicacao": "Infertilidade",
+              "cid": "N97",
+              "destino": "Nutrição"
+            },
+            {
+              "id": "4ec8f4c1-59d0-48d7-ba72-805b6262fefe",
+              "nome": "Endocrinologista",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] acima_referencia em tsh E/OU [ ] acima_referencia em prolactina",
+              "indicacao": "Infertilidade",
+              "cid": "N97",
+              "destino": "Endocrinologista"
+            },
+            {
+              "id": "3483e4a5-6649-4691-a049-ef2246d7edc8",
+              "nome": "Urologista",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] espermatozoides_urina em urina_ejaculacao E/OU [ ] concentracao_alterada E/OU [ ] motilidade_alterada em espermograma",
+              "indicacao": "Infertilidade",
+              "cid": "N46",
+              "destino": "Urologista"
+            },
+            {
+              "id": "9ee93457-9d50-472b-bfae-1b851f04d73c",
+              "nome": "Reprodução Assistida",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] espermatozoides_urina em urina_ejaculacao E/OU [ ] concentracao_alterada E/OU [ ] motilidade_alterada em espermograma_exame E/OU [ ] menor_um em hormonio_amh E/OU [ ] menor_cinco em usg_tv_foliculos_antrais E/OU [ ] maior_oitenta E/OU [ ] maior_cem em dosagem_estradiol E/OU [ ] acima_quinze em dosagem_fsh E/OU [ ] cotte_negativa em histerossalpingografia_exame",
+              "indicacao": "Infertilidade",
+              "cid": "N46",
+              "destino": "Reprodução Assistida"
+            }
+          ],
+          "mensagem": [
+            {
+              "id": "2ca882e5-4f67-4ddd-a822-5d6d814b4347",
+              "nome": "Seu paciente merece avaliação inicial por meio da realização de exames para suspeita de infertilidade.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_ aparece: se < 35 anos E [ ] um_ano_mais em tempo_relacoes_desprotegidas OU [ ] se ≥ 35 anos E [ ] seis_meses_mais em tempo_relacoes_desprotegidas",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "699944f4-2973-4e8e-9851-256347ed71cf",
+              "nome": "Sugerimos aumento na frequência de relações desprotegidas.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] nao_ideal em frequencia_relacoes",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "5b113484-0ec7-4be3-b0c4-72d18bd6b5a8",
+              "nome": "Sua paciente pode ter fator ovulatório como possível causa de infertilidade, recomendamos dosagem de Lh urinário e dosagem sérica de progesterona para investigação.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] ciclos_irregulares_amenorreia OU [ ] ciclos_irregulares_oligomenorreia em regularidade_ciclo_menstrual",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "9344021a-f20a-4241-8e61-fe2df052f780",
+              "nome": "Sua paciente apresenta fatores de risco para diminuição de reserva ovariana como possível causa de infertilidade.",
+              "descricao": "",
+              "condicional": "oculto",
+              "condicao": "Cond_desaparece: [ ] sem_fatores_risco em fatores_risco_reserva_ovariana E [ ] consulta_acompanhamento_exames em motivo_consulta",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "1e0f4a3b-7f69-4904-8142-7768dd5e3fa9",
+              "nome": "O casal pode ter hábitos de vida que podem estar relacionados à dificuldade de engravidar, sugerimos orientações em relação a mudança de estilo de vida.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] alcoolismo E/OU [ ] drogas_ilicitas E/OU [ ] consumo_cafeina E/OU [ ] tabagismo E/OU [ ] exposição_ocupacional em historia_social\n",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "31561b92-9d3f-471d-b00d-153277ea03aa",
+              "nome": "Sua paciente tem hábitos de vida que podem estar relacionados à dificuldade de engravidar, sugerimos orientações em relação a mudança de estilo de vida e encaminhamento ao Nutricionista.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] obesidade E/OU [ ] baixo_peso em historia_social",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "3c8a0dcd-f45e-4302-ae5c-362f3d947fb9",
+              "nome": "Sua paciente apresenta sinais/sintomas de sugerem a presença de uma endocrinopatia que pode estar associada com a infertilidade, sugerimos investigação adicional.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] galactorreia E/OU [ ] hiperandrogenismo em sinais_sintomas_infertilidade",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "0904db06-9428-4cc9-b248-074a85fb2e77",
+              "nome": "Seu paciente pode apresentar distúrbio testicular ou anormalidade estrutural como causa de infertilidade.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] varicocele E/OU [ ] alteracoes_geneticas E/OU [ ] procedimentos_traumas_genital em fatores_risco_infertilidade",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "50ac0d64-2e19-4c1e-83bf-be0444c4f0e2",
+              "nome": "Seu paciente está exposto a medicações ou terapias que podem afetar o eixo eixo hipotálamo-hipófise-testicular. ",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] opioides E/OU [ ] anabolizantes E/OU [ ] corticoides E/OU [ ] quimioterapia_radioterapia em muc",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "8251df70-d458-4ea2-b3d4-5bb558bb1fba",
+              "nome": "Seu paciente pode ter uma disfunção ejaculatória como causa de infertilidade.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] ejaculacao_prematura E/OU [ ] ausencia_semen E/OU [ ] ejaculacao_retrograda em disfuncao_ejaculatoria",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "cbac67c5-065f-4833-9242-ef8add07fac2",
+              "nome": "Sua paciente provavelmente possui um fator ovulatório como causa de infertilidade.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece:[ ] sem_pico_lh em lh E/OU [ ] progesterona_inferior em progesterona",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "215e4870-2c02-42fd-bcee-f0a21183b66a",
+              "nome": "Sua paciente provavelmente apresenta reserva ovariana diminuída como causa de infertilidade.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] menor_um_amh em hormonio_amh E/OU [ ] menor_cinco em usg_tv_foliculos_antrais E/OU [ ] maior_oitenta_estradiol E/OU [ ] maior_cem em estradiol E/OU [ ] acima_quinze_fsh em fsh",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "b6fef4da-461e-40b7-903a-b4cc87b2ec8c",
+              "nome": "Sua paciente apresenta fator tubário como provável causa de infertilidade, recomendamos realização de histeroscopia.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] cotte_negativa em histerossalpingografia_exame",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "bf92a21c-e028-423c-b32b-9b0f35367c64",
+              "nome": "Sua paciente pode ter uma endocrinopatia como causa de infertildiade, sugerimos investigação adicional e encaminhamento para Endocrinologista",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] acima_tsh em dosagem_tsh E/OU [ ] acima_prolactina em dosagem_prolactina",
+              "conteudo": "",
+              "observacao": ""
+            },
+            {
+              "id": "9a20421d-8d7d-47e4-80bb-f489c5cfa798",
+              "nome": "Seu paciente apresenta distúrbio do transporte de espermatozoides como possível causa para infertilidade, sugerimos encaminhamento ao Urologista e especialista em Reprodução Assistida.",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "Cond_aparece: [ ] espermatozoides_urina em urina_ejaculacao E/OU [ ] concentracao_alterada E/OU [ ] motilidade_alterada em espermograma_exame",
+              "conteudo": "",
+              "observacao": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-5f312f2f-258b-41d8-a463-d50d9c25ff41-c717fe61-9912-4572-b4b4-76ab6596da22",
+      "source": "5f312f2f-258b-41d8-a463-d50d9c25ff41",
+      "target": "c717fe61-9912-4572-b4b4-76ab6596da22",
+      "data": {}
+    },
+    {
+      "id": "e-c717fe61-9912-4572-b4b4-76ab6596da22-node-1753729145202",
+      "source": "c717fe61-9912-4572-b4b4-76ab6596da22",
+      "target": "node-1753729145202",
+      "data": {}
+    },
+    {
+      "id": "e-node-1753729145202-c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3",
+      "source": "node-1753729145202",
+      "target": "c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3",
+      "data": {}
+    },
+    {
+      "id": "e-c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3-68d86fb7-a70e-490a-8c78-4229339145ab",
+      "source": "c5a3efcd-4d08-4e2e-99df-e4e9b951a5b3",
+      "target": "68d86fb7-a70e-490a-8c78-4229339145ab",
+      "data": {}
+    },
+    {
+      "id": "e-68d86fb7-a70e-490a-8c78-4229339145ab-node-1754012471696",
+      "source": "68d86fb7-a70e-490a-8c78-4229339145ab",
+      "target": "node-1754012471696",
+      "data": {}
+    },
+    {
+      "id": "e-node-1754012471696-node-1754015105787",
+      "source": "node-1754012471696",
+      "target": "node-1754015105787",
+      "data": {}
+    },
+    {
+      "id": "e-node-1754015105787-summary-0c97c194-3df7-4ec9-9431-746f71488758",
+      "source": "node-1754015105787",
+      "target": "summary-0c97c194-3df7-4ec9-9431-746f71488758",
+      "data": {}
+    },
+    {
+      "id": "e-summary-0c97c194-3df7-4ec9-9431-746f71488758-conduta-1754016398362",
+      "source": "summary-0c97c194-3df7-4ec9-9431-746f71488758",
+      "target": "conduta-1754016398362",
+      "data": {}
+    }
+  ]
+};

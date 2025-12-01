@@ -1,0 +1,1099 @@
+{
+  "metadata": {
+    "company": "athena",
+    "name": "dor_no_ombro",
+    "version": "3.0.5"
+  },
+  "nodes": [
+    {
+      "id": "node-identificacao",
+      "type": "custom",
+      "position": {
+        "x": 900,
+        "y": 100
+      },
+      "data": {
+        "label": "Identificação do paciente",
+        "condicao": "",
+        "descricao": "Dados demográficos e de contato do paciente.",
+        "condicional": "oculto",
+        "questions": [
+          {
+            "id": "Q-identificacao-2",
+            "uid": "age",
+            "titulo": "<p><strong>Idade do paciente:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "defaultValue": "DD/MM/AAAA"
+          },
+          {
+            "id": "Q-identificacao-3",
+            "uid": "sex",
+            "titulo": "<p><strong>Sexo do paciente:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "id": "sexo_masculino",
+                "label": "Masculino",
+                "preselected": false,
+                "exclusive": true,
+                "iid": "uuid-sexo-masculino"
+              },
+              {
+                "id": "sexo_feminino",
+                "label": "Feminino",
+                "preselected": false,
+                "exclusive": true,
+                "iid": "uuid-sexo-feminino"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-15d1d149-6b5b-4efe-8eff-3898d4a32014",
+      "type": "custom",
+      "position": {
+        "x": 1800,
+        "y": 100
+      },
+      "data": {
+        "label": "Ciência",
+        "condicao": "",
+        "descricao": "<p></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P049ca094-90bd-4949-ae89-9a19dadca792",
+            "nodeId": "node-15d1d149-6b5b-4efe-8eff-3898d4a32014",
+            "uid": "termo_compromisso",
+            "titulo": "<p><strong>Toda informação inserida neste atendimento será gravada no prontuário e não poderá ser alterada após a conclusão do mesmo.</strong></p><p><strong>&nbsp;</strong></p><p><strong>Este protocolo é uma ferramenta institucional de registro junto ao prontuário do paciente. Em concordância com a resolução do CFM nº 1.638/2002, este documento possui valor médico legal.</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "9e8aafbe-04c5-48d7-9f03-4d51c6c4f910",
+                "id": "ciente",
+                "label": "Ciente de que as informações preenchidas neste protocolo serão registradas no prontuário.",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "90266016-b3bc-4104-8032-1adade711513",
+      "type": "custom",
+      "position": {
+        "x": 2700,
+        "y": 100
+      },
+      "data": {
+        "label": "Identificação",
+        "condicao": "",
+        "descricao": "<p></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P1d12607c-a281-4681-9715-a47bb9fe53ef",
+            "nodeId": "90266016-b3bc-4104-8032-1adade711513",
+            "uid": "motivo_consulta",
+            "titulo": "<p><strong>Tipo de consulta:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "5d4b261d-6d09-470c-bd41-0fb86eb5b609",
+                "id": "primeiro_atendimento",
+                "label": "Primeira consulta",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "293e6a20-5a61-4736-b0f1-efda07437b7b",
+                "id": "retorno_atendimento",
+                "label": "Consulta de retorno",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "P5e77e49f-4658-43e4-aa12-393464ba7170",
+            "nodeId": "90266016-b3bc-4104-8032-1adade711513",
+            "uid": "exames_avaliacao",
+            "titulo": "<p><strong>Paciente trouxe exames para avaliação?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+      "type": "custom",
+      "position": {
+        "x": 3600,
+        "y": 100
+      },
+      "data": {
+        "label": "Primeira avaliação",
+        "condicao": "'primeiro_atendimento' in motivo_consulta",
+        "descricao": "<p></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P262e44d9-3760-4a90-9a58-c148cf479042",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "instabilidade_luxacao",
+            "titulo": "<p><strong>Investigação de instabilidade com história prévia de luxação:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P8dcd51d6-ddff-4605-a4e0-02b43f136ece",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "instabilidade_teste_positivo",
+            "titulo": "<p><strong>Paciente possui algum teste para instabilidade (apreensão, realocação, surpresa) positivo?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P1ad8cd77-5b02-48c0-9050-098160f67be0",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "tendinite_manguito",
+            "titulo": "<p><strong>Detecção de tendinite do manguito rotador:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "71a8ed73-867c-431c-8907-ef39b9eb43ba",
+                "id": "none_teste_manguito",
+                "label": "Nenhum teste positivo para tendinite do manguito",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "41a828ca-9583-46b4-b1db-a9c5c12334cd",
+                "id": "supra_teste_manguito",
+                "label": "Testes de supraespinhal positivos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "3919a0f2-10fc-4865-9adc-250034fe6dd2",
+                "id": "infra_teste_manguito",
+                "label": "Testes de infraespinhal positivos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "7c4bf925-5eff-4e6a-823d-4af10419de08",
+                "id": "sub_teste_manguito",
+                "label": "Testes de subescapular positivos",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": true,
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3aba4dda-0ca3-41db-9a7a-7be5dd261cf0",
+      "type": "custom",
+      "position": {
+        "x": 4500,
+        "y": 100
+      },
+      "data": {
+        "label": "Ruptura manguito",
+        "condicao": "'primeiro_atendimento' in motivo_consulta and not(selected_any(tendinite_manguito, 'none_teste_manguito'))",
+        "descricao": "<p></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P26edfec0-07dd-4fc7-bc34-6ff5792379f6",
+            "nodeId": "3aba4dda-0ca3-41db-9a7a-7be5dd261cf0",
+            "uid": "exames_adicionais_manguito",
+            "titulo": "<p><strong>Exames adicionais para detecção de ruptura do manguito rotador:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "736079da-311a-41cc-aadf-5c9a03262f7c",
+                "id": "none_manguito_ruptura",
+                "label": "Paciente sem sinais de ruptura de manguito",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "30118230-3d98-469c-af13-f8d2681d5abe",
+                "id": "aguda_manguito_ruptura",
+                "label": "Paciente com sinais de ruptura de manguito aguda e perda de função importante",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f6adae5a-bf66-4532-928c-d36591e9f325",
+                "id": "cronica_manguito_ruptura",
+                "label": "Paciente com sinais de ruptura de manguito crônica e/ou com perda de função leve a moderada",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4",
+      "type": "custom",
+      "position": {
+        "x": 5400,
+        "y": 100
+      },
+      "data": {
+        "label": "Resultados de exames",
+        "condicao": "exames_avaliacao is True",
+        "descricao": "<p></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "e8092c83-d485-41c3-ba43-18914999d916",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "ombro_rx",
+            "titulo": "<p><strong>RX de Ombro:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "db811ff8-2d73-4ab0-a1a3-5feee3367bf0",
+                "id": "none_rx_ombro",
+                "label": "RX de ombro não realizado",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "508fdd3a-fdc2-4c2d-b5f2-adfbba93cd38",
+                "id": "normal_rx_ombro",
+                "label": "RX de ombro normal",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "60f6bd3b-b469-4946-827f-5685d038c175",
+                "id": "cal_levemod_rx_ombro",
+                "label": "Tendinite Calcária Leve a Moderada",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "3fa22fc2-1b23-4c77-963e-ce279053372e",
+                "id": "cal_grave_rx_ombro",
+                "label": "Tendinite Calcária Grave",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "a82d4d0a-ab13-4119-bfa5-01756aa992e0",
+                "id": "artrose_rx_ombro",
+                "label": "Artrose de Ombro",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": true,
+            "defaultValue": "false"
+          },
+          {
+            "id": "03538b43-85fc-44a0-a1db-e0ed51bdf0bf",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "ombro_usg",
+            "titulo": "<p><strong>USG de Ombro:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "93e4d771-84ab-4174-a8f2-0912e611bf41",
+                "id": "none_usg_ombro",
+                "label": "USG de ombro não realizado",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "e5b4909d-8f8c-4ea7-9acc-7a10ed38571e",
+                "id": "normal_usg_ombro",
+                "label": "USG de ombro normal",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "a9f73921-d994-46c6-8bd2-a4f307fbeb76",
+                "id": "bursite_usg_ombro",
+                "label": "Bursite associada no USG",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "594ff2ad-a7fc-471e-843a-d92a83f7e356",
+                "id": "tendinite_usg_ombro",
+                "label": "Tendinite do manguito rotador no USG",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "c1ca4853-56d7-4081-b4de-4b8d4230996f",
+                "id": "instabilidade_usg_ombro",
+                "label": "Sinais de instabilidade confirmada no USG",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": true,
+            "defaultValue": "false"
+          },
+          {
+            "id": "fe2f196a-2406-4bb3-b3e4-5ed859236dd7",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "ombro_rm",
+            "titulo": "<p><strong>RM de Ombro:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "aa40a9c2-612a-4669-97ee-bdef80122f2c",
+                "id": "none_rm_ombro",
+                "label": "RM de ombro não realizado",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "54ec388f-d921-4374-a7ef-9d46f48fdb25",
+                "id": "normal_rm_ombro",
+                "label": "RM de ombro normal",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "9991758a-1b88-49df-a65b-935a315c6996",
+                "id": "bursite_rm_ombro",
+                "label": "Bursite associada na RM",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f6d065ba-3be1-40d3-a618-16dcc71c66fc",
+                "id": "tendinite_rm_ombro",
+                "label": "Tendinite do manguito rotador na RM",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "1aeca6bc-37f7-4fcf-a3c7-84f200a915ac",
+                "id": "instabilidade_rm_ombro",
+                "label": "Sinais de instabilidade confirmada na RM",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": true,
+            "defaultValue": "false"
+          },
+          {
+            "id": "d07e8533-05ba-4551-a32f-558afa85864a",
+            "nodeId": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+            "uid": "exames_aberto",
+            "titulo": "<p><strong>Complemento de exames complementares:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "string",
+            "options": [],
+            "opcional": true,
+            "naSelecionado": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-historia-social",
+      "type": "custom",
+      "position": {
+        "x": 6300,
+        "y": 100
+      },
+      "data": {
+        "label": "Tratamento atual",
+        "condicao": "'retorno_atendimento' in motivo_consulta",
+        "descricao": "<p></p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P8472f9a7-32e5-4d43-9e36-dfe807499226",
+            "nodeId": "node-historia-social",
+            "uid": "suspeita_dx",
+            "titulo": "<p><strong>Suspeita diagnóstica:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "56a11446-06f1-45e4-b459-3dc8b624f274",
+                "id": "dx_outros",
+                "label": "Outros diagnósticos",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "e487b62d-e149-4ca5-bbd3-eab231d32968",
+                "id": "sd_instabilidade",
+                "label": "Síndrome de instabilidade",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f7042bc3-1864-4b45-94be-2ea2f768295e",
+                "id": "manguito_tendinite_supra",
+                "label": "Tendinite do manguito rotador - componente supraespinhal",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "bd1bfc0e-92ee-4653-8494-07512d742ac5",
+                "id": "manguito_tendinite_infra",
+                "label": "Tendinite do manguito rotador - componente infraespinhal",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "fd9f7c72-6f25-4a86-8951-cae637a3c05f",
+                "id": "manguito_tendinite_sub",
+                "label": "Tendinite do manguito rotador - componente subescapular",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "60e8f008-a435-46b7-893c-43a2e7835356",
+                "id": "manguito_ruptura",
+                "label": "Ruptura do manguito rotador",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P03c0d638-b868-4392-9c26-557748c04c8d",
+            "nodeId": "node-historia-social",
+            "uid": "dx_suspeita_complemento",
+            "titulo": "<p><strong>Complemento de suspeita diagnostica:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "string",
+            "options": [],
+            "opcional": true,
+            "naSelecionado": true
+          },
+          {
+            "id": "Pb0040f8c-97c4-4dcd-9a4b-612df6e14f9f",
+            "nodeId": "node-historia-social",
+            "uid": "tt_atual",
+            "titulo": "<p><strong>Tratamento atual:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "249418dc-950a-47be-b1a0-bd3bc4ffdd5e",
+                "id": "tt_atual_none",
+                "label": "Tratamento não instituído",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "fe2bdb59-122e-4c1f-9ca7-f7f15659e166",
+                "id": "tt_atual_primeira",
+                "label": "Primeira linha de tratamento",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "5f4ace83-ef11-4dc7-8069-a871ea29f47d",
+                "id": "tt_atual_segunda",
+                "label": "Segunda linha de tratamento",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "852e0396-83a9-4293-a841-0a386ec79f7a",
+                "id": "tt_atual_terceira",
+                "label": "Terceira linha de tratamento",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "P352aca09-3443-4ba1-af5b-440015ee971e",
+            "nodeId": "node-historia-social",
+            "uid": "tt_atual_avaliacao",
+            "titulo": "<p><strong>Avaliação da Resposta ao tratamento:</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "not('tt_atual_none' in tt_atual)",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "fe2bdb59-122e-4c1f-9ca7-f7f15659e166",
+                "id": "tt_atual_boa",
+                "label": "Boa resposta e ausência de sintomas",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "5f4ace83-ef11-4dc7-8069-a871ea29f47d",
+                "id": "tt_atual_parcial",
+                "label": "Resposta parcial e sintomas residuais",
+                "preselected": false,
+                "exclusive": true
+              },
+              {
+                "iid": "852e0396-83a9-4293-a841-0a386ec79f7a",
+                "id": "tt_atual_ruim",
+                "label": "Resposta ruim ao tratamento",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+      "type": "custom",
+      "position": {
+        "x": 7200,
+        "y": 100
+      },
+      "data": {
+        "label": "Exames de imagem",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P395f69c9-c6c4-44bb-8967-53997205cdc5",
+            "nodeId": "node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+            "uid": "trauma_limitacao_agudo_ombro",
+            "titulo": "<p><strong>Há trauma recente, limitação súbita de movimento ou deformidade evidente?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P03e3297d-19a6-44f9-adc5-7536bce91f7e",
+            "nodeId": "node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+            "uid": "manguito_cronico_ombro",
+            "titulo": "<p><strong>Dor crônica (&gt; 6 semanas) com sinais clínicos de lesão do manguito rotador?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pe8602eda-9383-463a-acc1-3b66b9f6f4a1",
+            "nodeId": "node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+            "uid": "slap_ombro",
+            "titulo": "<p><strong>Suspeita de instabilidade glenoumeral, lesão labral ou SLAP?</strong></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3",
+      "type": "custom",
+      "position": {
+        "x": 8100,
+        "y": 100
+      },
+      "data": {
+        "label": "Detalhamento de sintomas",
+        "condicao": "(trauma_limitacao_agudo_ombro is False) and (manguito_cronico_ombro is False) and (slap_ombro is False)",
+        "descricao": "<p></p>",
+        "condicional": "oculto",
+        "questions": [
+          {
+            "id": "P494f0e2d-f053-41c0-b3a9-6f5acc31a5c4",
+            "nodeId": "node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3",
+            "uid": "athena_detalhamento",
+            "titulo": "<p>Você marcou que o paciente possui<strong> indicações de exame de imagem.</strong></p><p></p><p>Descrever abaixo qual(is) o(s) antecedente(s), a data do diagnóstico, sintomas associados, medicamentos de uso contínuo que se relacionam com esse antecedente e resultados de exames prévios (mínimo 40 caracteres):</p>",
+            "descricao": "",
+            "condicional": "oculto",
+            "expressao": "",
+            "select": "string",
+            "options": [],
+            "naSelecionado": true,
+            "min": 40,
+            "max": 1000
+          }
+        ]
+      }
+    },
+    {
+      "id": "summary-65828fca-62aa-4075-ab73-aa5009267086",
+      "type": "summary",
+      "position": {
+        "x": 9000,
+        "y": 100
+      },
+      "data": {
+        "label": "Processamento clínico",
+        "condicao": "",
+        "descricao": "<p>Paciente de &lt;idade&gt;, &lt;sexo&gt;.</p><p>&lt;Tipo de consulta&gt;</p><p></p><p><strong>Avaliação de sintomas, exames e complemento</strong><br>&lt;Perguntas e respostas&gt;</p>",
+        "condicional": "visivel",
+        "clinicalExpressions": [],
+        "templateMarkdown": ""
+      }
+    },
+    {
+      "id": "conduta-5b23d4d0-fb9b-47f5-893e-8cb040cd9eb1",
+      "type": "conduct",
+      "position": {
+        "x": 9900,
+        "y": 100
+      },
+      "data": {
+        "label": "Conduta ",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "conduta": "pausa",
+        "condutaDataNode": {
+          "orientacao": [
+            {
+              "id": "ce4017b2-0f25-4538-8b59-6a5cd0af03ed",
+              "nome": "Orientações ao Paciente com Dor no Ombro",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<h2><strong>Entendendo sua condição</strong></h2><p>A dor no ombro é muito comum e pode ter diferentes causas, como:</p><ul><li><p><strong>Síndrome do manguito rotador</strong> (tendões inflamados ou enfraquecidos);</p></li><li><p><strong>Síndrome do impacto subacromial</strong> (compressão dos tendões ao movimentar o ombro);</p></li><li><p><strong>Capsulite adesiva</strong> (“ombro congelado”, com rigidez e limitação de movimento);</p></li><li><p><strong>Instabilidade do ombro</strong> (sensação de deslocamento ou fraqueza articular).</p></li></ul><p>Na maioria dos casos, <strong>o tratamento é conservador (sem cirurgia)</strong> e apresenta bons resultados quando seguido corretamente.</p><h2><strong>Tratamento Conservador</strong></h2><h3>1. <strong>Fisioterapia – o principal tratamento</strong></h3><p>A fisioterapia é o pilar da recuperação e deve ser iniciada o quanto antes.<br>Os exercícios são personalizados e têm como objetivo:</p><ul><li><p>Restaurar a <strong>força muscular</strong> (principalmente do manguito rotador e da escápula);</p></li><li><p>Melhorar o <strong>controle e a estabilidade</strong> do ombro;</p></li><li><p>Aumentar a <strong>amplitude dos movimentos</strong>.</p></li></ul><p>Durante o tratamento, o fisioterapeuta pode associar:</p><ul><li><p><strong>Terapia manual</strong>, principalmente nas fases iniciais, para aliviar dor e rigidez;</p></li><li><p><strong>Alongamentos</strong> específicos para melhorar a mobilidade;</p></li><li><p><strong>Modalidades auxiliares</strong> (como laser, ondas de choque ou “tape”), que podem ajudar em alguns casos, mas <strong>não substituem os exercícios</strong>.</p></li></ul><p>A prática regular dos exercícios, inclusive em casa, é essencial para uma boa recuperação.</p><h3>2. <strong>Uso de medicamentos</strong></h3><ul><li><p>Analgésicos e <strong>anti-inflamatórios</strong> (como ibuprofeno, diclofenaco ou paracetamol) podem ser usados para aliviar a dor, conforme orientação médica.</p></li><li><p>Em casos de dor intensa ou limitação importante, <strong>injeções de corticoide</strong> podem ser indicadas, geralmente com alívio a curto prazo.</p></li></ul><h3>3. <strong>Orientações específicas</strong></h3><ul><li><p><strong>Capsulite adesiva:</strong> foco no ganho de movimento e alongamentos suaves; pode-se associar corticoide intra-articular.</p></li><li><p><strong>Lesão do manguito rotador:</strong> o principal é fortalecer os músculos do ombro e da escápula.</p></li><li><p><strong>Instabilidade:</strong> priorizar exercícios de estabilização e controle muscular.</p></li></ul><h3>4. <strong>Acompanhamento</strong></h3><ul><li><p>O retorno ao médico ou fisioterapeuta deve ocorrer <strong>após 3 a 6 semanas</strong> para reavaliar a evolução.</p></li><li><p>Caso a dor ou a limitação <strong>não melhorem</strong>, pode ser necessário ajustar o tratamento ou encaminhar para avaliação especializada.</p></li></ul><h2><strong>Procure atendimento imediato se houver:</strong></h2><ul><li><p>Dor súbita e intensa após trauma;</p></li><li><p>Perda súbita de força no braço;</p></li><li><p>Febre, vermelhidão ou inchaço na região;</p></li><li><p>Dor que não melhora mesmo com medicação e fisioterapia.</p></li></ul><h2><strong>Dicas importantes para o dia a dia</strong></h2><ul><li><p>Evite carregar peso com o braço afetado.</p></li><li><p>Prefira dormir com o ombro dolorido para cima ou apoiado sobre um travesseiro.</p></li><li><p>Faça os exercícios conforme orientação do fisioterapeuta, de forma regular e sem dor excessiva.</p></li><li><p>Mantenha-se ativo — o repouso prolongado <strong>atrapalha a recuperação</strong>.</p></li><li><p><strong>Seu comprometimento é essencial para o sucesso do tratamento.</strong></p></li></ul>"
+            }
+          ],
+          "exame": [
+            {
+              "id": "acebdbf4-236a-49f5-8e20-745221b8f47b",
+              "nome": "RX - Articulação escapuloumeral (ombro)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "trauma_limitacao_agudo_ombro is True",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40803074"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "S43.0",
+              "indicacao": "Avaliação inicial da dor aguda no ombro, suspeita de fratura, luxação, desalinhamento, avaliação de anormalidades ósseas.",
+              "alerta": "Visualização limitada de partes moles, não diagnostica lesão do manguito rotador diretamente.",
+              "material": ""
+            },
+            {
+              "id": "9ad05c9c-7b6e-472b-9e04-2a633ced8ac2",
+              "nome": "US - Articular (por articulação)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not('dx_outros' in suspeita_dx) or not('none_teste_manguito' in tendinite_manguito) or ('aguda_manguito_ruptura' in exames_adicionais_manguito)",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "40901220"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "M75.1",
+              "indicacao": "Suspeita de lesão do manguito rotador (especialmente rupturas completas), patologia do tendão do bíceps, contraindicação à RM.",
+              "alerta": "Menor acurácia para rupturas parciais.",
+              "material": ""
+            },
+            {
+              "id": "4eadf8ab-c798-425f-b63c-f8575432e260",
+              "nome": "RM - Articular (por articulação)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "(manguito_cronico_ombro is True) or (slap_ombro is True) or not('dx_outros' in suspeita_dx) or not('none_teste_manguito' in tendinite_manguito) or not(selected_any(ombro_usg, 'normal_usg_ombro', 'none_usg_ombro'))",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "41101316"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "M75.1",
+              "indicacao": "Avaliação de lesões de partes moles (manguito rotador, lesões labrais, cartilagem), fraturas ocultas, radiografias inconclusivas.",
+              "alerta": "",
+              "material": ""
+            },
+            {
+              "id": "1dm5g62f",
+              "nome": "Artro-RM (incluir a punção articular) - por articulação",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "(manguito_cronico_ombro is True) or (slap_ombro is True) or not('dx_outros' in suspeita_dx) or not('none_teste_manguito' in tendinite_manguito) or not(selected_any(ombro_usg, 'normal_usg_ombro', 'none_usg_ombro'))",
+              "condicionalExame": "intra-hospitalar",
+              "codigo": [
+                {
+                  "sistema": "",
+                  "valor": "41102010"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "M75.1",
+              "indicacao": "Suspeita de lesão do lábio glenoidal (lesão de Bankart, SLAP), investigação de instabilidade do ombro (instabilidade anterior, posterior ou multidirecional, especialmente em atletas ou pós-trauma), avaliação de lesões parciais do manguito rotador, reavaliação pós-cirúrgica, dúvida diagnóstica após RM convencional.",
+              "alerta": "",
+              "material": ""
+            }
+          ],
+          "medicamento": [
+            {
+              "id": "5cf0772e-6cc3-4c6d-bb6d-78fb42338101",
+              "nome": "Ibuprofeno 600mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "mevo",
+                  "valor": "55388",
+                  "iid": "5f018c36-c5ff-4952-9b68-45c09360ab80"
+                }
+              ],
+              "categoria": "AINEs",
+              "nomeMed": "Ibuprofeno 600mg",
+              "posologia": "<p>01 comprimido, 8/8h, por 05 dias.</p>",
+              "mensagemMedico": "<p>AINE de 1ª linha, avaliar risco GI/renal</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "3522456a-1d40-4d34-b1d0-ac38e6046dd5",
+              "nome": "Naproxeno 550mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "mevo",
+                  "valor": "37432",
+                  "iid": "64b06d53-8b7f-49bf-bac9-c904b3a78ec1"
+                }
+              ],
+              "categoria": "AINEs",
+              "nomeMed": "Naproxeno 550mg",
+              "posologia": "<p>01 comprimido, 12/12h, por 05 dias.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "fsh9j7eu",
+              "nome": "Dipirona 500mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "mevo",
+                  "valor": "11018",
+                  "iid": "fe963536-8d11-4f78-87e1-d438a486bb4a"
+                }
+              ],
+              "categoria": "Analgésicos",
+              "nomeMed": "Dipirona 500mg",
+              "posologia": "<p>02 comprimidos, até de 6/6h, se dor.</p>",
+              "mensagemMedico": "",
+              "via": "Oral"
+            },
+            {
+              "id": "5xd9mitc",
+              "nome": "Paracetamol 500mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "mevo",
+                  "valor": "42402",
+                  "iid": "c34d7e66-c48e-45ca-8ed4-ff7cd487229c"
+                }
+              ],
+              "categoria": "Analgésicos",
+              "nomeMed": "Paracetamol 500mg",
+              "posologia": "<p>02 comprimidos, até de 6/6h, se dor.</p>",
+              "mensagemMedico": "<p>Analgesia segura em idosos.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "jfva7ks6",
+              "nome": "Triancinolona Hexacetonida 20mg/ml",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "sistema": "mevo",
+                  "valor": "30560",
+                  "iid": "837b7739-1161-4d2a-b1c9-b0927c1567d9"
+                }
+              ],
+              "categoria": "Glicocorticoide",
+              "nomeMed": "Triancinolona Hexacetonida 20mg/ml",
+              "posologia": "<p>20mg, dose única.</p>",
+              "mensagemMedico": "<p>Reservado para dor refratária; máximo 3 infiltrações/ano</p>",
+              "via": "Infiltração local"
+            }
+          ],
+          "encaminhamento": [
+            {
+              "id": "5260e616-40dd-4a68-a4ac-da708533c3c6",
+              "nome": "Fisioterapia",
+              "descricao": "<p>Encaminhar para reabilitação precoce melhora prognóstico.</p>",
+              "condicional": "visivel",
+              "condicao": "",
+              "indicacao": "Tendinopatias do manguito rotador, bursite, síndrome do impacto",
+              "codigo": "",
+              "cid": "M75.1, M75.4, M65.2",
+              "destino": "Fisioterapia"
+            }
+          ],
+          "mensagem": [
+            {
+              "id": "vd7pab99",
+              "nome": "INSTABILIDADE",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "(instabilidade_luxacao is True) or (instabilidade_teste_positivo is True) or ('sd_instabilidade' in suspeita_dx)",
+              "conteudo": "<p><strong>Instabilidade glenoumeral</strong></p><p></p><p>Seu paciente apresenta suspeita clínica de <strong>síndrome de instabilidade glenoumeral</strong>.</p><p><br>Caso o tratamento conservador ainda não tenha sido instituído, recomendamos fisioterapia com foco em controle escapular e fortalecimento da musculatura estabilizadora dinâmica (infraespinhal, redondo menor e subescapular).</p><p><br>Em casos refratários ao tratamento conservador, considerar avaliação ortopédica para abordagem cirúrgica.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "731dceac-1c4f-4e15-ad95-140032a6757e",
+              "nome": "TENDINOPATIA DO SUPRAESPINHAL",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "('supra_teste_manguito' in tendinite_manguito) or selected_any(suspeita_dx, 'manguito_tendinite_supra', 'manguito_ruptura')",
+              "conteudo": "<p><strong>Tendinopatia do supraespinhal</strong></p><p></p><p>Suspeita clínica de tendinite ou ruptura parcial do tendão do <strong>supraespinhal</strong>.</p><p><br>Caso o tratamento conservador ainda não tenha sido instituído, recomendamos fisioterapia orientada para fortalecimento e reequilíbrio escapular, com ênfase no componente supraespinhal.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "36abc9ce-5077-4e2a-9975-b81879bbad3e",
+              "nome": "TENDINOPATIA DO INPRAESPINHAL",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "('infra_teste_manguito' in tendinite_manguito) or selected_any(suspeita_dx, 'manguito_tendinite_infra', 'manguito_ruptura')",
+              "conteudo": "<p><strong>Tendinopatia do infraespinhal</strong></p><p></p><p>Suspeita clínica de tendinite ou ruptura parcial do tendão do <strong>infraespinhal</strong>.</p><p><br>Caso o tratamento conservador ainda não tenha sido instituído, recomendamos fisioterapia com fortalecimento segmentar do componente infraespinhal.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "8fe9554e-47fd-4d07-9830-5e96497d921b",
+              "nome": "TENDINOPATIA DO SUBESCAPULAR",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "('sub_teste_manguito' in tendinite_manguito) or selected_any(suspeita_dx, 'manguito_tendinite_sub', 'manguito_ruptura')",
+              "conteudo": "<p><strong>Tendinopatia do subescapular</strong></p><p></p><p>Suspeita clínica de tendinite ou ruptura parcial do <strong>subescapular</strong>.</p><p><br>Caso o tratamento conservador ainda não tenha sido instituído, recomendamos fisioterapia com foco em estabilização anterior e exercícios excêntricos do subescapular.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "8fdbadce-d7b3-4362-ad09-84c57262d200",
+              "nome": "RUPTURA AGUDA DO MANGUITO ROTADOR",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "('manguito_ruptura' in suspeita_dx) or (trauma_limitacao_agudo_ombro is True) or ('aguda_manguito_ruptura' in exames_adicionais_manguito)",
+              "conteudo": "<p><strong>Ruptura aguda do manguito rotador</strong></p><p></p><p>Há sinais de ruptura aguda com perda funcional importante.</p><p><br>Solicite <strong>ressonância magnética</strong> para confirmação diagnóstica e planejamento cirúrgico precoce.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "gjssopgv",
+              "nome": "RUPTURA SUBAGUDA/CRÔNICA DO MANGUITO ROTADOR",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "'cronica_manguito_ruptura' in exames_adicionais_manguito",
+              "conteudo": "<p><strong>Ruptura subaguda do manguito rotador</strong></p><p></p><p>Há sinais de ruptura crônica ou subaguda com perda leve/moderada de função.</p><p><br>Caso o tratamento conservador ainda não tenha sido instituído, recomendamos tratamento conservador com fisioterapia e fortalecimento, reavaliando em 4–6 semanas.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "304562dc-d212-495e-ba16-856da43f17f6",
+              "nome": "PACIENTE ASSINTOMÁTICO OU COMPENSADO",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "'tt_atual_boa' in tt_atual_avaliacao",
+              "conteudo": "<p><strong>Paciente assintomático</strong></p><p></p><p>O paciente apresenta critérios de resolução clínica, com boa resposta terapêutica e ausência de sintomas limitantes.<br>Manter acompanhamento clínico e fisioterapia de manutenção.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "41e596c6-c4e7-43ed-9e5f-7197ada634d0",
+              "nome": "1ª Linha – Manejo Conservador Inicial",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "'tt_atual_none' in tt_atual",
+              "conteudo": "<p><strong>1ª Linha – Manejo Conservador Inicial</strong></p><p></p><p><strong>Indicação:</strong> Todos os pacientes sem sinais de alarme ou limitação funcional grave.<br><strong>Componentes:</strong></p><ul><li><p><strong>Fisioterapia estruturada:</strong> exercícios ativos de fortalecimento e alongamento, supervisionados ≥2x/semana, por ≥4 semanas.</p></li><li><p><strong>Terapia manual:</strong> pode ser associada no início do tratamento para ganho de amplitude.</p></li><li><p><strong>AINEs orais ou tópicos:</strong> ibuprofeno 400–600 mg VO 8/8h ou diclofenaco 50 mg VO 8/8h, por 7–10 dias.</p></li><li><p><strong>Analgésicos simples:</strong> paracetamol 500–1000 mg VO 6/6h se dor leve/moderada.</p></li><li><p><strong>Corticosteroide subacromial (opcional):</strong> triancinolona 20–40 mg IM/SC guiada, se dor intensa limitar reabilitação.</p></li></ul><p><strong>Reavaliação:</strong> após 2–4 semanas.<br>→ <strong>Critério de resposta:</strong> redução ≥50% da dor (EVA) e melhora funcional.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "zfpeitsd",
+              "nome": "2ª Linha – Intensificação Conservadora",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "('tt_atual_primeira' in tt_atual) and (not('tt_atual_boa' in tt_atual_avaliacao))",
+              "conteudo": "<p><strong>2ª Linha – Intensificação Conservadora</strong></p><p></p><p><strong>Indicação:</strong> resposta parcial ou dor persistente após ≥4 semanas de 1ª linha.<br><strong>Componentes:</strong></p><ul><li><p>Combinar <strong>fisioterapia + infiltração subacromial</strong> (melhor efeito combinado).</p></li><li><p>Considerar <strong>modalidades adjuvantes:</strong></p></li><li><p>Laser de baixa intensidade (3 sessões/semana por 3 semanas).</p></li><li><p>Ondas de choque (1 sessão/semana, até 4 sessões).</p></li><li><p>Kinesiotaping ou eletroterapia analgésica.</p></li><li><p><strong>AINE sob demanda</strong>, manter analgesia otimizada.</p></li></ul><p><strong>Reavaliação:</strong> após 3–4 semanas.<br>→ <strong>Critério de resposta:</strong> melhora funcional ≥50% ou controle satisfatório da dor.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "85486ps5",
+              "nome": "3ª Linha – Avaliação Especializada / Cirurgia",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "('tt_atual_segunda' in tt_atual) and (not('tt_atual_boa' in tt_atual_avaliacao))",
+              "conteudo": "<p><strong>3ª Linha – Avaliação Especializada / Cirurgia</strong></p><p></p><p><strong>Indicação:</strong> ausência de melhora após ≥6–8 semanas de tratamento conservador otimizado.<br><strong>Componentes:</strong></p><ul><li><p>Encaminhar para ortopedista/fisiatra.</p></li><li><p>Solicitar <strong>ressonância magnética</strong> se suspeita de ruptura significativa, falha funcional grave ou planejamento cirúrgico.</p></li><li><p>Avaliar <strong>acromioplastia / reparo tendíneo</strong> apenas em casos refratários.</p></li></ul><p><strong>Observação:</strong> resultados cirúrgicos a longo prazo são similares ao tratamento conservador em casos degenerativos.</p>",
+              "observacao": ""
+            },
+            {
+              "id": "7059cfbb-1d53-4007-8d43-539c0084a6c4",
+              "nome": "ESCALONAMENTO DO TRATAMENTO",
+              "descricao": "<p></p>",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<p><strong>Escalonamento do tratamento</strong></p><ol><li><p><strong>Após 2–4 semanas sem melhora significativa, com tratamento conservador instituído:</strong><br>Sem resposta adequada à 1ª linha. Reavalie adesão, técnica de exercícios e analgesia. Considere infiltração subacromial e intensificação conservadora.</p><p></p></li><li><p><strong>Após 6–8 semanas de tratamento otimizado e ainda assim sem melhora funcional:</strong><br>“Dor refratária persistente. Avaliar encaminhamento especializado e RM para planejamento cirúrgico.”</p></li></ol>",
+              "observacao": ""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-node-identificacao-node-15d1d149-6b5b-4efe-8eff-3898d4a32014",
+      "source": "node-identificacao",
+      "target": "node-15d1d149-6b5b-4efe-8eff-3898d4a32014",
+      "data": {}
+    },
+    {
+      "id": "e-node-15d1d149-6b5b-4efe-8eff-3898d4a32014-90266016-b3bc-4104-8032-1adade711513",
+      "source": "node-15d1d149-6b5b-4efe-8eff-3898d4a32014",
+      "target": "90266016-b3bc-4104-8032-1adade711513",
+      "data": {}
+    },
+    {
+      "id": "e-90266016-b3bc-4104-8032-1adade711513-ef52d1b5-8ce2-4294-84f3-7da26488b645",
+      "source": "90266016-b3bc-4104-8032-1adade711513",
+      "target": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+      "data": {}
+    },
+    {
+      "id": "e-ef52d1b5-8ce2-4294-84f3-7da26488b645-3aba4dda-0ca3-41db-9a7a-7be5dd261cf0",
+      "source": "ef52d1b5-8ce2-4294-84f3-7da26488b645",
+      "target": "3aba4dda-0ca3-41db-9a7a-7be5dd261cf0",
+      "data": {}
+    },
+    {
+      "id": "e-3aba4dda-0ca3-41db-9a7a-7be5dd261cf0-56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4",
+      "source": "3aba4dda-0ca3-41db-9a7a-7be5dd261cf0",
+      "target": "56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4",
+      "data": {}
+    },
+    {
+      "id": "e-56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4-node-historia-social",
+      "source": "56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4",
+      "target": "node-historia-social",
+      "data": {}
+    },
+    {
+      "id": "e-node-historia-social-node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+      "source": "node-historia-social",
+      "target": "node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+      "data": {}
+    },
+    {
+      "id": "e-node-8734ab9e-d0ed-4157-b634-608fa6e7b745-node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3",
+      "source": "node-8734ab9e-d0ed-4157-b634-608fa6e7b745",
+      "target": "node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3",
+      "data": {}
+    },
+    {
+      "id": "e-node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3-summary-65828fca-62aa-4075-ab73-aa5009267086",
+      "source": "node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3",
+      "target": "summary-65828fca-62aa-4075-ab73-aa5009267086",
+      "data": {}
+    },
+    {
+      "id": "e-summary-65828fca-62aa-4075-ab73-aa5009267086-conduta-5b23d4d0-fb9b-47f5-893e-8cb040cd9eb1",
+      "source": "summary-65828fca-62aa-4075-ab73-aa5009267086",
+      "target": "conduta-5b23d4d0-fb9b-47f5-893e-8cb040cd9eb1",
+      "data": {}
+    }
+  ]
+};

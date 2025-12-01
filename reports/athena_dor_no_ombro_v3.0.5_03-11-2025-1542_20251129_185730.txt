@@ -1,0 +1,24 @@
+============================================================
+AGENT V2 - PROTOCOL ANALYSIS REPORT
+============================================================
+
+METADATA
+------------------------------------------------------------
+Protocol: C:\Users\daanm\AgenteV2\models_json\athena_dor_no_ombro_v3.0.5_03-11-2025-1542.json
+Playbook: C:\Users\daanm\AgenteV2\models_json\Sobre o protocolo de Dor no Ombro - ambulatorial 2806587d2ef580199815cdf37c4a5bb4.md
+Model: google/gemini-2.5-flash-preview-09-2025
+Timestamp: 
+Processing Time: 0ms
+
+IMPROVEMENT SUGGESTIONS
+------------------------------------------------------------
+1. [Critical] Fix the critical dead-end path after 'Primeira avaliação' (ef52d1b5-8ce2-4294-84f3-7da26488b645). Add an edge from 'ef52d1b5-8ce2-4294-84f3-7da26488b645' to '56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4' (if exames_avaliacao is True) or directly to 'node-8734ab9e-d0ed-4157-b634-608fa6e7b745' (if exames_avaliacao is False or if 3aba4dda-0ca3-41db-9a7a-7be5dd261cf0 is skipped).
+2. [Critical] Correct the conditional logic for 'Detalhamento de sintomas' (node-ec1a2f17-2421-45fa-b7a2-c28198ccf8b3). The condition should be the OR of the red flags/imaging indicators (e.g., trauma_limitacao_agudo_ombro is True OR manguito_cronico_ombro is True OR slap_ombro is True) to align with the question title asking for detailing when indications exist. Currently, it is conditional on the absence of indications.
+3. [High] Implement proper routing for 'retorno_atendimento' cases. Add an edge from '90266016-b3bc-4104-8032-1adade711513' directly to 'node-historia-social' (Tratamento atual) conditional on 'retorno_atendimento' being selected, bypassing 'Primeira avaliação' (ef52d1b5-8ce2-4294-84f3-7da26488b645).
+4. [High] Add specific questions regarding the duration and characteristics of pain (e.g., onset, location, radiation, severity (VAS/NRS)) to 'Primeira avaliação' or a dedicated 'Anamnese' node. Currently, pain is only implicitly covered by chronic/acute flags.
+5. [Medium] Clarify the differentiation between RM and Artro-RM indications in the 'Conduta' node. Artro-RM is typically reserved for specific indications like labral tears (SLAP/Bankart) or subtle instability. The current identical conditions are confusing.
+6. [Medium] In 'Resultados de exames' (56f4fe8f-9f35-4970-8ccd-bf1bb5ca3aa4), ensure that the 'none' options (e.g., 'none_rx_ombro') are exclusive only to the 'normal' option, but not to the pathological findings (e.g., 'cal_levemod_rx_ombro'). The current setup allows 'none' to be exclusive to all, which is correct, but if the user selects a pathological finding, they should not be able to select 'normal' or 'none'. The current structure seems to handle this via 'exclusive: true' on 'none' and 'normal', but this needs careful testing.
+
+============================================================
+Full JSON report saved to: C:\Users\daanm\AgenteV2\reports\athena_dor_no_ombro_v3.0.5_03-11-2025-1542_20251129_185730.json
+============================================================
