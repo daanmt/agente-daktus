@@ -126,57 +126,88 @@ Formatação de saída e relatórios v3.
 
 ## 🚀 Roadmap de Implementação
 
-### ✅ Setup (DIA 1)
+### ✅ Setup e Validação (DIA 1) - COMPLETO
 - [x] Estrutura de pastas criada
 - [x] Pacotes Python configurados
-- [ ] Validação crítica de auto-apply (GO/NO-GO)
+- [x] **Validação crítica de auto-apply (GO/NO-GO)** ✅
+  - Taxa de sucesso: 100% (3/3 protocolos)
+  - Custo: $0.0029-$0.012 por protocolo
+  - Decisão: **GO - PROSSEGUIR COM IMPLEMENTAÇÃO**
 
-### ⏳ Fase 4: JSONCompactor (DIAS 2-4)
-- [ ] Implementar `json_compactor/compactor.py`
-- [ ] Implementar `chunking/smart_chunker.py` (se necessário)
-- [ ] Testar com 10+ protocolos reais
-
-### ⏳ Fase 5: Auto-Apply Engine (DIAS 5-7)
+### 🔄 FASE 1: ImprovementApplicator (PRÓXIMO - 3-5 dias)
 - [ ] Implementar `applicator/improvement_applicator.py`
+- [ ] Implementar `applicator/llm_client.py`
+- [ ] Cost estimation integrado
+- [ ] Version management (MAJOR.MINOR.PATCH)
+- [ ] Output filename generation
+- [ ] Testes unitários completos
+
+### ⏳ FASE 2: StructuralValidator (2-3 dias)
 - [ ] Implementar `validator/structural_validator.py`
-- [ ] Implementar `scoring/confidence_scorer.py`
-- [ ] Implementar `diff/diff_generator.py`
+- [ ] Implementar `validator/schema_validator.py`
+- [ ] Validações obrigatórias (JSON, schema, integrity)
+- [ ] Testes unitários
 
-### ⏳ Fase 6: Prompt Caching (DIA 8)
-- [ ] Integrar cache 100% em `llm_client.py`
-- [ ] Implementar `monitoring/cache_monitor.py`
-
-### ⏳ Fase 7: Impact Scoring (DIA 9)
-- [ ] Implementar `scoring/impact_scorer.py`
-- [ ] Ajustar prompts para incluir scores
-
-### ⏳ Integração (DIA 10)
+### ⏳ FASE 3: Pipeline Integration (3-5 dias)
 - [ ] Implementar `pipeline.py` completo
-- [ ] CLI para v3
+- [ ] Integração V2 → V3
+- [ ] Flags de controle (auto_apply, confidence_threshold)
+- [ ] Output unificado
+- [ ] Testes de integração
 
-### ⏳ Testes (DIAS 11-13)
-- [ ] Testar com 20+ protocolos reais
-- [ ] Edge cases
-- [ ] Correções e refinamento
+### ⏳ FASE 4: DiffGenerator (2-3 dias)
+- [ ] Implementar `diff/diff_generator.py`
+- [ ] Structural diff + field-level diff
+- [ ] Rastreabilidade completa
+- [ ] Formatter legível
 
-### ⏳ Apresentação (DIA 14)
-- [ ] Demo ao vivo
-- [ ] Métricas de sucesso
-- [ ] Decisão de deployment
+### ⏳ FASE 5: Confidence Scoring (3-4 dias)
+- [ ] Implementar `scoring/confidence_scorer.py`
+- [ ] Heurísticas MVP (alta/média/baixa confiança)
+- [ ] Integração com pipeline
+- [ ] Decisões automáticas baseadas em threshold
+
+### ⏳ FASE 6: CLI Unificado (1-2 dias)
+- [ ] Atualizar CLI para V2+V3
+- [ ] Modo de operação configurável
+- [ ] Preview de mudanças
+- [ ] Estimativa de custo pré-execução
+
+### ⏳ FASE 7: Testes Intensivos (2-3 dias)
+- [ ] Testar com 15-20 protocolos reais
+- [ ] Múltiplas especialidades
+- [ ] Edge cases e correções
+- [ ] Validação de métricas
+
+### ⏳ FASE 8: Production Deploy (1 dia)
+- [ ] Documentação atualizada
+- [ ] Deploy em produção
+- [ ] Monitoramento inicial
+- [ ] Coleta de feedback
+
+**📋 Plano Detalhado**: Ver `../../V3_IMPLEMENTATION_PLAN.md`
 
 ---
 
 ## 🎯 Métricas de Sucesso MVP
 
-**Obrigatórias**:
-- ✅ Taxa de auto-apply bem-sucedida >80%
-- ✅ Suporta protocolos JSON >3k linhas
-- ✅ Prompt caching >70%
+**Validação Crítica (DIA 1)** - ✅ COMPLETO:
+- ✅ Taxa de auto-apply bem-sucedida: **100%** (target: >80%)
+- ✅ Custo por protocolo: **$0.0029-$0.012** (viável em escala)
+- ✅ Tempo de correção: **Segundos** (vs dias manualmente)
+- ✅ JSON válido: **100%**
+- ✅ Estrutura preservada: **100%**
+
+**Obrigatórias para MVP Completo**:
+- ✅ Taxa de auto-apply bem-sucedida >95%
+- ✅ Suporta protocolos JSON ilimitados
 - ✅ Tempo: dias → <10 minutos
 - ✅ Zero JSON quebrado salvo
+- ✅ Rastreabilidade completa (diff + versionamento)
 
 **Desejáveis**:
-- 🎯 Sugestões com impact scores
+- 🎯 Custo médio <$0.02 por protocolo
+- 🎯 Confidence scoring funcional
 - 🎯 Diff visual legível
 - 🎯 Logs de auditoria
 
@@ -187,4 +218,6 @@ Formatação de saída e relatórios v3.
 - **Documentação principal**: `../../README.md`
 - **Roadmap completo**: `../../roadmap.md`
 - **Histórico**: `../../dev_history.md`
-- **Script de validação**: `../../validate_auto_apply.py`
+- **Plano de Implementação V3**: `../../V3_IMPLEMENTATION_PLAN.md` 🆕
+- **Script de validação**: `../../test_v3_auto_apply.py` (DIA 1 - completo)
+- **Script legacy**: `../../validate_auto_apply.py` (deprecated)

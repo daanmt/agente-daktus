@@ -370,16 +370,55 @@ def validate_fixed_protocol(original: dict, fixed: dict) -> dict:
     }
 
 
+def increment_version(version_str: str) -> str:
+    """Incrementa versão no formato MAJOR.MINOR.PATCH"""
+    import re
+    match = re.search(r'v(\d+)\.(\d+)\.(\d+)', version_str)
+    if match:
+        major, minor, patch = map(int, match.groups())
+        patch += 1  # Incrementar PATCH para correções/melhorias
+        return f"v{major}.{minor}.{patch}"
+    return "v0.1.1"  # Fallback se não encontrar versão
+
+
+def generate_output_filename(input_path: Path) -> tuple:
+    """Gera nome de arquivo de saída baseado no input com versão incrementada"""
+    import re
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = input_path.stem  # Nome sem extensão
+
+    # Extrair partes: nome_base + versão + timestamp_original
+    # Exemplo: UNIMED_FORTALEZA_protocolo_solicitacao_testosterona_v0.1.2_22-09-2025-1840
+    match = re.match(r'(.+?)_(v\d+\.\d+\.\d+)_(.+)', filename)
+
+    if match:
+        base_name = match.group(1)  # UNIMED_FORTALEZA_protocolo_solicitacao_testosterona
+        version = match.group(2)     # v0.1.2
+        # Incrementar versão
+        new_version = increment_version(version)
+    else:
+        # Fallback: usar nome completo e adicionar versão
+        base_name = filename
+        new_version = "v0.1.1"
+
+    # Gerar nome: base_v0.1.3_20251201_104143.json
+    output_filename = f"{base_name}_{new_version}_{timestamp}.json"
+    return output_filename, new_version, timestamp
+
+
 def save_outputs(protocol_fixed: dict, validation: dict, suggestions: list):
     """Salva outputs do teste"""
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Gerar nome de arquivo correto com versão incrementada
+    output_filename, new_version, timestamp = generate_output_filename(PROTOCOL_JSON_PATH)
 
     # 1. Salvar protocolo corrigido
-    fixed_path = OUTPUT_DIR / f"amil_ficha_orl_v1.0.0_FIXED_{timestamp}.json"
+    fixed_path = OUTPUT_DIR / output_filename
     with open(fixed_path, 'w', encoding='utf-8') as f:
         json.dump(protocol_fixed, f, indent=2, ensure_ascii=False)
     print(f"\n✅ Protocolo corrigido salvo: {fixed_path}")
+    print(f"   Nova versão: {new_version}")
 
     # 2. Salvar relatório de validação
     report_path = OUTPUT_DIR / f"validation_report_{timestamp}.json"
