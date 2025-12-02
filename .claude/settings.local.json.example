@@ -1,11 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir \"C:\\Users\\daanm\\AgenteV2\" /s /b /a:d)",
+      "Bash(dir \"${PROJECT_ROOT}\" /s /b /a:d)",
       "Bash(find:*)",
       "Bash(cat:*)",
       "Bash(findstr:*)",
-      "Bash(dir /b /ad \"C:\\Users\\daanm\\AgenteV2\")",
+      "Bash(dir /b /ad \"${PROJECT_ROOT}\")",
       "Bash(dir:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
@@ -18,3 +18,4 @@
     "ask": []
   }
 }
+

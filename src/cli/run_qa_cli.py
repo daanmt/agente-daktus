@@ -233,11 +233,51 @@ def select_model() -> str:
             sys.exit(0)
 
 
+def normalize_path(path_str: str, project_root: Path) -> str:
+    """
+    Normaliza caminho absoluto para relativo ao projeto.
+    
+    Args:
+        path_str: Caminho (absoluto ou relativo)
+        project_root: Raiz do projeto
+        
+    Returns:
+        Caminho relativo ao projeto ou nome do arquivo se não estiver no projeto
+    """
+    if not path_str:
+        return path_str
+    
+    try:
+        path = Path(path_str)
+        if path.is_absolute():
+            try:
+                # Tenta tornar relativo ao projeto
+                rel_path = path.relative_to(project_root)
+                return str(rel_path).replace('\\', '/')  # Normalizar separadores
+            except ValueError:
+                # Se não estiver dentro do projeto, retorna apenas o nome do arquivo
+                return path.name
+        else:
+            # Já é relativo, normalizar separadores
+            return str(path).replace('\\', '/')
+    except Exception:
+        # Em caso de erro, retorna o nome do arquivo
+        return Path(path_str).name if path_str else path_str
+
+
 def save_report(result: dict, protocol_name: str, project_root: Path, version: str = "V2"):
     """Save analysis report"""
     from datetime import datetime
     import json
     from agent.applicator.version_utils import generate_daktus_timestamp
+    
+    # Normalizar caminhos nos metadados antes de salvar
+    if "metadata" in result:
+        metadata = result["metadata"]
+        if "protocol_path" in metadata:
+            metadata["protocol_path"] = normalize_path(metadata["protocol_path"], project_root)
+        if "playbook_path" in metadata:
+            metadata["playbook_path"] = normalize_path(metadata["playbook_path"], project_root) if metadata.get("playbook_path") else None
     
     # Usar formato de timestamp Daktus Studio: DD-MM-YYYY-HHMM
     timestamp = generate_daktus_timestamp()
@@ -383,8 +423,8 @@ def main():
                     for s in enhanced_result.improvement_suggestions
                 ],
                 "metadata": {
-                    "protocol_path": str(protocol_path),
-                    "playbook_path": str(playbook_path) if playbook_path else None,
+                    "protocol_path": normalize_path(str(protocol_path), project_root),
+                    "playbook_path": normalize_path(str(playbook_path), project_root) if playbook_path else None,
                     "model_used": model,
                     "timestamp": datetime.now().isoformat(),
                     "version": "V3",

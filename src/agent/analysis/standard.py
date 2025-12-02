@@ -125,6 +125,21 @@ def analyze(protocol_path: str, playbook_path: Optional[str] = None, model: Opti
     recommendations = llm_result.get("recommendations", [])
     quality_scores = llm_result.get("quality_scores", {})
     
+    # Normalize paths to relative (avoid exposing absolute paths in metadata)
+    def normalize_path(path_str: str) -> str:
+        """Normaliza caminho absoluto para relativo ou apenas nome do arquivo"""
+        if not path_str:
+            return path_str
+        try:
+            from pathlib import Path
+            path = Path(path_str)
+            if path.is_absolute():
+                # Retorna apenas o nome do arquivo para evitar expor caminhos absolutos
+                return path.name
+            return str(path).replace('\\', '/')
+        except Exception:
+            return Path(path_str).name if path_str else path_str
+    
     # Build unified output format
     result = {
         "protocol_analysis": {
@@ -133,8 +148,8 @@ def analyze(protocol_path: str, playbook_path: Optional[str] = None, model: Opti
         },
         "improvement_suggestions": recommendations,
         "metadata": {
-            "protocol_path": str(protocol_path),
-            "playbook_path": str(playbook_path) if playbook_path else None,
+            "protocol_path": normalize_path(str(protocol_path)),
+            "playbook_path": normalize_path(str(playbook_path)) if playbook_path else None,
             "model_used": client.model,
             "timestamp": llm_result.get("metadata", {}).get("timestamp", ""),
             "processing_time_ms": llm_result.get("metadata", {}).get("processing_time_ms", 0),
