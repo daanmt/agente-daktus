@@ -18,3 +18,7 @@ prompt_toolkit>=3.0.0
 
 # Optional: Anthropic SDK (fallback se OpenRouter falhar)
 # anthropic>=0.18.0
+
+# Memory Engine V2 - Semantic Similarity
+sentence-transformers>=2.2.2
+numpy>=1.24.3

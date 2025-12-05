@@ -328,7 +328,7 @@ class InteractiveCLI:
     def _select_model_interactive(self) -> str:
         """Seleção interativa de modelo LLM."""
         models = [
-            ("x-ai/grok-4.1-fast:free", "Grok 4.1 Fast (Free) - Recomendado", "$0.00"),
+            ("google/gemini-2.5-flash-lite", "Gemini 2.5 Flash Lite - Recomendado", "$0.075/$0.30 por MTok"),
             ("x-ai/grok-4.1-fast", "Grok 4.1 Fast", "$0.20/$0.50 por MTok"),
             ("x-ai/grok-code-fast-1", "Grok Code Fast 1", "$0.20/$1.50 por MTok"),
             ("google/gemini-2.5-flash-preview-09-2025", "Gemini 2.5 Flash Preview", "$0.30/$2.50 por MTok"),
@@ -343,7 +343,7 @@ class InteractiveCLI:
             answer = questionary.select(
                 "Selecione o modelo LLM:",
                 choices=choices,
-                default=choices[0]  # Grok Free como padrão
+                default=choices[0]  # Gemini Flash Lite como padrão
             ).ask()
             selected_desc = answer.split(" - ")[0]
             selected = next((model_id for model_id, desc, _ in models if desc == selected_desc), models[0][0])
@@ -354,7 +354,7 @@ class InteractiveCLI:
             for i, (model_id, desc, cost) in enumerate(models, 1):
                 marker = " (Padrão)" if i == 1 else ""
                 print(f"  {i}. {desc} - {cost}{marker}")
-            print("  0. Padrão (Grok 4.1 Fast Free)")
+            print("  0. Padrão (Gemini 2.5 Flash Lite)")
             while True:
                 try:
                     choice = input("\nSelecione o número (0 para padrão): ").strip()
@@ -419,62 +419,32 @@ class InteractiveCLI:
             return "N/A"
 
     def _run_analysis(self) -> None:
-        """Executa análise com task tracking e progress display."""
+        """Executa análise."""
         self.session_state.stage = SessionStage.ANALYSIS
 
-        # Criar tasks
-        self.tasks.add_task("load_protocol", "Carregar protocolo JSON", "5s")
-        self.tasks.add_task("load_playbook", "Carregar playbook", "10s")
-        if self.session_state.version == "V3":
-            self.tasks.add_task("analyze", "Gerar análise expandida (5-50 sugestões, prioriza média/alta/crítica)", "60-90s")
-        else:
-            self.tasks.add_task("analyze", "Gerar análise padrão (5-15 sugestões)", "30-60s")
-
-        # Renderizar tasks iniciais
-        self.tasks.render_tasks(self.display)
-        print()
-
         try:
-            with self.display.create_progress_bar("Análise em andamento", total=4) as progress:
-                pb_task = progress.add_task("Preparando análise", total=4)
+            # Load protocol
+            if not load_protocol:
+                raise ImportError("load_protocol não disponível")
 
-                # Task 1: Load protocol
-                self.tasks.update_status("load_protocol", TaskStatus.IN_PROGRESS)
-                if not load_protocol:
-                    raise ImportError("load_protocol não disponível")
+            with self.display.spinner("Carregando protocolo..."):
+                protocol_path_to_load = self.session_state.protocol_path
+                edited_path = Path(str(protocol_path_to_load).replace('.json', '_EDITED.json'))
+                if edited_path.exists():
+                    logger.info(f"Using EDITED protocol for analysis: {edited_path.name}")
+                    protocol_path_to_load = edited_path
+                protocol_json = load_protocol(protocol_path_to_load)
 
-                with self.display.spinner("Carregando protocolo..."):
-                    protocol_path_to_load = self.session_state.protocol_path
-                    edited_path = Path(str(protocol_path_to_load).replace('.json', '_EDITED.json'))
-                    if edited_path.exists():
-                        logger.info(f"Using EDITED protocol for analysis: {edited_path.name}")
-                        protocol_path_to_load = edited_path
-                    protocol_json = load_protocol(protocol_path_to_load)
+            # Load playbook (se fornecido)
+            playbook_content = ""
+            if self.session_state.playbook_path:
+                if not load_playbook:
+                    raise ImportError("load_playbook não disponível")
+                with self.display.spinner("Carregando playbook..."):
+                    playbook_content = load_playbook(self.session_state.playbook_path)
 
-                progress.update(pb_task, advance=1)
-                self.tasks.mark_completed("load_protocol")
-                self.tasks.render_tasks(self.display)
-                print()
-
-                # Task 2: Load playbook (se fornecido)
-                playbook_content = ""
-                self.tasks.update_status("load_playbook", TaskStatus.IN_PROGRESS)
-                if self.session_state.playbook_path:
-                    if not load_playbook:
-                        raise ImportError("load_playbook não disponível")
-                    with self.display.spinner("Carregando playbook..."):
-                        playbook_content = load_playbook(self.session_state.playbook_path)
-                    self.tasks.mark_completed("load_playbook")
-                else:
-                    self.tasks.mark_completed("load_playbook")  # Skip
-                progress.update(pb_task, advance=1)
-                self.tasks.render_tasks(self.display)
-                print()
-
-                # Task 3: Run analysis
-                self.tasks.update_status("analyze", TaskStatus.IN_PROGRESS)
-                self.display.show_thinking("Executando análise expandida, isso pode levar até 90s...")
-                with self.display.spinner("Executando análise LLM..."):
+            # Run analysis
+            with self.display.spinner("Executando análise LLM..."):
                     if self.session_state.version == "V3" and V3_AVAILABLE and EnhancedAnalyzer:
                         analyzer = EnhancedAnalyzer(model=self.session_state.model)
                         enhanced_result = analyzer.analyze_comprehensive(
@@ -531,15 +501,9 @@ class InteractiveCLI:
                         result["metadata"]["version"] = "V2"
                         self.session_state.analysis_result = result
 
-                self.tasks.mark_completed("analyze")
-                progress.update(pb_task, advance=1)
-                self.tasks.render_tasks(self.display)
-                print()
-
-                # Task 4: Salvar relatórios
-                with self.display.spinner("Salvando relatórios..."):
-                    self._save_reports(result)
-                progress.update(pb_task, advance=1)
+            # Salvar relatórios
+            with self.display.spinner("Salvando relatórios..."):
+                self._save_reports(result)
 
             suggestions_count = len(result.get('improvement_suggestions', []))
             self.display.show_success(f"Análise concluída! {suggestions_count} sugestões geradas.")
@@ -550,8 +514,6 @@ class InteractiveCLI:
                 self.display.show_info(f"Esperado: {expected_range} sugestões (prioriza média/alta/crítica) | Status: {status}")
 
         except Exception as e:
-            self.tasks.mark_failed("analyze", str(e))
-            self.tasks.render_tasks(self.display)
             self.display.show_error(f"Erro durante análise: {e}")
             if logger:
                 logger.error(f"Analysis error: {e}", exc_info=True)
@@ -621,7 +583,7 @@ class InteractiveCLI:
             return
 
         try:
-            collector = FeedbackCollector()
+            collector = FeedbackCollector(display_manager=self.display)
             
             # Preparar sugestões para feedback
             if self.session_state.enhanced_result:
@@ -700,9 +662,7 @@ class InteractiveCLI:
                                     version=self.session_state.version
                                 )
                                 if success:
-                                    self.display.show_success(f"✅ Relatório TXT atualizado com segurança: {txt_report_path.name}")
-                                    self.display.show_info("   • Backup criado automaticamente")
-                                    self.display.show_info("   • Operação atômica (sem corrupção de arquivo)")
+                                    self.display.show_success(f"✅ Relatório TXT atualizado: {txt_report_path}")
                                 else:
                                     self.display.show_warning("⚠️  Falha ao atualizar relatório TXT (rollback aplicado se necessário)")
                                     if logger:
@@ -755,96 +715,84 @@ class InteractiveCLI:
             return
 
         try:
-            with self.display.create_progress_bar("Reconstrução em andamento", total=4) as progress:
-                pb_task = progress.add_task("Preparando reconstrução", total=4)
-
-                # Preparar sugestões editadas em memória (pós-feedback); fallback para originais
-                edited_report = getattr(self.session_state, "edited_report", None)
-                if edited_report:
-                    suggestions_for_reconstruction = edited_report.get("improvement_suggestions", [])
-                    rejected_count = len(edited_report.get("rejected_suggestions", []))
-                    if rejected_count > 0:
-                        self.display.show_info(f"📝 Usando apenas sugestões aprovadas: {len(suggestions_for_reconstruction)} relevantes, {rejected_count} rejeitadas")
+            # Preparar sugestões editadas em memória (pós-feedback); fallback para originais
+            edited_report = getattr(self.session_state, "edited_report", None)
+            if edited_report:
+                suggestions_for_reconstruction = edited_report.get("improvement_suggestions", [])
+                rejected_count = len(edited_report.get("rejected_suggestions", []))
+                if rejected_count > 0:
+                    self.display.show_info(f"📝 Usando apenas sugestões aprovadas: {len(suggestions_for_reconstruction)} relevantes, {rejected_count} rejeitadas")
+            else:
+                if self.session_state.enhanced_result:
+                    suggestions_for_reconstruction = [s.to_dict() for s in self.session_state.enhanced_result.improvement_suggestions]
                 else:
-                    if self.session_state.enhanced_result:
-                        suggestions_for_reconstruction = [s.to_dict() for s in self.session_state.enhanced_result.improvement_suggestions]
-                    else:
-                        suggestions_for_reconstruction = self.session_state.analysis_result.get('improvement_suggestions', [])
+                    suggestions_for_reconstruction = self.session_state.analysis_result.get('improvement_suggestions', [])
 
-                progress.update(pb_task, advance=1)
+            if not suggestions_for_reconstruction:
+                self.display.show_warning("Nenhuma sugestão disponível para reconstrução")
+                return
 
-                if not suggestions_for_reconstruction:
-                    self.display.show_warning("Nenhuma sugestão disponível para reconstrução")
-                    return
+            # Carregar protocolo original
+            if not load_protocol:
+                raise ImportError("load_protocol não disponível")
 
-                # Carregar protocolo original
-                if not load_protocol:
-                    raise ImportError("load_protocol não disponível")
+            protocol_path_to_load = self.session_state.protocol_path
+            with self.display.spinner("Carregando protocolo para reconstrução..."):
+                protocol_json = load_protocol(protocol_path_to_load)
 
-                protocol_path_to_load = self.session_state.protocol_path
-                with self.display.spinner("Carregando protocolo para reconstrução..."):
-                    protocol_json = load_protocol(protocol_path_to_load)
+            # Reconstruir
+            with self.display.spinner("Aplicando sugestões..."):
+                reconstructor = ProtocolReconstructor(model=self.session_state.model)
+                reconstruction_result = reconstructor.reconstruct_protocol(
+                    original_protocol=protocol_json,
+                    suggestions=suggestions_for_reconstruction,
+                    analysis_result=self.session_state.enhanced_result
+                )
 
-                progress.update(pb_task, advance=1)
+            if reconstruction_result:
+                # Salvar protocolo reconstruído
+                from ..applicator.version_utils import (
+                    generate_output_filename,
+                    update_protocol_version
+                )
 
-                # Reconstruir
-                self.display.show_thinking("Aplicando sugestões aprovadas no protocolo...")
-                with self.display.spinner("Aplicando sugestões..."):
-                    reconstructor = ProtocolReconstructor(model=self.session_state.model)
-                    reconstruction_result = reconstructor.reconstruct_protocol(
-                        original_protocol=protocol_json,
-                        suggestions=suggestions_for_reconstruction,
-                        analysis_result=self.session_state.enhanced_result
-                    )
+                reconstructed_protocol = reconstruction_result.reconstructed_protocol
+                output_filename, new_version = generate_output_filename(
+                    protocol_json=reconstructed_protocol,
+                    protocol_path=self.session_state.protocol_path,
+                    suffix="RECONSTRUCTED"
+                )
 
-                progress.update(pb_task, advance=1)
+                reconstructed_protocol = update_protocol_version(
+                    reconstructed_protocol,
+                    new_version
+                )
 
-                if reconstruction_result:
-                    # Salvar protocolo reconstruído
-                    from ..applicator.version_utils import (
-                        generate_output_filename,
-                        update_protocol_version
-                    )
+                output_dir = self.project_root / "models_json"
+                output_path = output_dir / output_filename
 
-                    reconstructed_protocol = reconstruction_result.reconstructed_protocol
-                    output_filename, new_version = generate_output_filename(
-                        protocol_json=reconstructed_protocol,
-                        protocol_path=self.session_state.protocol_path,
-                        suffix="RECONSTRUCTED"
-                    )
+                with self.display.spinner("Gravando protocolo reconstruído..."):
+                    import json
+                    with open(output_path, 'w', encoding='utf-8') as f:
+                        json.dump(reconstructed_protocol, f, ensure_ascii=False, indent=2)
 
-                    reconstructed_protocol = update_protocol_version(
-                        reconstructed_protocol,
-                        new_version
-                    )
+                # Exibir resultados
+                changes = reconstruction_result.changes_applied
+                if changes:
+                    self.display.show_diff(changes)
 
-                    output_dir = self.project_root / "models_json"
-                    output_path = output_dir / output_filename
+                summary = {
+                    "Arquivo": str(output_path),
+                    "Versão": f"{reconstruction_result.metadata.get('original_version', 'N/A')} → {new_version}",
+                    "Sugestões Aplicadas": len(changes),
+                    "Validação": "✅ PASSOU" if reconstruction_result.validation_passed else "❌ FALHOU"
+                }
+                self.display.show_summary_panel("Reconstrução Concluída", summary)
 
-                    with self.display.spinner("Gravando protocolo reconstruído..."):
-                        import json
-                        with open(output_path, 'w', encoding='utf-8') as f:
-                            json.dump(reconstructed_protocol, f, ensure_ascii=False, indent=2)
-
-                    progress.update(pb_task, advance=1)
-
-                    # Exibir resultados
-                    changes = reconstruction_result.changes_applied
-                    if changes:
-                        self.display.show_diff(changes)
-
-                    summary = {
-                        "Arquivo": str(output_path),
-                        "Versão": f"{reconstruction_result.metadata.get('original_version', 'N/A')} → {new_version}",
-                        "Sugestões Aplicadas": len(changes),
-                        "Validação": "✅ PASSOU" if reconstruction_result.validation_passed else "❌ FALHOU"
-                    }
-                    self.display.show_summary_panel("Reconstrução Concluída", summary)
-
-                    self.session_state.reconstruction_result = reconstruction_result
-                    self.display.show_success("Protocolo reconstruído com sucesso!")
-                else:
-                    self.display.show_warning("Reconstrução não concluída")
+                self.session_state.reconstruction_result = reconstruction_result
+                self.display.show_success("Protocolo reconstruído com sucesso!")
+            else:
+                self.display.show_warning("Reconstrução não concluída")
 
         except Exception as e:
             self.display.show_error(f"Erro ao reconstruir protocolo: {e}")
@@ -944,7 +892,8 @@ class InteractiveCLI:
             # Armazenar caminho do TXT para atualizações futuras
             self.session_state.report_txt_path = txt_path
 
-            self.display.show_info(f"Relatório salvo: {txt_path.name}")
+            # Mostrar caminho completo para Ctrl+Click
+            self.display.show_info(f"Relatório salvo: {txt_path}")
 
         except Exception as e:
             self.display.show_warning(f"Erro ao salvar relatórios: {e}")

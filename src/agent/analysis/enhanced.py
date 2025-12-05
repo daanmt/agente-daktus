@@ -33,6 +33,7 @@ from config.prompts.enhanced_analysis_prompt import (
 
 # Import memory QA (simple markdown-based memory)
 from ..feedback.memory_qa import MemoryQA
+from ..feedback.memory_engine import MemoryEngine
 
 
 @dataclass
@@ -116,13 +117,13 @@ class EnhancedAnalyzer:
 
     def __init__(
         self,
-        model: str = "x-ai/grok-4.1-fast:free"
+        model: str = "google/gemini-2.5-flash-lite"
     ):
         """
         Inicializa o analisador expandido.
 
         Args:
-            model: Modelo LLM a ser utilizado (default: Grok 4.1 Fast Free - gratuito, contexto 2M tokens)
+            model: Modelo LLM a ser utilizado (default: Gemini 2.5 Flash Lite - barato e estável)
         """
         self.model = model
         self.llm_client = LLMClient(model=model)
@@ -235,6 +236,20 @@ class EnhancedAnalyzer:
                 f"({pre_validation_count - post_validation_count} removed - NO VALID PLAYBOOK REFERENCE)"
             )
 
+        # Step 4.7: Apply memory-based filtering (Memory Engine V2)
+        logger.info("Step 4.7: Applying memory-based filtering...")
+        memory_engine = MemoryEngine()
+        memory_engine.load_memory()
+        pre_memory_count = len(suggestions)
+        suggestions, memory_debug = memory_engine.filter_suggestions(suggestions)
+        post_memory_count = len(suggestions)
+
+        if pre_memory_count != post_memory_count:
+            logger.info(
+                f"Memory filtering: {pre_memory_count} → {post_memory_count} suggestions "
+                f"({pre_memory_count - post_memory_count} filtered by memory rules)"
+            )
+
         # Step 5: Categorize and prioritize
         logger.info("Step 5: Categorizing and prioritizing suggestions...")
         categorized = self._categorize_suggestions(suggestions)
@@ -251,6 +266,16 @@ class EnhancedAnalyzer:
             sug.id: sug.evidence.get("playbook_reference", "")
             for sug in prioritized
         }
+        
+        # Include memory filter debug info in evidence mapping (for transparency)
+        # Store memory debug info as a special entry
+        if memory_debug.get("filtered_count", 0) > 0:
+            evidence_mapping["_memory_filters"] = {
+                "filtered_count": memory_debug.get("filtered_count", 0),
+                "exact_matches": len(memory_debug.get("exact_matches", [])),
+                "semantic_matches": len(memory_debug.get("semantic_matches", [])),
+                "reinforced_by_memory": len(memory_debug.get("reinforced_by_memory", []))
+            }
         
         # Estimate total cost
         cost_estimation = {
@@ -290,23 +315,35 @@ class EnhancedAnalyzer:
             operation_description: Descrição da operação
         """
         total_cost = cost_estimate.estimated_cost_usd["total"]
-        input_cost = cost_estimate.estimated_cost_usd["input"]
-        output_cost = cost_estimate.estimated_cost_usd["output"]
         input_tokens = cost_estimate.estimated_tokens["input"]
         output_tokens = cost_estimate.estimated_tokens["output"]
+        total_tokens = input_tokens + output_tokens
         
-        print("\n" + "=" * 60)
-        print("ESTIMATIVA DE CUSTO")
-        print("=" * 60)
-        print(f"\nOperação: {operation_description}")
-        print(f"Modelo: {cost_estimate.model}")
-        print(f"\nTokens Estimados:")
-        print(f"  Input:  {input_tokens:,} tokens (${input_cost:.4f})")
-        print(f"  Output: {output_tokens:,} tokens (${output_cost:.4f})")
-        print(f"  Total:  {input_tokens + output_tokens:,} tokens")
-        print(f"\nCusto Total Estimado: ${total_cost:.4f} USD")
-        print(f"Confiança: {cost_estimate.confidence.upper()}")
-        print("=" * 60)
+        # Estilo moderno e compacto
+        try:
+            from rich.console import Console
+            from rich.panel import Panel
+            from rich import box
+            
+            console = Console()
+            content = f"""[bold cyan]{cost_estimate.model}[/bold cyan]
+
+[dim]Tokens:[/dim] {total_tokens:,} ({input_tokens:,} in + {output_tokens:,} out)
+[bold]Custo:[/bold] ${total_cost:.4f} USD [dim]({cost_estimate.confidence.upper()})[/dim]"""
+            
+            panel = Panel(
+                content,
+                box=box.ROUNDED,
+                title="💰 Estimativa de Custo",
+                title_align="left",
+                border_style="cyan",
+                padding=(1, 2)
+            )
+            console.print(panel)
+        except ImportError:
+            # Fallback simples
+            print(f"\n💰 Estimativa de Custo: {cost_estimate.model}")
+            print(f"Tokens: {total_tokens:,} | Custo: ${total_cost:.4f} USD ({cost_estimate.confidence.upper()})")
 
     def _build_enhanced_prompt(
         self,
@@ -346,7 +383,13 @@ class EnhancedAnalyzer:
         # Carregar filtros ativos baseados em padrões de feedback (NEW - Phase 2.2)
         # CRITICAL FIX: Lower threshold from 3 to 1 so patterns activate immediately
         active_filters = self.memory_qa.get_active_filters(min_frequency=1)
-        filter_instructions = self._build_filter_instructions(active_filters)
+        
+        # Carregar regras do Memory Engine para contexto adicional
+        memory_engine = MemoryEngine()
+        memory_engine.load_memory()
+        memory_rules_context = self._build_memory_rules_context(memory_engine)
+        
+        filter_instructions = self._build_filter_instructions(active_filters, memory_rules_context)
 
         # Armazenar filtros para pós-processamento
         self._active_filters = active_filters
@@ -372,8 +415,35 @@ class EnhancedAnalyzer:
             
             base_instructions = f"""You are an expert medical protocol quality analyst conducting DEEP, COMPREHENSIVE analysis.
 
-CONTEXT: You will analyze a medical protocol (JSON decision tree) against its corresponding clinical playbook to identify ALL possible improvements, gaps, and optimization opportunities.
+CONTEXT: You will analyze a medical protocol (JSON decision tree) against its corresponding clinical playbook to identify improvements, gaps, and optimization opportunities.
 
+🚨 CRITICAL CONSTRAINT - PLAYBOOK IS THE SINGLE SOURCE OF TRUTH:
+
+THE PLAYBOOK IS THE ONLY VALID SOURCE FOR ALL SUGGESTIONS. You MUST:
+
+1. ✅ ONLY suggest exams, treatments, medications, procedures that are EXPLICITLY mentioned in the playbook
+2. ✅ ONLY reference clinical guidelines, protocols, or recommendations that appear in the playbook
+3. ✅ EVERY suggestion MUST have a direct, explicit reference to specific playbook content
+4. ❌ NEVER add content from external sources, medical literature, or general medical knowledge
+5. ❌ NEVER suggest "introducing" or "adding" treatments/exams not in the playbook
+6. ❌ NEVER assume standard medical practices - only what the playbook explicitly states
+
+WHY THIS MATTERS:
+- The playbook is customized for THIS specific health operator's reality
+- It reflects their available resources, contracts, and operational constraints
+- Adding external content violates the operator's operational model
+
+VALIDATION: Before including ANY suggestion, ask yourself:
+- "Is this exam/treatment/medication explicitly mentioned in the playbook?" → If NO, REJECT
+- "Can I quote the exact playbook text supporting this?" → If NO, REJECT
+- "Am I assuming this should exist based on medical knowledge?" → If YES, REJECT
+
+IMPORTANT: Review the feedback history below (memory_qa.md) to understand:
+- Which types of suggestions were rejected and why (learn from IRRELEVANT patterns)
+- Which types of suggestions were accepted and why (learn from RELEVANT patterns)
+- What patterns indicate recurring problems vs valuable suggestions
+
+FEEDBACK HISTORY (memory_qa.md):
 {memory_qa_content}
 
 INPUT MATERIALS:
@@ -402,11 +472,16 @@ ACTIVE FILTERS (Based on User Feedback Patterns):
 YOUR EXPANDED ANALYSIS MUST GENERATE 5-50 DETAILED IMPROVEMENT SUGGESTIONS:
 
 CRITICAL PRIORITY FOCUS: 
-- PRIORIZE generating MEDIUM, HIGH and CRITICAL priority suggestions over LOW priority ones
+- PRIORIZE generating suggestions in this order:
+  1. SEGURANÇA (safety score >= 7) - HIGHEST PRIORITY
+  2. EFICIÊNCIA (medium/high impact) - HIGH PRIORITY
+  3. ECONOMIA (medium/high impact) - MEDIUM PRIORITY
+  4. USABILIDADE (only if significantly enhances workflow) - LOWER PRIORITY
 - LOW priority suggestions should ONLY be included if they are truly valuable, non-redundant, and add significant value
 - Focus computational resources on suggestions that have significant impact:
-  * Safety score >= 7 (high/critical safety issues)
-  * Medium/High efficiency or economy impact
+  * Safety score >= 7 (high/critical safety issues) - PRIORITIZE THESE
+  * Medium/High efficiency impact - PRIORITIZE THESE
+  * Medium/High economy impact
   * Medium/High usability improvements that significantly enhance workflow
 - DO NOT force low-impact suggestions just to reach a target count
 - Quality over quantity: Better to generate 5-10 high-quality, high-priority suggestions than 20-30 mixed-quality suggestions with many low-impact ones
@@ -414,16 +489,13 @@ CRITICAL PRIORITY FOCUS:
 
 CRITICAL REQUIREMENTS:
 
-1. QUANTITY: Generate 5-50 suggestions, prioritizing MEDIUM/HIGH/CRITICAL priority.
-   Focus on quality and impact, not quantity:
-   - Safety enhancements (prioritize: safety score >= 7) - 2-8 suggestions
-   - Clinical coverage gaps (prioritize: high impact) - 3-12 suggestions
-   - Efficiency optimizations (prioritize: medium/high impact) - 2-8 suggestions
-   - Structural improvements (prioritize: significant issues) - 2-8 suggestions
-   - Usability improvements (prioritize: medium/high impact) - 1-6 suggestions
-   - Workflow enhancements (prioritize: medium/high impact) - 1-5 suggestions
+1. QUANTITY: Generate 5-50 suggestions, prioritizing in this order:
+   - Safety enhancements (PRIORITY 1: safety score >= 7) - 3-10 suggestions
+   - Efficiency optimizations (PRIORITY 2: medium/high impact) - 3-10 suggestions
+   - Economy optimizations (PRIORITY 3: medium/high impact) - 2-8 suggestions
+   - Usability improvements (PRIORITY 4: only if significantly enhances workflow) - 1-5 suggestions
    
-   IMPORTANT: If you cannot find enough high/medium priority suggestions, generate fewer but higher quality suggestions. Do NOT pad with low-priority suggestions.
+   IMPORTANT: Focus on SEGURANÇA and EFICIÊNCIA first. If you cannot find enough high/medium priority suggestions, generate fewer but higher quality suggestions. Do NOT pad with low-priority suggestions.
 
 2. CATEGORIZATION: Each suggestion MUST be categorized as ONE of:
    - "seguranca" (patient safety, red flags, contraindications)
@@ -442,9 +514,16 @@ CRITICAL REQUIREMENTS:
    - "media": Segurança 5-7 OR Economia="M"/"A" OR Eficiência="A"
    - "baixa": All other cases
 
-5. EVIDENCE TRACEABILITY: For EACH suggestion, provide:
-   - playbook_reference: Exact quote or section from playbook that supports this suggestion
-   - context: Additional context explaining why this improvement is needed
+5. EVIDENCE TRACEABILITY (🚨 MANDATORY - NO EXCEPTIONS):
+   For EACH suggestion, you MUST provide:
+   - playbook_reference: EXACT QUOTE from the playbook (copy-paste actual text)
+     → This is MANDATORY. If you cannot provide an exact quote, DO NOT include the suggestion
+     → The quote must be verifiable in the playbook content provided above
+     → Generic references like "based on medical best practices" are INVALID
+   - context: Why the protocol is missing/misimplementing this playbook recommendation
+   - clinical_rationale: Justification using ONLY information from the playbook
+
+   🚨 CRITICAL: If a suggestion does NOT have an explicit playbook quote, it is INVALID and must be REMOVED
    - clinical_rationale: Medical/clinical justification
 
 6. IMPLEMENTATION DETAILS: For EACH suggestion, estimate:
@@ -524,7 +603,56 @@ CRITICAL OUTPUT REQUIREMENTS:
             logger.info(f"Built enhanced prompt (no caching): size={len(prompt_text)} chars")
             return {"prompt": prompt_text}
 
-    def _build_filter_instructions(self, active_filters: Dict) -> str:
+    def _build_memory_rules_context(self, memory_engine: MemoryEngine) -> str:
+        """
+        Constrói contexto das regras do Memory Engine para o prompt.
+        
+        Args:
+            memory_engine: Instância do Memory Engine carregada
+            
+        Returns:
+            String com contexto formatado das regras rejeitadas
+        """
+        if not memory_engine.rules_rejected:
+            return ""
+        
+        context = []
+        context.append("\n" + "=" * 60)
+        context.append("🧠 MEMORY ENGINE V2 - REJECTED PATTERNS")
+        context.append("=" * 60)
+        context.append("")
+        context.append(f"Total de {len(memory_engine.rules_rejected)} regras rejeitadas aprendidas do histórico.")
+        context.append("")
+        context.append("PADRÕES CRÍTICOS DE REJEIÇÃO (evitar sugestões similares):")
+        context.append("")
+        
+        # Agrupar por keywords para identificar padrões
+        keyword_groups = {}
+        for rule in memory_engine.rules_rejected[:20]:  # Limitar a 20 para não sobrecarregar
+            keywords = rule.get('keywords', [])
+            if not keywords:
+                keywords = ['geral']
+            
+            for keyword in keywords[:2]:  # Pegar até 2 keywords principais
+                if keyword not in keyword_groups:
+                    keyword_groups[keyword] = []
+                keyword_groups[keyword].append(rule)
+        
+        # Adicionar exemplos por padrão
+        for keyword, rules in list(keyword_groups.items())[:10]:  # Top 10 padrões
+            context.append(f"• {keyword.upper().replace('_', ' ')}:")
+            # Pegar exemplo mais representativo
+            example_rule = rules[0]
+            example_text = example_rule.get('text', example_rule.get('comment', ''))[:150]
+            context.append(f"  Exemplo rejeitado: \"{example_text}...\"")
+            context.append("")
+        
+        context.append("=" * 60)
+        context.append("")
+        
+        return "\n".join(context)
+    
+    def _build_filter_instructions(self, active_filters: Dict, memory_rules_context: str = "") -> str:
         """
         Constrói instruções LLM a partir dos filtros ativos.
 
@@ -544,6 +672,11 @@ CRITICAL OUTPUT REQUIREMENTS:
         instructions.append("The following rules were derived from EXPLICIT user rejection patterns.")
         instructions.append("VIOLATING these rules will result in suggestion rejection.")
         instructions.append("")
+        
+        # Adicionar contexto do Memory Engine
+        if memory_rules_context:
+            instructions.append(memory_rules_context)
+            instructions.append("")
 
         rule_number = 1
 
@@ -938,10 +1071,10 @@ CRITICAL OUTPUT REQUIREMENTS:
                 elif hasattr(sug.evidence, 'playbook_reference'):
                     playbook_ref = sug.evidence.playbook_reference
 
-            # Validação 1: Referência existe?
-            if not playbook_ref or len(playbook_ref.strip()) < 10:
+            # Validação 1: Referência existe e é substancial?
+            if not playbook_ref or len(playbook_ref.strip()) < 20:
                 should_keep = False
-                removal_reason = "NO_PLAYBOOK_REFERENCE (reference missing or too short)"
+                removal_reason = "NO_PLAYBOOK_REFERENCE (reference missing or too short - minimum 20 chars required)"
 
             # Validação 2: Referência é genérica/inválida?
             elif should_keep:
@@ -953,37 +1086,54 @@ CRITICAL OUTPUT REQUIREMENTS:
                     "according to literature",
                     "medical consensus",
                     "não especificado",
-                    "conforme literatura"
+                    "conforme literatura",
+                    "segundo literatura",
+                    "de acordo com",
+                    "conforme diretrizes",
+                    "baseado em evidências",
+                    "evidências científicas",
+                    "recomendação geral",
+                    "prática clínica",
+                    "protocolo padrão",
+                    "guidelines gerais"
                 ]
 
                 ref_lower = playbook_ref.lower()
                 if any(phrase in ref_lower for phrase in generic_phrases):
                     should_keep = False
-                    removal_reason = "GENERIC_REFERENCE (not specific to playbook)"
+                    removal_reason = "GENERIC_REFERENCE (not specific to playbook - contains generic medical phrases)"
 
-            # Validação 3: Referência existe no playbook?
+            # Validação 3: Referência existe no playbook? (CRITICAL - must be verifiable)
             elif should_keep:
-                # Extrair trecho relevante da referência (primeiras 50 chars significativas)
+                # Extrair trecho relevante da referência
                 ref_normalized = " ".join(playbook_ref.lower().split())
 
                 # Pegar snippet de 30+ caracteres consecutivos da referência
                 words = ref_normalized.split()
-                if len(words) >= 5:
-                    # Tentar encontrar snippet de 5 palavras consecutivas no playbook
+                if len(words) >= 6:
+                    # Tentar encontrar snippet de 6 palavras consecutivas no playbook (mais rigoroso)
                     found = False
-                    for i in range(len(words) - 4):
-                        snippet = " ".join(words[i:i+5])
-                        if len(snippet) >= 20 and snippet in playbook_normalized:
+                    for i in range(len(words) - 5):
+                        snippet = " ".join(words[i:i+6])
+                        if len(snippet) >= 30 and snippet in playbook_normalized:
                             found = True
                             break
+                    
+                    # Se não encontrou com 6 palavras, tentar com 5 (mais permissivo, mas ainda válido)
+                    if not found and len(words) >= 5:
+                        for i in range(len(words) - 4):
+                            snippet = " ".join(words[i:i+5])
+                            if len(snippet) >= 25 and snippet in playbook_normalized:
+                                found = True
+                                break
 
                     if not found:
                         should_keep = False
-                        removal_reason = f"REFERENCE_NOT_IN_PLAYBOOK (cannot verify: '{playbook_ref[:60]}...')"
+                        removal_reason = f"REFERENCE_NOT_IN_PLAYBOOK (cannot verify reference in playbook: '{playbook_ref[:80]}...')"
                 else:
-                    # Referência muito curta para validar
+                    # Referência muito curta para validar adequadamente
                     should_keep = False
-                    removal_reason = f"REFERENCE_TOO_SHORT (cannot verify: '{playbook_ref}')"
+                    removal_reason = f"REFERENCE_TOO_SHORT (reference has fewer than 6 words, cannot verify: '{playbook_ref[:60]}...')"
 
             if should_keep:
                 validated.append(sug)

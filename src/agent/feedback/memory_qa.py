@@ -1384,24 +1384,13 @@ IMPORTANTE:
 
 Responda com APENAS o JSON editado:"""
 
-            # Escolher modelos para edição do relatório:
-            # 1) Tentar o mesmo modelo usado na análise principal (se disponível e não-Grok)
-            # 2) Fallback para Gemini 2.5 Flash Preview e Gemini 2.5 Flash Lite
-            models_to_try = []
-            try:
-                metadata = analysis_report.get("metadata", {})
-                model_used = metadata.get("model_used")
-                if model_used and "grok" not in str(model_used).lower():
-                    models_to_try.append(model_used)
-            except Exception:
-                pass
-            
-            for m in [
-                "google/gemini-2.5-flash-preview-09-2025",
-                "google/gemini-2.5-flash-lite",
-            ]:
-                if m not in models_to_try:
-                    models_to_try.append(m)
+            # Usar modelo GRATUITO/BARATO para edição do relatório (economia de 50% do custo)
+            # Esta é uma tarefa de formatação/estruturação, não requer modelo premium
+            # Prioridade: modelos gratuitos/baratos, com fallback para modelos estáveis
+            models_to_try = [
+                "google/gemini-2.5-flash-lite",  # Modelo barato e estável (prioridade)
+                "google/gemini-2.5-flash-preview-09-2025",  # Fallback estável
+            ]
             
             response = None
             last_error = None
@@ -1980,25 +1969,9 @@ Responda com APENAS o JSON editado:"""
                 lines.append("Feedback Incorporated: yes")
             lines.append("")
 
-            # Resumo de seções exigidas pela Fase 6
-            suggestions = edited_result.get("improvement_suggestions", [])
-            rejected = edited_result.get("rejected_suggestions", [])
-            implemented = edited_result.get("implemented_suggestions", [])
-            total_suggested = metadata.get("suggestions_count", len(suggestions) + len(rejected))
-            total_implemented = len(implemented) if implemented else 0
-
-            lines.append("RESUMO (PÓS-FEEDBACK E RECONSTRUÇÃO)")
-            lines.append("-" * 60)
-            lines.append(f"SUGESTOES SUGERIDAS: {total_suggested}")
-            lines.append(f"SUGESTOES HOMOLOGADAS (aprovadas): {len(suggestions)}")
-            lines.append(f"SUGESTOES REJEITADAS: {len(rejected)}")
-            lines.append(f"SUGESTOES IMPLEMENTADAS: {total_implemented}")
-            lines.append("")
-
             # Improvement suggestions
-            lines.append(f"IMPROVEMENT SUGGESTIONS (APÓS FEEDBACK): {len(suggestions)}")
-            lines.append("=" * 60)
-            lines.append("")
+            suggestions = edited_result.get("improvement_suggestions", [])
+            implemented = edited_result.get("implemented_suggestions", [])
 
             if suggestions:
                 # Normalize priority helper

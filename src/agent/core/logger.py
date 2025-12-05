@@ -28,9 +28,28 @@ class StructuredLogger:
         file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setLevel(logging.INFO)
         
-        # Console handler (only WARNING and above)
+        # Console handler (only ERROR and above - filter out technical warnings)
         console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.WARNING)
+        console_handler.setLevel(logging.ERROR)
+        
+        # Filter to suppress technical warnings
+        class TechnicalWarningFilter(logging.Filter):
+            def filter(self, record):
+                # Suppress technical warnings that clutter the UI
+                message = record.getMessage()
+                technical_patterns = [
+                    "Failed to parse RULES_REJECTED",
+                    "Failed to parse RULES_ACCEPTED",
+                    "CRITICAL: Suggestion",
+                    "CRITICAL FIX:",
+                    "Post-filtering removed",
+                    "Playbook validation removed"
+                ]
+                if any(pattern in message for pattern in technical_patterns):
+                    return False
+                return True
+        
+        console_handler.addFilter(TechnicalWarningFilter())
         
         # Formatter
         formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s | %(message)s')

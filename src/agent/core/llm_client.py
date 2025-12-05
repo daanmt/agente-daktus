@@ -102,7 +102,7 @@ class LLMClient:
                     default_model = get_default_model()
                     model_id = default_model.id
                 except ImportError:
-                    model_id = "x-ai/grok-4.1-fast:free"  # Default: Grok 4.1 Fast (Free) - gratuito, contexto 2M tokens
+                    model_id = "google/gemini-2.5-flash-lite"  # Default: Gemini 2.5 Flash Lite - barato e estável
         
         # Validate and get model info from catalog (if available)
         try:
@@ -146,8 +146,7 @@ class LLMClient:
             True se for modelo gratuito, False caso contrário
         """
         free_models = [
-            "x-ai/grok-4.1-fast:free",
-            "grok-4.1-fast:free",
+            "google/gemini-2.5-flash-lite",
         ]
         return any(free_model in model for free_model in free_models)
     
@@ -166,7 +165,72 @@ class LLMClient:
             "grok",
         ]
         return any(grok_model in model.lower() for grok_model in grok_models)
-    
+
+    def _run_with_auto_continue(self, prompt: Union[str, Dict], max_tokens: int = 20000) -> str:
+        """
+        Universal auto-continue wrapper for LLM completions.
+
+        Automatically continues generation when the model stops with finish_reason == "length".
+        Ensures complete outputs regardless of model or output size.
+
+        Args:
+            prompt: String prompt OR structured dict with system/messages
+            max_tokens: Maximum tokens per call (default: 20000)
+
+        Returns:
+            Complete output as string (concatenated if continued)
+        """
+        full_output = ""
+        current_prompt = prompt
+        continuation_count = 0
+
+        while True:
+            # Call low-level API
+            content, finish_reason, usage = self._call_api(current_prompt, attempt=0, max_tokens=max_tokens)
+
+            # Append chunk to full output
+            full_output += content
+
+            # Check if truncated
+            if finish_reason == "length":
+                continuation_count += 1
+                logger.info(
+                    f"Response truncated (continuation #{continuation_count}), "
+                    f"continuing... (current length: {len(full_output)} chars)"
+                )
+
+                # Build continuation prompt
+                if isinstance(current_prompt, dict) and "messages" in current_prompt:
+                    # Structured prompt: append assistant response and "continue" user message
+                    messages = list(current_prompt.get("messages", []))
+                    messages.append({"role": "assistant", "content": content})
+                    messages.append({"role": "user", "content": "continue"})
+                    current_prompt = dict(current_prompt)
+                    current_prompt["messages"] = messages
+                else:
+                    # String prompt: convert to message format for continuation
+                    original_content = prompt if isinstance(prompt, str) else str(prompt)
+                    current_prompt = {
+                        "messages": [
+                            {"role": "user", "content": original_content},
+                            {"role": "assistant", "content": content},
+                            {"role": "user", "content": "continue"}
+                        ]
+                    }
+
+                continue
+
+            # Not truncated, done
+            break
+
+        if continuation_count > 0:
+            logger.info(
+                f"Auto-continue completed: {continuation_count} continuation(s), "
+                f"total length={len(full_output)} chars"
+            )
+
+        return full_output
+
     def analyze(self, prompt: Union[str, Dict], max_retries: int = 3) -> Dict:
         """
         Send analysis prompt to LLM and return parsed JSON response.
@@ -205,84 +269,20 @@ class LLMClient:
         # Retry logic with exponential backoff
         for attempt in range(max_retries):
             try:
-                # Call LLM API
-                response_text, finish_reason, usage = self._call_api(prompt, attempt=attempt)
-                
-                # Check if response was truncated
-                if finish_reason == "length":
-                    is_grok = self._is_grok_model(self.model)
-                    logger.warning(
-                        f"LLM response truncated (attempt {attempt + 1}/{max_retries}). "
-                        f"Content length: {len(response_text)} chars. "
-                        f"Model: {self.model} (Grok: {is_grok}). "
-                        f"Attempting to repair incomplete JSON..."
-                    )
-                    
-                    # Try to repair truncated JSON
-                    repaired_result = self._attempt_truncated_json_repair(response_text)
-                    if repaired_result:
-                        logger.info(f"Successfully repaired truncated JSON on attempt {attempt + 1}")
-                        latency_ms = int((time.time() - start_time) * 1000)
-                        logger.info(
-                            f"LLM analysis completed: request_id={request_id}, "
-                            f"latency_ms={latency_ms}, attempt={attempt + 1}"
-                        )
-                        return repaired_result
-                    
-                    # If repair failed and not last attempt, retry
-                    if attempt < max_retries - 1:
-                        wait_time = 2 ** attempt  # Exponential backoff
-                        if is_grok:
-                            logger.warning(
-                                f"Retrying Grok model after {wait_time}s "
-                                f"(attempt {attempt + 2}/{max_retries}). "
-                                f"Note: Grok models don't use max_tokens parameter."
-                            )
-                        else:
-                            logger.warning(
-                                f"Retrying with increased max_tokens after {wait_time}s "
-                                f"(attempt {attempt + 2}/{max_retries})"
-                            )
-                        time.sleep(wait_time)
-                        continue
-                    else:
-                        error_msg = (
-                            f"LLM response was truncated and could not be repaired. "
-                            f"Response length: {len(response_text)} chars. "
-                        )
-                        if is_grok:
-                            error_msg += (
-                                f"Model: {self.model} (Grok). "
-                                f"Grok models don't use max_tokens - truncation may be due to API limits or prompt size."
-                            )
-                        else:
-                            error_msg += (
-                                f"Consider using a model with larger context window or chunking strategy."
-                            )
-                        logger.error(error_msg)
-                        raise ValueError(error_msg)
-                
+                # Call LLM API with auto-continue (handles truncation automatically)
+                response_text = self._run_with_auto_continue(prompt, max_tokens=20000)
+
                 # Extract and parse JSON from response
                 analysis_result = self._extract_json_from_response(response_text)
                 
                 # Calculate latency
                 latency_ms = int((time.time() - start_time) * 1000)
-                
-                # Log cache usage if available
-                if usage:
-                    cache_read = usage.get("cache_read_input_tokens", 0)
-                    cache_creation = usage.get("cache_creation_input_tokens", 0)
-                    if cache_read > 0 or cache_creation > 0:
-                        logger.info(
-                            f"Prompt cache used: read={cache_read} tokens, "
-                            f"created={cache_creation} tokens"
-                        )
-                
+
                 logger.info(
                     f"LLM analysis completed: request_id={request_id}, "
                     f"latency_ms={latency_ms}, attempt={attempt + 1}"
                 )
-                
+
                 return analysis_result
                 
             except requests.exceptions.Timeout as e:
@@ -347,16 +347,17 @@ class LLMClient:
                     "partial_result": None
                 }
     
-    def _call_api(self, prompt: Union[str, Dict], attempt: int = 0) -> Tuple[str, str, Dict]:
+    def _call_api(self, prompt: Union[str, Dict], attempt: int = 0, max_tokens: int = 20000) -> Tuple[str, str, Dict]:
         """
         Make API call to OpenRouter with support for prompt caching.
-        
+
         Simple HTTP request - NO medical processing, NO legacy dependencies.
-        
+
         Args:
             prompt: String prompt OR structured dict with system/messages for caching
             attempt: Retry attempt number (used to increase max_tokens on retry)
-            
+            max_tokens: Maximum tokens for completion (default: 20000)
+
         Returns:
             Tuple of (content, finish_reason, usage_dict)
         """
@@ -435,8 +436,8 @@ class LLMClient:
             # Adicionar max_tokens apenas se não for modelo gratuito E não for Grok
             # Grok (free ou pago) não deve ter max_tokens para evitar truncamento
             if not is_free_model and not is_grok_model:
-                payload["max_tokens"] = min(32000 + (attempt * 8000), 128000)  # Increase on retry, max 128k
-            logger.debug(f"Using structured prompt with caching support (attempt {attempt + 1}, free_model={is_free_model}, grok={is_grok_model})")
+                payload["max_tokens"] = max_tokens
+            logger.debug(f"Using structured prompt with caching support (attempt {attempt + 1}, free_model={is_free_model}, grok={is_grok_model}, max_tokens={max_tokens if not is_grok_model else 'N/A'})")
         else:
             # Legacy string prompt (no caching) - usado para Grok ou prompts simples
             if isinstance(prompt, dict) and "system" in prompt:
@@ -470,7 +471,7 @@ class LLMClient:
             # NUNCA adicionar max_tokens para modelos Grok (free ou pago)
             # Grok tem comportamento diferente e max_tokens pode causar truncamento
             if not is_free_model and not is_grok_model:
-                payload["max_tokens"] = min(32000 + (attempt * 8000), 128000)  # Increase on retry
+                payload["max_tokens"] = max_tokens
             logger.debug(f"Using string prompt (no caching, attempt {attempt + 1}, free_model={is_free_model}, grok={is_grok_model}, max_tokens={'N/A' if is_grok_model else payload.get('max_tokens', 'N/A')})")
         
         response = requests.post(
@@ -687,6 +688,349 @@ class LLMClient:
         try:
             return json.loads(cleaned)
         except:
+            return None
+    
+    def _find_last_complete_structure(self, json_text: str) -> Tuple[Optional[str], Optional[Dict], int]:
+        """
+        Encontra o último ponto válido no JSON truncado.
+        
+        Args:
+            json_text: JSON truncado como string
+            
+        Returns:
+            Tuple de (json_completo_até_aqui, contexto_para_continuação, índice_do_último_nó)
+            - json_completo_até_aqui: JSON válido até o último nó completo (None se não encontrar)
+            - contexto_para_continuação: Dict com informações para continuação (None se não encontrar)
+            - índice_do_último_nó: Índice do último nó completo no array (ou -1 se não encontrar)
+        """
+        # Tentar extrair JSON válido até onde conseguir
+        json_str = self._extract_json_by_braces(json_text)
+        if not json_str:
+            return None, None, -1
+        
+        try:
+            partial_json = json.loads(json_str)
+        except json.JSONDecodeError:
+            return None, None, -1
+        
+        # Procurar por estrutura "reconstructed_protocol" -> "nodes" (caso de reconstrução)
+        if "reconstructed_protocol" in partial_json:
+            protocol = partial_json["reconstructed_protocol"]
+        elif "protocol" in partial_json:
+            protocol = partial_json["protocol"]
+        else:
+            protocol = partial_json
+        
+        # Se tem array "nodes", encontrar último nó completo
+        if isinstance(protocol, dict) and "nodes" in protocol:
+            nodes = protocol["nodes"]
+            if isinstance(nodes, list) and len(nodes) > 0:
+                # Último nó do array (assumindo que está completo)
+                last_node_idx = len(nodes) - 1
+                last_node = nodes[last_node_idx]
+                
+                # Contexto para continuação
+                context = {
+                    "last_complete_node_index": last_node_idx,
+                    "last_complete_node_id": last_node.get("id", f"node_{last_node_idx}") if isinstance(last_node, dict) else None,
+                    "total_nodes_processed": len(nodes),
+                    "structure_type": "protocol_with_nodes"
+                }
+                
+                return json_str, context, last_node_idx
+        
+        # Se não tem estrutura conhecida, retornar o que temos
+        context = {
+            "structure_type": "unknown",
+            "partial_json_keys": list(partial_json.keys()) if isinstance(partial_json, dict) else []
+        }
+        
+        return json_str, context, -1
+    
+    def _continue_truncated_json(
+        self,
+        truncated_response: str,
+        original_prompt: Union[str, Dict],
+        continuation_level: int = 0,
+        max_continuation_levels: int = 3
+    ) -> Optional[Dict]:
+        """
+        Continua geração de JSON truncado fazendo nova chamada ao LLM.
+        
+        Args:
+            truncated_response: Resposta truncada do LLM
+            original_prompt: Prompt original usado na chamada
+            continuation_level: Nível atual de continuação (0 = primeira continuação)
+            max_continuation_levels: Máximo de níveis de continuação permitidos
+            
+        Returns:
+            JSON completo (juntado) ou None se falhar
+        """
+        if continuation_level >= max_continuation_levels:
+            logger.error(f"Maximum continuation levels ({max_continuation_levels}) reached")
+            return None
+        
+        # Encontrar último ponto válido
+        complete_json_str, context, last_node_idx = self._find_last_complete_structure(truncated_response)
+        
+        if not complete_json_str or not context:
+            logger.warning("Could not find valid structure in truncated JSON for continuation")
+            return None
+        
+        logger.info(
+            f"Continuing truncated JSON (level {continuation_level + 1}/{max_continuation_levels}). "
+            f"Last complete node index: {last_node_idx}, Context: {context.get('structure_type', 'unknown')}"
+        )
+        
+        # Construir prompt de continuação
+        continuation_prompt = self._build_continuation_prompt(
+            original_prompt=original_prompt,
+            complete_part=complete_json_str,
+            context=context
+        )
+        
+        # Fazer chamada de continuação
+        try:
+            continuation_response_text, continuation_finish_reason, _ = self._call_api(
+                continuation_prompt,
+                attempt=0  # Não aumentar max_tokens na continuação
+            )
+            
+            # Se continuação também truncou, fazer nova continuação
+            if continuation_finish_reason == "length":
+                logger.warning(f"Continuation also truncated (level {continuation_level + 1})")
+                continued_part = self._continue_truncated_json(
+                    truncated_response=continuation_response_text,
+                    original_prompt=original_prompt,
+                    continuation_level=continuation_level + 1,
+                    max_continuation_levels=max_continuation_levels
+                )
+                if not continued_part:
+                    return None
+                # Juntar: parte original (parseada) + continuação da continuação
+                try:
+                    first_part_dict = json.loads(complete_json_str)
+                except json.JSONDecodeError:
+                    logger.error("Failed to parse complete_json_str for merge")
+                    return None
+                return self._merge_json_parts(first_part_dict, continued_part)
+            
+            # Extrair JSON da continuação
+            continuation_json = self._extract_json_from_response(continuation_response_text)
+            
+            # Parsear primeira parte para dict
+            try:
+                first_part_dict = json.loads(complete_json_str)
+            except json.JSONDecodeError:
+                logger.error("Failed to parse complete_json_str for merge")
+                return None
+            
+            # Juntar partes
+            merged_result = self._merge_json_parts(first_part_dict, continuation_json)
+            
+            return merged_result
+            
+        except Exception as e:
+            logger.error(f"Error during JSON continuation: {e}", exc_info=True)
+            return None
+    
+    def _build_continuation_prompt(
+        self,
+        original_prompt: Union[str, Dict],
+        complete_part: str,
+        context: Dict
+    ) -> str:
+        """
+        Constrói prompt para continuação do JSON truncado.
+        
+        Args:
+            original_prompt: Prompt original
+            complete_part: JSON completo até o último ponto válido
+            context: Contexto com informações sobre onde parou
+            
+        Returns:
+            Prompt formatado para continuação
+        """
+        # Extrair informações do contexto
+        structure_type = context.get("structure_type", "unknown")
+        last_node_idx = context.get("last_complete_node_index", -1)
+        total_processed = context.get("total_nodes_processed", 0)
+        last_node_id = context.get("last_complete_node_id", None)
+        
+        # Tentar extrair informações do prompt original
+        original_prompt_str = ""
+        if isinstance(original_prompt, dict):
+            # Converter prompt estruturado para string
+            if "system" in original_prompt:
+                system_parts = []
+                for item in original_prompt.get("system", []):
+                    if isinstance(item, dict) and "text" in item:
+                        system_parts.append(item["text"])
+                    elif isinstance(item, str):
+                        system_parts.append(item)
+                original_prompt_str += "\n\n".join(system_parts) + "\n\n"
+            
+            if "messages" in original_prompt:
+                for msg in original_prompt.get("messages", []):
+                    if isinstance(msg, dict) and "content" in msg:
+                        original_prompt_str += msg["content"] + "\n\n"
+                    elif isinstance(msg, str):
+                        original_prompt_str += msg + "\n\n"
+        else:
+            original_prompt_str = str(original_prompt)
+        
+        # Construir prompt de continuação
+        if structure_type == "protocol_with_nodes":
+            continuation_prompt = f"""O JSON anterior foi truncado. Continue a partir do último nó completo.
+
+CONTEXTO (últimos nós já processados):
+- Total de nós processados: {total_processed}
+- Último nó completo: índice {last_node_idx}"""
+            if last_node_id:
+                continuation_prompt += f" (ID: {last_node_id})"
+            continuation_prompt += f"""
+
+JSON COMPLETO ATÉ AQUI:
+{complete_part}
+
+INSTRUÇÕES:
+1. Continue o JSON a partir do próximo nó após o último nó completo (índice {last_node_idx + 1})
+2. NÃO repita nós já processados
+3. Complete todos os nós restantes do protocolo
+4. Retorne APENAS a continuação do JSON (sem repetir o início)
+5. Formato: {{"reconstructed_protocol": {{"nodes": [<nós_restantes>], ...}}}}
+
+PROMPT ORIGINAL (para referência):
+{original_prompt_str[:2000]}..."""
+        else:
+            # Estrutura desconhecida - pedir continuação genérica
+            continuation_prompt = f"""O JSON anterior foi truncado. Continue a partir do último ponto válido.
+
+JSON COMPLETO ATÉ AQUI:
+{complete_part}
+
+INSTRUÇÕES:
+1. Continue o JSON a partir do último ponto válido
+2. NÃO repita conteúdo já processado
+3. Complete a estrutura JSON
+4. Retorne APENAS a continuação do JSON (sem repetir o início)
+
+PROMPT ORIGINAL (para referência):
+{original_prompt_str[:2000]}..."""
+        
+        return continuation_prompt
+    
+    def _merge_json_parts(self, first_part: Union[str, Dict], second_part: Union[str, Dict]) -> Optional[Dict]:
+        """
+        Junta duas partes de JSON de forma inteligente.
+        
+        Args:
+            first_part: Primeira parte do JSON (string ou dict)
+            second_part: Segunda parte do JSON (string ou dict)
+            
+        Returns:
+            JSON completo juntado ou None se falhar
+        """
+        # Converter strings para dict se necessário
+        if isinstance(first_part, str):
+            try:
+                first_dict = json.loads(first_part)
+            except json.JSONDecodeError:
+                logger.error("Failed to parse first_part as JSON")
+                return None
+        else:
+            first_dict = first_part
+        
+        if isinstance(second_part, str):
+            try:
+                second_dict = json.loads(second_part)
+            except json.JSONDecodeError:
+                logger.error("Failed to parse second_part as JSON")
+                return None
+        else:
+            second_dict = second_part
+        
+        # Extrair protocolos de ambas as partes
+        first_protocol = None
+        if "reconstructed_protocol" in first_dict:
+            first_protocol = first_dict["reconstructed_protocol"]
+        elif "protocol" in first_dict:
+            first_protocol = first_dict["protocol"]
+        else:
+            first_protocol = first_dict
+        
+        second_protocol = None
+        if "reconstructed_protocol" in second_dict:
+            second_protocol = second_dict["reconstructed_protocol"]
+        elif "protocol" in second_dict:
+            second_protocol = second_dict["protocol"]
+        else:
+            second_protocol = second_dict
+        
+        # Se ambos têm estrutura "nodes", juntar arrays
+        if (isinstance(first_protocol, dict) and "nodes" in first_protocol and
+            isinstance(second_protocol, dict) and "nodes" in second_protocol):
+            
+            first_nodes = first_protocol["nodes"]
+            second_nodes = second_protocol["nodes"]
+            
+            if not isinstance(first_nodes, list):
+                first_nodes = []
+            if not isinstance(second_nodes, list):
+                second_nodes = []
+            
+            # Remover duplicatas por ID
+            first_node_ids = set()
+            for node in first_nodes:
+                if isinstance(node, dict) and "id" in node:
+                    first_node_ids.add(node["id"])
+            
+            # Adicionar apenas nós não duplicados da segunda parte
+            merged_nodes = list(first_nodes)
+            for node in second_nodes:
+                if isinstance(node, dict) and "id" in node:
+                    if node["id"] not in first_node_ids:
+                        merged_nodes.append(node)
+                        first_node_ids.add(node["id"])
+                else:
+                    # Nó sem ID - adicionar de qualquer forma (pode ser novo)
+                    merged_nodes.append(node)
+            
+            # Construir resultado final
+            merged_protocol = dict(first_protocol)
+            merged_protocol["nodes"] = merged_nodes
+            
+            # Preservar metadados da primeira parte
+            result = {"reconstructed_protocol": merged_protocol}
+            
+            # Validar JSON final
+            try:
+                json.dumps(result)  # Teste de serialização
+                logger.info(f"Successfully merged JSON parts: {len(first_nodes)} + {len(second_nodes)} -> {len(merged_nodes)} nodes")
+                return result
+            except (TypeError, ValueError) as e:
+                logger.error(f"Failed to validate merged JSON: {e}")
+                return None
+        
+        # Se não tem estrutura "nodes", tentar merge genérico
+        # Preservar primeira parte e adicionar campos únicos da segunda
+        merged = dict(first_dict)
+        for key, value in second_dict.items():
+            if key not in merged:
+                merged[key] = value
+            elif isinstance(merged[key], dict) and isinstance(value, dict):
+                # Merge recursivo de dicts
+                merged[key] = {**merged[key], **value}
+            elif isinstance(merged[key], list) and isinstance(value, list):
+                # Concatenar arrays (sem duplicatas se possível)
+                merged[key] = merged[key] + [v for v in value if v not in merged[key]]
+        
+        try:
+            json.dumps(merged)  # Teste de serialização
+            logger.info("Successfully merged JSON parts (generic merge)")
+            return merged
+        except (TypeError, ValueError) as e:
+            logger.error(f"Failed to validate merged JSON: {e}")
             return None
     
     def _attempt_truncated_json_repair(self, response: str) -> Optional[Dict]:

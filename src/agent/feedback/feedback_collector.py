@@ -21,6 +21,7 @@ from pathlib import Path
 from ..core.logger import logger
 from .feedback_storage import FeedbackStorage
 from .memory_qa import MemoryQA
+from .memory_engine import MemoryEngine
 
 
 @dataclass
@@ -85,16 +86,19 @@ class FeedbackCollector:
         >>> print(f"Feedback coletado: {len(session.suggestions_feedback)} sugestões")
     """
 
-    def __init__(self, auto_save: bool = True):
+    def __init__(self, auto_save: bool = True, display_manager=None):
         """
         Inicializa o coletor de feedback.
 
         Args:
             auto_save: Se True, salva automaticamente após coleta
+            display_manager: DisplayManager para UI integrada (opcional)
         """
         self.memory_qa = MemoryQA()
         self.storage = FeedbackStorage()  # Mantido para backup opcional
+        self.memory_engine = MemoryEngine()  # Memory Engine V2 para regras estruturadas
         self.auto_save = auto_save
+        self.display = display_manager
         logger.info("FeedbackCollector initialized")
 
     def collect_feedback_interactive(
@@ -130,15 +134,14 @@ class FeedbackCollector:
             logger.warning("No suggestions provided for feedback collection")
             return None
         
-        print("\n" + "=" * 60)
-        print("FEEDBACK COLLECTION - Human-in-the-Loop")
-        print("=" * 60)
-        print(f"\nProtocol: {protocol_name}")
-        print(f"Model: {model_used}")
-        print(f"Total suggestions: {len(suggestions)}")
-        print("\nVocê será solicitado a revisar cada sugestão.")
-        print("Opções: S (Relevante), N (Irrelevante), E (Editar), C (Comentar)")
-        print("=" * 60 + "\n")
+        # Header moderno e limpo (usando display_manager se disponível)
+        if self.display:
+            self.display.show_info(f"💬 Feedback - {len(suggestions)} sugestões")
+            self.display.show_info(f"Protocolo: {protocol_name} | Modelo: {model_used}")
+        else:
+            print(f"\n💬 Feedback - {len(suggestions)} sugestões")
+            print(f"Protocolo: {protocol_name} | Modelo: {model_used}")
+            print("=" * 60)
         
         # Gerar session ID
         from .feedback_storage import FeedbackStorage
@@ -146,11 +149,11 @@ class FeedbackCollector:
         session_id = temp_storage._generate_session_id()
         suggestions_feedback = []
         
+        # Carregar memória estruturada
+        self.memory_engine.load_memory()
+        
         # Coletar feedback para cada sugestão
         for idx, suggestion in enumerate(suggestions, 1):
-            print(f"\n[{idx}/{len(suggestions)}] Revisando sugestão...")
-            print("(Digite 'Q' a qualquer momento para sair do feedback e retornar ao pipeline)")
-            
             try:
                 feedback = self.capture_user_verdict(suggestion, idx, len(suggestions))
                 if feedback is None:  # Usuário saiu
@@ -181,6 +184,23 @@ class FeedbackCollector:
                     else:
                         print("Nenhum feedback coletado até agora.")
                         return None
+                
+                # Registrar feedback no Memory Engine V2
+                if feedback:
+                    decision = "S" if feedback.user_verdict == "relevant" else "N"
+                    self.memory_engine.register_feedback(
+                        suggestion=suggestion,
+                        decision=decision,
+                        comment=feedback.user_comment or "",
+                        protocol_id=protocol_name,
+                        model_id=model_used
+                    )
+                    # Salvar memória após cada feedback (incremental)
+                    try:
+                        self.memory_engine.save_memory()
+                    except Exception as e:
+                        logger.warning(f"Failed to save memory after feedback: {e}")
+                
                 suggestions_feedback.append(feedback)
             except KeyboardInterrupt:
                 print("\n\n⚠️  Feedback interrompido (Ctrl+C)")
@@ -209,26 +229,20 @@ class FeedbackCollector:
                     return session
                 return None
         
-        # Coletar feedback geral
-        print("\n" + "=" * 60)
-        print("FEEDBACK GERAL")
-        print("=" * 60)
-        general_feedback_data = self.collect_general_feedback()
-        
-        # Criar sessão
+        # Criar sessão (sem feedback geral - removido para simplificar)
         session = FeedbackSession(
             session_id=session_id,
             timestamp=datetime.now(),
             protocol_name=protocol_name,
             model_used=model_used,
             suggestions_feedback=suggestions_feedback,
-            general_feedback=general_feedback_data.get("general_feedback"),
-            quality_rating=general_feedback_data.get("quality_rating")
+            general_feedback=None,
+            quality_rating=None
         )
         
         # Salvar se auto_save
         if self.auto_save:
-            # Salvar no memory_qa.md (principal)
+            # Salvar no memory_qa.md (principal) - histórico textual
             session_dict = asdict(session)
             # Converter datetime para string se necessário
             if isinstance(session_dict.get('timestamp'), datetime):
@@ -237,7 +251,10 @@ class FeedbackCollector:
             
             # Salvar no FeedbackStorage (backup opcional)
             self.storage.save_feedback_session(session_dict)
+            
+            # Memory Engine já foi salvo incrementalmente durante coleta
             print(f"\n✅ Feedback salvo: {session_id}")
+            print(f"✅ Memória estruturada atualizada: {len(self.memory_engine.rules_accepted)} aceitas, {len(self.memory_engine.rules_rejected)} rejeitadas")
         
         logger.info(f"Feedback collection completed: {session_id}, {len(suggestions_feedback)} suggestions")
         return session
@@ -256,11 +273,7 @@ class FeedbackCollector:
             index: Índice da sugestão atual
             total: Total de sugestões
         """
-        print("\n" + "=" * 60)
-        print(f"SUGESTÃO {index}/{total}")
-        print("=" * 60)
-        
-        # Prioridade com emoji
+        # Layout moderno e limpo
         priority = suggestion.get("priority", "baixa").upper()
         priority_emoji = {
             "ALTA": "🔴",
@@ -272,113 +285,70 @@ class FeedbackCollector:
         }
         emoji = priority_emoji.get(priority, "⚪")
         
-        print(f"\n{emoji} PRIORIDADE: {priority}")
-        print(f"📁 CATEGORIA: {suggestion.get('category', 'N/A')}")
-        print(f"🆔 ID: {suggestion.get('id', 'N/A')}")
-        
-        # Título
         title = suggestion.get("title", "")
-        if title:
-            print(f"\n📝 TÍTULO:")
-            print(f"   {title}")
-        
-        # Descrição completa (contexto ampliado)
         description = suggestion.get("description", "")
-        if description:
-            print(f"\n📄 DESCRIÇÃO COMPLETA:")
-            # Quebrar em linhas se muito longo
-            if len(description) > 200:
-                words = description.split()
+        
+        # Usar display_manager se disponível, senão usar print
+        if self.display:
+            # UI integrada com display_manager
+            header = f"[{index}/{total}] {emoji} {priority} | {suggestion.get('category', 'N/A')} | {suggestion.get('id', 'N/A')}"
+            self.display.show_info(header)
+            
+            if title:
+                self.display.console.print(f"\n[bold]{title}[/bold]")
+            
+            if description:
+                # Mostrar descrição completa, quebrando em linhas de forma inteligente
+                desc_clean = " ".join(description.split())
+                words = desc_clean.split()
                 lines = []
                 current_line = ""
                 for word in words:
-                    if len(current_line + word) > 70:
+                    test_line = (current_line + " " + word) if current_line else word
+                    if len(test_line) <= 75:
+                        current_line = test_line
+                    else:
                         if current_line:
                             lines.append(current_line)
-                        current_line = word + " "
-                    else:
-                        current_line += word + " "
+                        current_line = word
                 if current_line:
                     lines.append(current_line)
-                for line in lines:
-                    print(f"   {line}")
-            else:
-                print(f"   {description}")
-        
-        # Rationale (justificativa clínica) - contexto adicional
-        rationale = suggestion.get("rationale", "")
-        if rationale:
-            print(f"\n💡 JUSTIFICATIVA CLÍNICA:")
-            if len(rationale) > 200:
-                words = rationale.split()
+                
+                # Mostrar até 3 linhas completas
+                for line in lines[:3]:
+                    self.display.console.print(f"   {line}")
+                if len(lines) > 3:
+                    self.display.console.print("   ...")
+            self.display.console.print()
+        else:
+            # Fallback para print simples
+            print(f"\n[{index}/{total}] {emoji} {priority} | {suggestion.get('category', 'N/A')} | {suggestion.get('id', 'N/A')}")
+            print("-" * 60)
+            
+            if title:
+                print(f"\n{title}")
+            
+            if description:
+                desc_clean = " ".join(description.split())
+                words = desc_clean.split()
                 lines = []
                 current_line = ""
                 for word in words:
-                    if len(current_line + word) > 70:
+                    test_line = (current_line + " " + word) if current_line else word
+                    if len(test_line) <= 75:
+                        current_line = test_line
+                    else:
                         if current_line:
                             lines.append(current_line)
-                        current_line = word + " "
-                    else:
-                        current_line += word + " "
+                        current_line = word
                 if current_line:
                     lines.append(current_line)
-                for line in lines:
+                
+                for line in lines[:3]:
                     print(f"   {line}")
-            else:
-                print(f"   {rationale}")
-        
-        # Evidence (evidência do playbook) - contexto crítico
-        evidence = suggestion.get("evidence", {})
-        if evidence:
-            print(f"\n📚 EVIDÊNCIA DO PLAYBOOK:")
-            playbook_ref = evidence.get("playbook_reference", "")
-            context = evidence.get("context", "")
-            if playbook_ref:
-                print(f"   Referência: {playbook_ref}")
-            if context:
-                print(f"   Contexto: {context}")
-        
-        # Impact scores (se disponível)
-        impact_scores = suggestion.get("impact_scores", {})
-        if impact_scores:
-            print(f"\n📊 SCORES DE IMPACTO:")
-            if "seguranca" in impact_scores:
-                seg = impact_scores["seguranca"]
-                bar = "█" * seg + "░" * (10 - seg)
-                print(f"   Segurança:   {bar} {seg}/10")
-            if "economia" in impact_scores:
-                econ = impact_scores["economia"]
-                print(f"   Economia:    {econ} (L=Baixa, M=Média, A=Alta)")
-            if "eficiencia" in impact_scores:
-                eff = impact_scores["eficiencia"]
-                print(f"   Eficiência:  {eff} (L=Baixa, M=Média, A=Alta)")
-            if "usabilidade" in impact_scores:
-                usab = impact_scores["usabilidade"]
-                bar = "█" * usab + "░" * (10 - usab)
-                print(f"   Usabilidade: {bar} {usab}/10")
-        
-        # Location (se disponível)
-        location = suggestion.get("specific_location", {})
-        if location:
-            print(f"\n📍 LOCALIZAÇÃO NO PROTOCOLO:")
-            node_id = location.get("node_id")
-            field = location.get("field")
-            path = location.get("path")
-            if node_id:
-                print(f"   Node ID: {node_id}")
-            if field:
-                print(f"   Campo: {field}")
-            if path:
-                print(f"   Caminho: {path}")
-        
-        # Cost estimate (se disponível)
-        cost_estimate = suggestion.get("auto_apply_cost_estimate", {})
-        if cost_estimate:
-            cost = cost_estimate.get("estimated_cost_usd", 0)
-            if cost:
-                print(f"\n💰 CUSTO ESTIMADO PARA APLICAR: ${cost:.4f} USD")
-        
-        print("\n" + "-" * 60)
+                if len(lines) > 3:
+                    print("   ...")
+            print()
 
     def capture_user_verdict(
         self,
@@ -472,13 +442,9 @@ class FeedbackCollector:
         Returns:
             Sugestão editada pelo usuário
         """
-        print("\n" + "=" * 60)
-        print("EDIÇÃO DE SUGESTÃO")
-        print("=" * 60)
-        print("\nCampos editáveis:")
-        print("  1. Título")
-        print("  2. Descrição")
-        print("  3. Cancelar edição")
+        print("\n✏️  Edição de Sugestão")
+        print("-" * 60)
+        print("1. Título | 2. Descrição | 3. Cancelar")
         
         edited = suggestion.copy()
         
@@ -560,53 +526,3 @@ class FeedbackCollector:
         comment = "\n".join(comment_lines).strip()
         return comment if comment else None
 
-    def collect_general_feedback(self) -> Dict[str, any]:
-        """
-        Coleta feedback geral sobre a análise completa.
-
-        Returns:
-            Dict com feedback geral e quality rating
-        """
-        print("\n" + "=" * 60)
-        print("FEEDBACK GERAL SOBRE A ANÁLISE")
-        print("=" * 60)
-        
-        # Quality rating
-        while True:
-            try:
-                rating_str = input("\nAvalie a qualidade geral da análise (0-10): ").strip()
-                if not rating_str:
-                    rating = None
-                    break
-                rating = int(rating_str)
-                if 0 <= rating <= 10:
-                    break
-                else:
-                    print("❌ Por favor, digite um número entre 0 e 10")
-            except ValueError:
-                print("❌ Por favor, digite um número válido")
-            except KeyboardInterrupt:
-                rating = None
-                break
-        
-        # General feedback
-        print("\nComentários gerais sobre a análise (opcional):")
-        print("(Digite 'END' em linha vazia para finalizar)")
-        feedback_lines = []
-        while True:
-            try:
-                line = input()
-                if line.strip().upper() == "END":
-                    break
-                feedback_lines.append(line)
-            except KeyboardInterrupt:
-                break
-        
-        general_feedback = "\n".join(feedback_lines).strip()
-        if not general_feedback:
-            general_feedback = None
-        
-        return {
-            "quality_rating": rating,
-            "general_feedback": general_feedback
-        }

@@ -130,13 +130,11 @@ class DisplayManager:
                 title_style="bold cyan"
             )
 
-            # Adicionar colunas
+            # Adicionar colunas (removidas Segurança e Economia)
             table.add_column("ID", style="cyan", width=6)
             table.add_column("Prioridade", style="yellow", width=10)
             table.add_column("Categoria", style="green", width=12)
-            table.add_column("Título", style="white", width=40)
-            table.add_column("Segurança", style="red", width=8, justify="center")
-            table.add_column("Economia", style="blue", width=8, justify="center")
+            table.add_column("Título", style="white", width=60)
 
             # Adicionar linhas (limitado a max_rows)
             display_count = min(len(suggestions), max_rows)
@@ -144,12 +142,10 @@ class DisplayManager:
                 sug_id = sug.get("id", f"SUG{i+1:02d}")
                 priority = sug.get("priority", "N/A")
                 category = sug.get("category", "N/A")
-                title = sug.get("title", sug.get("description", "N/A"))[:40]
-                
-                # Impact scores
-                impact_scores = sug.get("impact_scores", {})
-                safety = impact_scores.get("seguranca", 0)
-                economy = impact_scores.get("economia", "N/A")
+                title = sug.get("title", sug.get("description", "N/A"))
+                # Truncar título se muito longo, mas preservar palavras completas
+                if len(title) > 60:
+                    title = title[:57] + "..."
                 
                 # Colorir prioridade
                 priority_style = {
@@ -165,9 +161,7 @@ class DisplayManager:
                     sug_id,
                     f"[{priority_style}]{priority.upper()}[/{priority_style}]" if priority_style else priority,
                     category,
-                    title,
-                    str(safety) if isinstance(safety, (int, float)) else "N/A",
-                    str(economy) if economy != "N/A" else "N/A"
+                    title
                 )
 
             self.console.print(table)
@@ -187,7 +181,9 @@ class DisplayManager:
                 priority = sug.get("priority", "N/A")
                 category = sug.get("category", "N/A")
                 title = sug.get("title", sug.get("description", "N/A"))
-                print(f"{sug_id} | {priority:10s} | {category:12s} | {title[:40]}")
+                if len(title) > 60:
+                    title = title[:57] + "..."
+                print(f"{sug_id} | {priority:10s} | {category:12s} | {title}")
             if len(suggestions) > max_rows:
                 print(f"\n... e mais {len(suggestions) - max_rows} sugestões")
 
@@ -196,7 +192,7 @@ class DisplayManager:
         estimate: Dict
     ) -> None:
         """
-        Exibe estimativa de custo formatada.
+        Exibe estimativa de custo formatada (estilo moderno).
 
         Args:
             estimate: Dict com campos:
@@ -219,37 +215,30 @@ class DisplayManager:
             output_cost = costs.get("output", 0.0)
             total_cost = costs.get("total", input_cost + output_cost)
 
-            # Construir conteúdo
-            content = f"""
-[bold]Modelo:[/bold] {model}
+            # Construir conteúdo compacto
+            content = f"""[bold cyan]{model}[/bold cyan]
 
-[bold]Tokens Estimados:[/bold]
-  Input:  {input_tokens:,} tokens (${input_cost:.4f})
-  Output: {output_tokens:,} tokens (${output_cost:.4f})
-  Total:  {total_tokens:,} tokens
-
-[bold]Custo Total Estimado:[/bold] ${total_cost:.4f} USD
-[bold]Confiança:[/bold] {confidence.upper()}
-            """.strip()
+[dim]Tokens:[/dim] {total_tokens:,} ({input_tokens:,} in + {output_tokens:,} out)
+[bold]Custo:[/bold] ${total_cost:.4f} USD [dim]({confidence.upper()})[/dim]"""
 
             panel = Panel(
                 content,
                 box=box.ROUNDED,
                 title="💰 Estimativa de Custo",
                 title_align="left",
-                border_style="cyan"
+                border_style="cyan",
+                padding=(1, 2)
             )
             self.console.print(panel)
         else:
             # Fallback simples
-            print("\nESTIMATIVA DE CUSTO")
+            print("\n💰 ESTIMATIVA DE CUSTO")
             print("-" * 60)
             print(f"Modelo: {estimate.get('model', 'N/A')}")
             tokens = estimate.get("estimated_tokens", {})
             costs = estimate.get("estimated_cost_usd", {})
-            print(f"Tokens Input: {tokens.get('input', 0):,}")
-            print(f"Tokens Output: {tokens.get('output', 0):,}")
-            print(f"Custo Total: ${costs.get('total', 0.0):.4f} USD")
+            total_tokens = tokens.get('input', 0) + tokens.get('output', 0)
+            print(f"Tokens: {total_tokens:,} | Custo: ${costs.get('total', 0.0):.4f} USD")
 
     def show_diff(
         self,

@@ -36,7 +36,7 @@ class ImprovementApplicator:
     - StructuralValidator: validação do resultado
     """
 
-    def __init__(self, model: str = "x-ai/grok-4.1-fast:free"):
+    def __init__(self, model: str = "google/gemini-2.5-flash-lite"):
         """Inicializa o applicator."""
         self.model = model
         # TODO: Inicializar dependências

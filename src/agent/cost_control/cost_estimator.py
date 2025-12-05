@@ -53,8 +53,8 @@ class CostEstimator:
     
     # Tabela de preços (USD por milhão de tokens) - Preços atualizados 2025-12-01
     MODEL_PRICING = {
-        # Grok models (default: Grok 4.1 Fast Free)
-        "x-ai/grok-4.1-fast:free": {"input": 0.0, "output": 0.0},  # Contexto: 2M tokens
+        # Grok models (mantido para compatibilidade, mas não recomendado)
+        # "x-ai/grok-4.1-fast:free": {"input": 0.0, "output": 0.0},  # DESCONTINUADO
         "x-ai/grok-4.1-fast": {"input": 0.20, "output": 0.50},  # Contexto: 2M tokens
         "x-ai/grok-code-fast-1": {"input": 0.20, "output": 1.50},  # Contexto: 256K tokens
         
