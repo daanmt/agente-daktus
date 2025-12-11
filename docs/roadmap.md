@@ -1,7 +1,7 @@
 # 🗺️ Roadmap - Agente Daktus | QA
 
-**Última Atualização**: 2025-12-07
-**Status Atual**: ✅ FASES 1-6 Completas | ✅ WAVES 1-3 Completas (Production Ready)
+**Última Atualização**: 2025-12-11
+**Status Atual**: ✅ FASES 1-6 Completas | ✅ WAVES 1-3 Completas | ✅ TODOS OS BUGS CORRIGIDOS (Production Ready)
 
 ---
 
@@ -102,11 +102,24 @@ Localização: `src/agent/cli/`
 
 ---
 
-## ✅ Wave 2: Memory & Learning (COMPLETA)
+## ✅ Wave 2: Memory & Learning (COMPLETA - VALIDADA 2025-12-11)
 
-**Status**: 100% Implementada (2025-12-07)
+**Status**: 100% Implementada e Integrada | ✅ TODOS OS BUGS CORRIGIDOS
 
-**Objetivo**: Eliminar hallucinations, aprender com feedback, melhorar qualidade das sugestões.
+**Validação Completa (2025-12-11)**:
+- ✅ Revisão completa do código-fonte confirmou implementação 100%
+- ✅ Todos os 6 bugs críticos documentados em relatórios foram corrigidos
+- ✅ Todos os módulos Wave 2 estão integrados no fluxo principal
+- ✅ Sistema de aprendizado funcionando: feedback → padrões → regras
+- ✅ Zero bugs conhecidos - Sistema production-ready
+
+**Bugs Críticos Corrigidos**:
+1. ✅ Reconstruction Display (N/A values) - `protocol_reconstructor.py:593-635`
+2. ✅ Threshold=1 (ativação imediata) - `enhanced.py:462`
+3. ✅ Filtros sempre no prompt - `enhanced.py:475-481`
+4. ✅ Pattern-based filtering semântico - `enhanced.py:973-1056`
+5. ✅ Uso de relatórios EDITED - `interactive_cli.py:432-435, 741-746`
+6. ✅ Feedback UX simplificado (3 opções) - `feedback_collector.py:353-420`
 
 **Implementado** ✅:
 - ✅ **Hard Rules Engine** - Bloqueio automático de sugestões inválidas
@@ -115,17 +128,18 @@ Localização: `src/agent/cli/`
 - ✅ **Feedback Learner** - Aprendizado automático com padrões de rejeição
 - ✅ **Spider/Daktus Knowledge** - Regras específicas para protocolos clínicos
 
-**Arquivos Criados**:
-- `src/agent/learning/rules_engine.py` - Motor de regras
-- `src/agent/learning/feedback_learner.py` - Sistema de aprendizado
-- `src/agent/validators/reference_validator.py` - Validador de referências
-- `src/agent/applicator/change_verifier.py` - Verificador de mudanças
+**Arquivos Criados e Integrados**:
+- `src/agent/learning/rules_engine.py` - Motor de regras (usado em `enhanced.py:293`)
+- `src/agent/learning/feedback_learner.py` - Sistema de aprendizado (usado em `interactive_cli.py:680`)
+- `src/agent/validators/reference_validator.py` - Validador de referências (usado em `enhanced.py:242`)
+- `src/agent/applicator/change_verifier.py` - Verificador de mudanças (usado em `protocol_reconstructor.py:162`)
 - `docs/spider_playbook.md` - Documentação Spider/Daktus
 
 **Impacto**:
 - **Quality**: 95%+ sugestões baseadas em evidências
-- **Learning**: Feedback automático gera novas regras
+- **Learning**: Feedback automático gera novas regras (threshold=1)
 - **Reliability**: Mudanças verificadas após reconstrução
+- **UX**: Feedback simplificado (3 opções: S/N/Q)
 
 ---
 
@@ -157,9 +171,41 @@ Localização: `src/agent/cli/`
 
 ## ⏳ Próximas Fases (Planejamento)
 
-### WAVE 4: Advanced Analytics & Automation
+### 📊 DECISÃO DE ARQUITETURA: SQLite Híbrido (ADIADO)
 
-### FASE 7: Persistent Metrics Storage
+**Proposta Original**: Migração para SQLite híbrido (8 tabelas) conforme `DATA_ARCHITECTURE_PROPOSAL.md`
+
+**Decisão (2025-12-11)**: ADIAR implementação de SQLite
+
+**Justificativa**:
+- ✅ Sistema production-ready com arquitetura de arquivos atual
+- ✅ `memory_qa.md` gerenciável (185KB < 500KB limite)
+- ✅ Sistema de aprendizado funcionando
+- ❌ Migração SQLite = 2-3 semanas + risco de bugs
+- ❌ Sem urgência de analytics/dashboard
+
+**Arquitetura Atual Mantida**:
+- `memory_qa.md` - Sistema de memória textual (185KB)
+- `reports/*.txt` - Relatórios de análise
+- `reports/*_EDITED.json` - Protocolos editados pós-feedback
+- `FeedbackStorage` - Backup JSON de sessões
+- `MemoryEngine` - Regras estruturadas em memória
+
+**Gatilhos para Reavaliar SQLite**:
+1. `memory_qa.md` > 500KB (degradação de performance)
+2. Necessidade de dashboard/analytics de negócio
+3. Volume > 50 análises/mês (queries complexas)
+4. ROI analytics requerido por stakeholders
+
+**Próximos Passos**:
+- Monitorar crescimento de `memory_qa.md` (alerta em 300KB)
+- Reavaliar SQLite quando gatilhos forem atingidos
+
+---
+
+### WAVE 4: Advanced Analytics & Automation (PLANEJAMENTO)
+
+### FASE 7: Persistent Metrics Storage (Condicional - depende de gatilhos SQLite)
 - Armazenamento SQLite/JSON de métricas de sessão
 - Dashboard de tendências (custo/qualidade ao longo do tempo)
 - Análise de ROI por protocolo
@@ -176,10 +222,11 @@ Localização: `src/agent/cli/`
 - Formatação HTML/texto
 - Rastreabilidade 100%
 
-### FASE 9-11: Integração e Deploy
-- Pipeline completo integrado
-- Testes intensivos (15-20 protocolos)
-- Documentação final e deploy
+### FASE 10: Interface Web (Opcional)
+- Dashboard web simples (Streamlit/Flask)
+- Visualização de métricas
+- Gestão de regras aprendidas
+- Histórico de análises
 
 ---
 

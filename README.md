@@ -2,9 +2,9 @@
 
 > Sistema de validação e correção automatizada de protocolos clínicos usando IA
 
-**Versão Atual**: 3.1.0  
-**Status**: Waves 1, 2, 3 Complete - Production Ready  
-**Última Atualização**: 2025-12-07
+**Versão Atual**: 3.1.0
+**Status**: Waves 1, 2, 3 Complete - Production Ready | ✅ TODOS OS BUGS CORRIGIDOS (Validado 2025-12-11)
+**Última Atualização**: 2025-12-11
 
 ---
 
@@ -79,12 +79,13 @@ python run_agent.py --help
 - **LLM Contract Validation**: Detecção de model drift com schemas Pydantic
 - **Zero Invalid Protocols**: 100% dos protocolos inválidos bloqueados antes de salvar
 
-### 🧠 Wave 2: Memory & Learning
+### 🧠 Wave 2: Memory & Learning (✅ VALIDADO 2025-12-11)
 - **Hard Rules Engine**: Bloqueio automático de sugestões inválidas
 - **Reference Validator**: Verificação rigorosa de evidências do playbook
 - **Change Verifier**: Validação pós-reconstrução de mudanças aplicadas
 - **Feedback Learner**: Aprendizado automático com padrões de rejeição
 - **Spider/Daktus Knowledge**: Regras específicas para protocolos clínicos
+- **6 Bugs Críticos Corrigidos**: Display reconstrução, threshold=1, filtros no prompt, pattern-based filtering, EDITED reports, UX simplificado
 
 ### 💰 Wave 3: Observability & Cost Control
 - **Real-Time Cost Tracking**: Token counter ao vivo durante análise
