@@ -314,11 +314,9 @@ class FeedbackCollector:
                 if current_line:
                     lines.append(current_line)
                 
-                # Mostrar até 3 linhas completas
-                for line in lines[:3]:
+                # Mostrar descrição COMPLETA (sem truncation)
+                for line in lines:
                     self.display.console.print(f"   {line}")
-                if len(lines) > 3:
-                    self.display.console.print("   ...")
             self.display.console.print()
         else:
             # Fallback para print simples
@@ -344,10 +342,9 @@ class FeedbackCollector:
                 if current_line:
                     lines.append(current_line)
                 
-                for line in lines[:3]:
+                # Mostrar descrição COMPLETA (sem truncation)
+                for line in lines:
                     print(f"   {line}")
-                if len(lines) > 3:
-                    print("   ...")
             print()
 
     def capture_user_verdict(

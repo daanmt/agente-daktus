@@ -26,9 +26,12 @@ class ImpactScores(BaseModel):
 
 class SpecificLocation(BaseModel):
     """Localização específica da sugestão no protocolo."""
-    node_id: Optional[str] = Field(None, pattern=r'^node-\d+$')
+    # NOTA: Removido pattern restritivo pois protocolos usam IDs variados (UUID, conduta-xxx, etc.)
+    node_id: Optional[str] = None
     question_id: Optional[str] = None
     section: Optional[str] = None
+    field: Optional[str] = None  # Campo específico
+    path: Optional[str] = None  # JSON path
 
 
 class ImplementationStrategy(BaseModel):

@@ -20,105 +20,222 @@ As seções abaixo contêm regras estruturadas que são usadas para filtrar suge
 ```json
 [
   {
-    "rule_id": "3280480a8efbfdb6",
-    "text": "Adicionar opção 'Nenhum' para Sintomas Sistêmicos Associados. O campo 'Q-sintomas-associados' no nó 'node-cronologia-fatores' deve ter a opção 'nenhum_associado' pré-selecionada para agilizar o preenchimento na maioria dos casos.",
+    "rule_id": "636e9aac46cf63d8",
+    "text": "Melhorar clareza da pergunta sobre 'Provas Anatômicas DAC'. A pergunta 'Alterações em provas coronarianas anatômicas:' (uid: provas_anatomicas_dac) lista opções que misturam achados de angioTC e cateterismo. Sugere-se refinar a descrição das opções para maior clareza e especificidade, indicando qual exame se refere cada achado.",
     "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:50:45.156938",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:08.664522",
     "comment": null,
-    "suggestion_id": "sug_016",
-    "category": "eficiencia",
+    "suggestion_id": "sug_007",
+    "category": "usabilidade",
     "priority": "baixa",
     "keywords": null
   },
   {
-    "rule_id": "b7b769a87f72f4d0",
-    "text": "Restringir Timpanometria em caso de Otorreia Ativa ou Perfuração. O exame 'timpanometria-impedanciometria' possui um alerta de contraindicação ('Contraindicado em otorreia ativa ou perfuração timpânica conhecida'), mas a condição de exibição não verifica a presença de otorreia ativa ('otorreia' in sintomas_otologicos).",
+    "rule_id": "b55fd853d575f062",
+    "text": "Adicionar opção 'Outros' em 'Detalhamento da queixa principal'. O campo 'Detalhamento da queixa principal:' (uid: detalhamento_queixa) é do tipo 'string' e não oferece opções pré-definidas. Sugere-se adicionar uma opção 'Outros' com um campo de texto associado para facilitar a categorização e análise posterior das queixas.",
     "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:51:05.328922",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:17.043458",
     "comment": null,
-    "suggestion_id": "sug_002",
-    "category": "seguranca",
-    "priority": "media",
+    "suggestion_id": "sug_012",
+    "category": "usabilidade",
+    "priority": "baixa",
     "keywords": null
   },
   {
-    "rule_id": "4c60ce65e2409d85",
-    "text": "Condicionar Amoxicilina/Clavulanato à ausência de alergia à Penicilina. O medicamento 'amoxicilina-clavulanato-antibiotico' é um derivado da penicilina. A condição de exibição deve ser ajustada para garantir que não seja sugerido a pacientes com alergia à penicilina, que é uma comorbidade listada.",
+    "rule_id": "2cba0bdae8081eb4",
+    "text": "Melhorar clareza da descrição do PREVENT Calculator. A descrição do nó 'Calculadoras - reavaliação' (ID: summary-b6a21578-f1ca-4b0b-bae6-8146d5f38ed7) contém informações sobre a lógica de cálculo e referências, mas a descrição principal do propósito da calculadora PREVENT poderia ser mais direta e focada no benefício para o paciente.",
     "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:51:21.077866",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:25.611204",
     "comment": null,
-    "suggestion_id": "sug_009",
-    "category": "seguranca",
-    "priority": "media",
+    "suggestion_id": "sug_018",
+    "category": "usabilidade",
+    "priority": "baixa",
     "keywords": null
   },
   {
-    "rule_id": "9e27655bd7f1c22c",
-    "text": "Refinar indicação de TC de Seios Paranasais para RSC Refratária. O exame 'tc-seios-refrataria' é indicado para RSC refratária. A condição atual exige 'duracao_sintomas == 'cronico'' e tratamento prévio com corticoide ou exames alterados. Para maior precisão, deve-se exigir a falha do tratamento de primeira linha (corticoide spray nasal) antes de solicitar a TC.",
+    "rule_id": "b7247b55dee3f508",
+    "text": "Adicionar condição para solicitação de Ecocardiograma em FA+Dispneia. A combinação de Fibrilação Atrial (FA) com dispneia requer um Ecocardiograma Transtorácico (ECOTT). Sugere-se adicionar uma condição explícita para a solicitação do ECOTT (ID: ecocardiograma) quando 'fa' ou 'flutter_atrial' estiverem selecionados em comorbidades E 'dispneia' estiver selecionado em 'main'.",
     "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:51:45.713561",
-    "comment": null,
-    "suggestion_id": "sug_010",
-    "category": "eficiencia",
-    "priority": "media",
-    "keywords": null
-  },
-  {
-    "rule_id": "1839b99a4218f3cd",
-    "text": "Condicionar Endoscopia Nasal à cronicidade e falha terapêutica. O exame 'endoscopia-nasal-flexivel' é indicado para RSC crônica. Para otimizar custos e evitar exames desnecessários, deve-se condicionar a solicitação à falha do tratamento clínico inicial (irrigação salina e corticoide intranasal).",
-    "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:51:51.136995",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:30.326607",
     "comment": null,
     "suggestion_id": "sug_011",
-    "category": "economia",
-    "priority": "media",
-    "keywords": null
-  },
-  {
-    "rule_id": "66d8d94473fa1d04",
-    "text": "Condicionar Audiometria Vocal à alteração na Audiometria Tonal. O exame 'audiometria-vocal-discriminacao' é um complemento da audiometria tonal. Para otimizar custos, deve ser solicitado apenas se a audiometria tonal (se trazida) estiver alterada.",
-    "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:51:55.720731",
-    "comment": null,
-    "suggestion_id": "sug_017",
-    "category": "economia",
-    "priority": "media",
-    "keywords": null
-  },
-  {
-    "rule_id": "0e4bbfb88b220a6d",
-    "text": "Otimizar condição de exibição do nó 'Cronologia e Fatores Modificadores'. A condição de exibição do nó 'node-cronologia-fatores' é excessivamente longa e complexa, verificando a ausência de todos os sintomas 'nenhum' em cinco listas. Isso pode ser simplificado para melhorar a performance e legibilidade.",
-    "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:52:02.488574",
-    "comment": null,
-    "suggestion_id": "sug_005",
     "category": "eficiencia",
     "priority": "media",
     "keywords": null
   },
   {
-    "rule_id": "f8bb46e1fa3736a2",
-    "text": "Adicionar alerta de contraindicação de Prova Calórica em Otorreia Recente. O exame 'prova-calorica-vestibular' possui um alerta de contraindicação ('Contraindicado em otorreia recente ou perfuração timpânica conhecida'), mas a condição de exibição não verifica a presença de otorreia ativa ('otorreia' in sintomas_otologicos).",
+    "rule_id": "0f91881ff77b80a8",
+    "text": "Automatizar solicitação de Holter em palpitações ou arritmias no ECG. O Holter de 24h é indicado para pacientes com palpitações ou arritmias detectadas no ECG. Sugere-se automatizar a solicitação do Holter quando 'palpitacao' for selecionado em 'main', ou quando opções como 'fa_ecg', 'esv_ecg', 'bav_ecg', 'bradicardia_ecg', 'taquicardia_extrema_ecg', ou 'outras_arritmias_ecg' forem selecionadas no ECG.",
     "decision": "accepted",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:52:14.344589",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:34.771948",
+    "comment": null,
+    "suggestion_id": "sug_014",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "d03c6fd5330d2fc4",
+    "text": "Automatizar solicitação de Ecocardiograma em ICC ou Disfunção Ventricular. O Ecocardiograma Transtorácico (ECOTT) é fundamental para avaliar a função ventricular e diagnosticar ICC. Sugere-se automatizar a solicitação do ECOTT quando 'icc' for selecionado em comorbidades, ou quando o risco PREVENT for alto (≥20%) ou risco CVD Total for alto (≥25%).",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:42.603932",
+    "comment": null,
+    "suggestion_id": "sug_020",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "531dcefd78435210",
+    "text": "Automatizar solicitação de Holter em casos de Palpitações ou Arritmias no ECG. O Holter de 24h é indicado para pacientes com palpitações ou arritmias detectadas no ECG. Sugere-se automatizar a solicitação do Holter quando 'palpitacao' for selecionado em 'main', ou quando opções como 'fa_ecg', 'esv_ecg', 'bav_ecg', 'bradicardia_ecg', 'taquicardia_extrema_ecg', ou 'outras_arritmias_ecg' forem selecionadas no ECG.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:53:49.178931",
+    "comment": null,
+    "suggestion_id": "sug_024",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "fcb7c2990188bb3e",
+    "text": "Automatizar solicitação de MAPA/MRPA em casos de variabilidade da PA. O protocolo identifica a variabilidade da PA ('variabilidade_aval_has') como um fator a ser avaliado. Sugere-se automatizar a solicitação de MAPA ou MRPA (conforme diretriz SBC 2025) quando esta opção for selecionada, para agilizar o diagnóstico e monitoramento da hipertensão arterial.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:54:02.661395",
+    "comment": null,
+    "suggestion_id": "sug_006",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "4c49e7f3c7e188de",
+    "text": "Adicionar condição para solicitação de Teste Ergométrico. O Teste Ergométrico é sugerido em várias condições, mas sua solicitação automática pode ser otimizada. Sugere-se adicionar uma condição explícita para a solicitação do Teste Ergométrico (ID: teste_ergometrico) quando o paciente tiver dor torácica, risco intermediário (PREVENT 7.5-20%) e não houver contraindicações (mobilidade prejudicada, impossibilidade de exercício).",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:54:19.765000",
+    "comment": null,
+    "suggestion_id": "sug_008",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "cf11b736eaba993e",
+    "text": "Automatizar solicitação de Teste Ergométrico em Dor Torácica de Risco Intermediário. Para pacientes com dor torácica e risco cardiovascular intermediário (PREVENT 7.5-20%), o Teste Ergométrico é uma ferramenta diagnóstica importante. Sugere-se automatizar a solicitação deste exame quando essas condições forem atendidas, excluindo pacientes com contraindicações.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:54:43.571240",
+    "comment": null,
+    "suggestion_id": "sug_022",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "da0633630f1f2053",
+    "text": "Automatizar solicitação de Exames Laboratoriais para Risco Cardiovascular Elevado. Pacientes com risco cardiovascular elevado (PREVENT ≥ 7.5%) necessitam de exames laboratoriais específicos (Perfil Lipídico Completo, HbA1c, Creatinina+eGFR). Sugere-se automatizar a solicitação desses exames quando o risco PREVENT for intermediário ou alto.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:54:49.426558",
+    "comment": null,
+    "suggestion_id": "sug_029",
+    "category": "eficiencia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "9106703beb7d551a",
+    "text": "Otimizar solicitação de exames laboratoriais de rotina. Os exames laboratoriais básicos (Hemograma, Creatinina, Ureia, Eletrólitos, Perfil Lipídico, Glicada) são frequentemente solicitados mesmo quando o paciente já os trouxe recentes. Sugere-se adicionar uma condição para solicitar esses exames apenas se 'sem_exames_recentes' for selecionado em 'exames_avaliacao', evitando duplicação e custos desnecessários.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:55:24.370696",
+    "comment": null,
+    "suggestion_id": "sug_009",
+    "category": "economia",
+    "priority": "media",
+    "keywords": null
+  },
+  {
+    "rule_id": "cfbb1e276c25a0be",
+    "text": "Garantir prescrição de estatina em DAC. O protocolo identifica a ausência de estatina em pacientes com DAC ('expr-dac-sem-estatina-alerta'), mas não força a prescrição ou um alerta crítico na conduta médica. Sugere-se adicionar um alerta de alta prioridade e a prescrição automática de estatina de alta intensidade (Atorvastatina 40-80mg ou Rosuvastatina 20-40mg) quando a condição for identificada.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:56:19.700775",
     "comment": null,
     "suggestion_id": "sug_003",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "b7d7b2e8758468a9",
+    "text": "Implementar Rastreamento de IC em DM2 com BNP/NT-proBNP. A diretriz ADA 2025 recomenda o rastreamento de insuficiência cardíaca estágio B em pacientes com Diabetes Mellitus tipo 2 (DM2) usando BNP ou NT-proBNP. O protocolo deve incluir a solicitação desses exames quando DM2 for identificado e adicionar uma mensagem educativa sobre o propósito do exame.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:57:47.243322",
+    "comment": null,
+    "suggestion_id": "sug_004",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "d32aebea9d21ceb8",
+    "text": "Reforçar a obrigatoriedade do ECG em Síncope sem Pródromos. O protocolo identifica 'Síncope súbita sem pródromo sugere arritmia' como um alerta de risco alto. No entanto, a solicitação explícita de ECG de 12 derivações como exame inicial obrigatório para essa condição não está claramente definida no fluxo de conduta. Sugere-se adicionar o ECG como exame mandatório quando esta opção for selecionada.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:57:53.442775",
+    "comment": null,
+    "suggestion_id": "sug_005",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "c86757a8f92087f5",
+    "text": "Adicionar alerta para Síncope em Posição Supina. A síncope em posição supina (deitado) é um sinal de alerta para causas cardíacas ou neurológicas graves. Sugere-se adicionar um alerta de alta prioridade e a solicitação de ECG e Ecocardiograma quando esta opção for selecionada.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:58:16.649819",
+    "comment": null,
+    "suggestion_id": "sug_023",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "2db0acb3db494ab4",
+    "text": "Adicionar alerta para FA + Dispneia. A combinação de Fibrilação Atrial (FA) com dispneia é um sinal de alerta crítico para insuficiência cardíaca ou risco de tromboembolismo. O protocolo deve apresentar um alerta explícito e a solicitação obrigatória de Ecocardiograma Transtorácico (ECOTT) e BNP/NT-proBNP, conforme a diretriz ESC.",
+    "decision": "accepted",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:58:21.704680",
+    "comment": null,
+    "suggestion_id": "sug_027",
     "category": "seguranca",
     "priority": "alta",
     "keywords": null
@@ -131,29 +248,120 @@ As seções abaixo contêm regras estruturadas que são usadas para filtrar suge
 ```json
 [
   {
-    "rule_id": "045acdd599c1d3c4",
-    "text": "Melhorar a descrição da condição do nó 'Resultados de Exames'. O nó 'node-resultados-exames' só é exibido se 'exames_avaliacao == true'. A descrição do nó deve ser mais clara sobre o propósito de preenchimento.",
+    "rule_id": "89ebd93f5e86a759",
+    "text": "Clarificar a pergunta sobre 'Risco do procedimento a ser realizado'. A pergunta 'Risco do procedimento a ser realizado:' (uid: risco_procedimento) no nó 'Pré-operatório - reavaliação' menciona 'colocar tabela do miro de DCC e levar pro resumo de atendimento'. A descrição atual é vaga. Sugere-se adicionar a tabela de risco ou um link direto para ela, e clarificar que a seleção deve ser baseada em diretrizes clínicas.",
     "decision": "rejected",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:50:57.729774",
-    "comment": "bobagem",
-    "suggestion_id": "sug_018",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:55:10.023147",
+    "comment": "adiciona complexidade com baixo retorno operacional",
+    "suggestion_id": "sug_010",
     "category": "usabilidade",
-    "priority": "baixa",
+    "priority": "media",
     "keywords": null
   },
   {
-    "rule_id": "ff046c58f3b64e6b",
-    "text": "Condicionar Azitromicina à alergia à Penicilina. O medicamento 'azitromicina-antibiotico' é sugerido como alternativa em caso de alergia à penicilina. A condição de exibição deve ser ajustada para garantir que só seja sugerido quando a alergia estiver presente.",
+    "rule_id": "01a7aad2c1402b9a",
+    "text": "Adicionar alerta para Síncope de Esforço. O campo 'Síncope de esforço' (ID: contexto_esforco) é um red flag crítico. Atualmente, o protocolo não apresenta um alerta visual ou bloqueio explícito para garantir investigação imediata. Sugere-se adicionar um alerta de alta prioridade e um bloqueio de conduta até que a investigação seja concluída, conforme a diretriz ESC.",
     "decision": "rejected",
-    "protocol_id": "amil_ficha_orl_v1.0.4_07-12-2025-2135",
-    "model_id": "google/gemini-2.5-flash-preview-09-2025",
-    "timestamp": "2025-12-07T21:51:40.537408",
-    "comment": "pode ser sugerido o uso, conforme critério médico, como primeira linha",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:55:53.915534",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
+    "suggestion_id": "sug_001",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "736b57f8f80132b1",
+    "text": "Adicionar alerta e bloqueio para Síncope de Esforço não investigada. A síncope de esforço é um red flag crítico. O protocolo deve implementar um bloqueio de conduta médica e um alerta visual explícito caso o paciente relate síncope de esforço e a investigação cardiológica obrigatória (ECG, ECOTT, Teste Ergométrico/Cintilografia) não tenha sido realizada ou documentada.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:56:31.327035",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
     "suggestion_id": "sug_015",
     "category": "seguranca",
-    "priority": "media",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "2809ff23c4b838f6",
+    "text": "Reforçar a obrigatoriedade de investigação para Síncope de Esforço. A síncope de esforço é um red flag crítico. O protocolo deve garantir que, ao selecionar 'contexto_esforco' para síncope, um alerta crítico seja exibido e a conduta médica seja bloqueada até que a investigação cardiológica obrigatória (ECG, ECOTT, Teste Ergométrico/Cintilografia) seja documentada.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:56:56.850482",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
+    "suggestion_id": "sug_021",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "ec5fcd2cc34dc959",
+    "text": "Adicionar alerta para Síncope de Esforço não investigada. A síncope de esforço é um red flag crítico. O protocolo deve garantir que, ao selecionar 'contexto_esforco' para síncope, um alerta crítico seja exibido e a conduta médica seja bloqueada até que a investigação cardiológica obrigatória (ECG, ECOTT, Teste Ergométrico/Cintilografia) seja documentada.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:57:20.882170",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
+    "suggestion_id": "sug_026",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "7dcf7ea645b0bc56",
+    "text": "Adicionar alerta para DAC sem estatina prescrita. O protocolo possui a expressão 'expr-dac-sem-estatina-alerta' que identifica pacientes com DAC sem estatina. Sugere-se transformar isso em um alerta visual proeminente na tela de conduta médica e, opcionalmente, pré-selecionar a prescrição de uma estatina de alta intensidade.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:57:31.850558",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
+    "suggestion_id": "sug_031",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "47f9bb4a8a788c01",
+    "text": "Adicionar alerta para Fibrilação Atrial + Dispneia. A combinação de Fibrilação Atrial (FA) com dispneia é um sinal de alerta crítico para insuficiência cardíaca ou risco de tromboembolismo. O protocolo deve apresentar um alerta explícito e a solicitação obrigatória de Ecocardiograma Transtorácico (ECOTT) e BNP/NT-proBNP, conforme a diretriz ESC.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:57:40.843053",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
+    "suggestion_id": "sug_002",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "c86757a8f92087f5",
+    "text": "Adicionar alerta para Síncope em Posição Supina. A síncope em posição supina (deitado) é um sinal de alerta para causas cardíacas ou neurológicas graves. Sugere-se adicionar um alerta de alta prioridade e a solicitação de ECG e Ecocardiograma quando esta opção for selecionada.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:57:59.843110",
+    "comment": "alertas devem ser sugeridos como mensagens ao médico, orientações ao paciente, ou então mensagens no campo \"mensagem de alerta\" dos medicamentos.",
+    "suggestion_id": "sug_013",
+    "category": "seguranca",
+    "priority": "alta",
+    "keywords": null
+  },
+  {
+    "rule_id": "18b44a0a6bf21101",
+    "text": "Adicionar alerta para Síncope sem Pródromos. A opção 'sem_prodromos' na pergunta sobre síncope tem 'flag_risk': 'high' e um alerta 'Síncope súbita sem pródromo sugere arritmia'. Sugere-se transformar isso em um alerta visual proeminente na tela de conduta médica, com recomendação de investigação cardiológica.",
+    "decision": "rejected",
+    "protocol_id": "amil_ficha_cardiologia_v2.0.0_12-12-2025-1024",
+    "model_id": "google/gemini-2.5-flash-lite",
+    "timestamp": "2025-12-12T22:58:27.830042",
+    "comment": "s",
+    "suggestion_id": "sug_028",
+    "category": "seguranca",
+    "priority": "alta",
     "keywords": null
   }
 ]
@@ -4161,6 +4369,1011 @@ Apesar de o relatório ter alcançado uma alta taxa de relevância (9/15), as 6 
 **Categoria Dominante:** Falta de Integração/Formulário
 
 ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Feedback - 2025-12-07 21:52
+
+**Protocolo:** amil_ficha_orl_v1.0.4_07-12-2025-2135
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 11
+- Relevantes: 8
+- Irrelevantes: 3
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_018:** bobagem
+- **sug_015:** pode ser sugerido o uso, conforme critério médico, como primeira linha
+- **sug_007:** seguir recomendação do playbook
+
+
+---
+
+## Feedback - 2025-12-07 21:52
+
+**Protocolo:** amil_ficha_orl_v1.0.4_07-12-2025-2135
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 11
+- Relevantes: 8
+- Irrelevantes: 3
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_018:** bobagem
+- **sug_015:** pode ser sugerido o uso, conforme critério médico, como primeira linha
+- **sug_007:** seguir recomendação do playbook
+
+
+---
+
+## Insight LLM - 2025-12-07 21:52
+
+**Análise:**
+O relatório gerou 8 sugestões relevantes e 3 irrelevantes, atingindo uma alta taxa de acerto (72.7%). As falhas principais não foram de erro factual, mas de desalinhamento com a política interna do cliente ('playbook') e uma interpretação excessivamente restritiva do uso de medicamentos de primeira linha. O usuário valoriza a flexibilidade do critério médico e a aderência às suas diretrizes internas, o que o modelo não conseguiu capturar totalmente. As sugestões de otimização de interface e fluxo (eficiência/usabilidade) foram universalmente aceitas.
+
+**Recomendações:**
+1. Priorizar a identificação de diretrizes específicas do cliente (playbooks) e usá-las como filtro de alta prioridade. 2. Ao sugerir condicionamentos em medicamentos de primeira linha (como Amoxicilina/Clavulanato), o modelo deve diferenciar entre contraindicações absolutas (alergia) e restrições baseadas em custo/eficiência, dando peso maior à manutenção da opção como primeira linha, salvo contraindicação. 3. Continuar a focar em sugestões de eficiência e usabilidade, pois estas demonstraram alta relevância.
+
+---
+
+## Aprendizados - 2025-12-07 21:52
+
+### Padrão: Foco na Primeira Linha de Tratamento
+
+**Descrição:** O modelo sugeriu restrições ou condicionamentos baseados em protocolos de segunda linha ou falha terapêutica, mas o feedback do usuário indica que certas sugestões devem ser mantidas como 'primeira linha' conforme critério médico, mesmo que o protocolo sugira o contrário. Isso aponta para uma rigidez excessiva na aplicação de diretrizes de custo/eficiência.
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- Condicionar Amoxicilina/Clavulanato à ausência de alergia à Penicilina (Feedback: 'pode ser sugerido o uso, conforme critério médico, como primeira linha')
+
+---
+
+### Padrão: Conflito com Playbook/Diretrizes Internas
+
+**Descrição:** O feedback 'seguir recomendação do playbook' sugere que algumas sugestões consideradas irrelevantes pelo usuário podem ter sido geradas por uma análise que divergiu das diretrizes internas da Amil (o 'playbook'). O modelo precisa ser mais sensível a diretrizes específicas do cliente que podem anular sugestões baseadas em protocolos genéricos.
+
+**Severidade:** alta
+**Frequência:** 1
+
+**Exemplos:**
+- Refinar indicação de TC de Seios Paranasais para RSC Refratária (Irrelevante)
+- Condicionar Endoscopia Nasal à cronicidade e falha terapêutica (Irrelevante)
+
+---
+
+### Padrão: Relevância de Sugestões de Eficiência/Usabilidade
+
+**Descrição:** Todas as sugestões de 'eficiência' e 'usabilidade' foram consideradas relevantes pelo usuário, indicando que o modelo está acertando na identificação de melhorias de fluxo e clareza da interface.
+
+**Severidade:** baixa
+**Frequência:** 4
+
+**Exemplos:**
+- Adicionar opção 'Nenhum' para Sintomas Sistêmicos Associados (Relevant)
+- Otimizar condição de exibição do nó 'Cronologia e Fatores Modificadores' (Relevant)
+
+---
+
+
+## Métricas - 2025-12-07 21:52
+
+**Protocolo:** amil_ficha_orl_v1.0.4_07-12-2025-2135
+**Sessão:** fb-20251207-008
+
+### Breakdown de Sugestões
+
+- **Total geradas:** 11
+- **Revisadas:** 11
+- **Relevantes:** 8 (72.7%)
+- **Irrelevantes:** 3 (27.3%)
+
+### Distribuição por Prioridade
+
+- **Alta:** 2
+- **Média:** 7
+- **Baixa:** 2
+
+**Taxa de Rejeição (Baixa Prioridade):** 50.0%
+
+### Tendência de Melhoria
+
+- **Taxa de Rejeição Atual:** 27.3%
+- **Taxa de Rejeição Acumulada:** 33.9%
+- **Mudança vs Sessão Anterior:** [PIORA] 0.0%
+- **Sessões até agora:** 58
+
+### Padrões de Rejeição Detectados
+
+- **Relevância de Sugestões de Eficiência/Usabilidade:** 4 ocorrências
+- **Foco na Primeira Linha de Tratamento:** 1 ocorrências
+- **Conflito com Playbook/Diretrizes Internas:** 1 ocorrências
+
+**Categoria Dominante:** Relevância de Sugestões de Eficiência/Usabilidade
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Feedback - 2025-12-09 14:25
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_PREVENT
+**Modelo:** anthropic/claude-sonnet-4.5
+
+**Estatísticas:**
+- Total revisado: 14
+- Relevantes: 14
+- Irrelevantes: 0
+
+
+---
+
+## Feedback - 2025-12-09 14:25
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_PREVENT
+**Modelo:** anthropic/claude-sonnet-4.5
+
+**Estatísticas:**
+- Total revisado: 14
+- Relevantes: 14
+- Irrelevantes: 0
+
+
+---
+
+## Insight LLM - 2025-12-09 14:25
+
+**Análise:**
+O feedback revela uma análise excepcionalmente bem-sucedida, com 100% de aprovação (14/14 sugestões relevantes, 0 irrelevantes). O sistema demonstrou forte compreensão do contexto clínico cardiológico, identificando corretamente prioridades de segurança do paciente, oportunidades de automação clinicamente relevantes e otimizações operacionais. A distribuição das sugestões mostra foco apropriado em segurança (64% das sugestões), seguido por eficiência operacional (21%). Não há evidência de falsos positivos ou sugestões superficiais. O usuário não forneceu comentários textuais adicionais, sugerindo que as sugestões eram autoexplicativas e bem fundamentadas. Este caso representa um benchmark de qualidade para análises futuras.
+
+**Recomendações:**
+1. **Replicar metodologia**: Documentar e aplicar a abordagem usada nesta análise cardiológica em outros protocolos clínicos, mantendo o foco em segurança, automação e eficiência operacional. 2. **Expandir profundidade em segurança**: Dado o sucesso das 9 sugestões de segurança, intensificar a busca por interações medicamentosas, contraindicações e verificações pré-procedimento em todos os protocolos. 3. **Priorizar automações clínicas**: Buscar sistematicamente oportunidades de cálculo automático de scores, índices e parâmetros clínicos padronizados. 4. **Integrar economia com segurança**: Identificar redundâncias e desperdícios que possam ser eliminados sem comprometer qualidade assistencial. 5. **Manter especificidade técnica**: As sugestões foram suficientemente detalhadas e contextualizadas - manter este nível de especificidade técnica. 6. **Validar em outras especialidades**: Testar se esta taxa de sucesso se replica em protocolos de outras especialidades médicas para identificar se há padrões específicos da cardiologia que contribuíram para o resultado.
+
+---
+
+## Aprendizados - 2025-12-09 14:26
+
+### Padrão: alta_precisao_em_seguranca_clinica
+
+**Descrição:** Todas as 9 sugestões de segurança foram consideradas relevantes pelo usuário, indicando que o sistema está identificando corretamente riscos clínicos reais, interações medicamentosas e contraindicações em protocolos cardiológicos
+
+**Severidade:** alta
+**Frequência:** 9
+
+**Exemplos:**
+- Alerta sobre interação medicamentosa entre betabloqueadores e BCC não-diidropiridínicos
+- Verificação de função hepática antes de prescrever estatinas de alta intensidade
+- Alerta de contraindicação para teste ergométrico em pacientes com estenose aórtica
+
+---
+
+### Padrão: eficiencia_operacional_valorizada
+
+**Descrição:** Todas as 3 sugestões de eficiência foram aprovadas, demonstrando que automações (cálculo de eGFR), auto-preenchimento de dados e consolidação de perguntas são altamente valorizadas em contextos clínicos
+
+**Severidade:** alta
+**Frequência:** 3
+
+**Exemplos:**
+- Cálculo automático de eGFR a partir de creatinina, idade e sexo
+- Auto-preenchimento de dados PREVENT a partir de exames laboratoriais já coletados
+- Consolidar perguntas de comorbidades cardiovasculares em grupos lógicos
+
+---
+
+### Padrão: economia_com_impacto_clinico
+
+**Descrição:** A sugestão de economia (evitar exames duplicados) foi considerada relevante, indicando que otimizações financeiras são valorizadas quando têm justificativa clínica clara e não comprometem a qualidade do cuidado
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- Adicionar lógica para evitar solicitação de exames laboratoriais duplicados quando já realizados recentemente
+
+---
+
+### Padrão: usabilidade_com_foco_em_seguranca
+
+**Descrição:** A única sugestão de usabilidade aprovada tinha componente de segurança (resumo visual com alertas de interações), sugerindo que melhorias de interface são mais valorizadas quando aumentam a segurança do paciente
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- Adicionar resumo visual das medicações prescritas com alertas de interações no final do protocolo
+
+---
+
+### Padrão: cobertura_completa_do_protocolo
+
+**Descrição:** O sistema analisou e gerou sugestões relevantes para todas as 14 oportunidades identificadas, sem nenhuma sugestão irrelevante, demonstrando alta precisão na análise do protocolo cardiológico PREVENT
+
+**Severidade:** alta
+**Frequência:** 14
+
+**Exemplos:**
+- 100% de taxa de aprovação (14/14 sugestões relevantes)
+- 0% de sugestões irrelevantes
+- Cobertura balanceada entre segurança (64%), eficiência (21%), usabilidade (7%) e economia (7%)
+
+---
+
+
+## Métricas - 2025-12-09 14:25
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_PREVENT
+**Sessão:** fb-20251209-001
+
+### Breakdown de Sugestões
+
+- **Total geradas:** 14
+- **Revisadas:** 14
+- **Relevantes:** 14 (100.0%)
+- **Irrelevantes:** 0 (0.0%)
+
+### Distribuição por Prioridade
+
+- **Alta:** 7
+- **Média:** 7
+- **Baixa:** 0
+
+### Tendência de Melhoria
+
+- **Taxa de Rejeição Atual:** 0.0%
+- **Taxa de Rejeição Acumulada:** 32.8%
+- **Mudança vs Sessão Anterior:** N/A (primeira sessão)
+- **Sessões até agora:** 60
+
+### Padrões de Rejeição Detectados
+
+- **cobertura_completa_do_protocolo:** 14 ocorrências
+- **alta_precisao_em_seguranca_clinica:** 9 ocorrências
+- **eficiencia_operacional_valorizada:** 3 ocorrências
+- **economia_com_impacto_clinico:** 1 ocorrências
+- **usabilidade_com_foco_em_seguranca:** 1 ocorrências
+
+**Categoria Dominante:** cobertura_completa_do_protocolo
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Feedback - 2025-12-09 21:14
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_PREVENT
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 17
+- Relevantes: 13
+- Irrelevantes: 4
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_010:** a opção sem exames recentes é o mesmo que "Nenhum' para Exames Trazidos para avaliação.
+- **sug_006:** não há necessidade de impor este limite.
+- **sug_008:** neste caso, não temos playbook para comparação. nesses cenários, avaliar apenas o JSON.
+- **sug_009:** se existe essa diferenciação, é importante.
+
+
+---
+
+## Feedback - 2025-12-09 21:14
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_PREVENT
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 17
+- Relevantes: 13
+- Irrelevantes: 4
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_010:** a opção sem exames recentes é o mesmo que "Nenhum' para Exames Trazidos para avaliação.
+- **sug_006:** não há necessidade de impor este limite.
+- **sug_008:** neste caso, não temos playbook para comparação. nesses cenários, avaliar apenas o JSON.
+- **sug_009:** se existe essa diferenciação, é importante.
+
+
+---
+
+## Insight LLM - 2025-12-09 21:14
+
+**Análise:**
+O feedback do usuário revela que o modelo, embora tenha gerado um número significativo de sugestões, falhou em alguns aspectos cruciais de compreensão contextual e de negócio. A principal lacuna parece ser a dificuldade do modelo em lidar com cenários onde não há playbooks claros para comparação, levando a sugestões redundantes (como a opção 'Nenhum' para exames) ou a imposição de limites desnecessários. Além disso, o modelo parece ter subestimado a importância de diferenciações específicas que são valiosas para o usuário. A alta taxa de sugestões relevantes (13 de 17) indica que o modelo tem uma base sólida, mas a qualidade das sugestões irrelevantes (4 de 17) e os comentários do usuário apontam para a necessidade de refinar a interpretação de nuances e do contexto de negócio.
+
+**Recomendações:**
+1. Aprimorar o treinamento do modelo para que ele possa identificar e respeitar opções de UI/UX já existentes, evitando sugestões redundantes. 2. Desenvolver a capacidade do modelo de inferir regras de negócio e flexibilidade a partir da estrutura do JSON, especialmente em cenários sem playbooks de referência. 3. Priorizar a análise do JSON em detrimento de playbooks quando estes não se aplicam perfeitamente, garantindo que as sugestões sejam contextualmente relevantes. 4. Ajustar os critérios de avaliação do modelo para que ele reconheça e valorize a importância de diferenciações específicas e nuances contextuais, em vez de focar apenas em simplificações gerais.
+
+---
+
+## Aprendizados - 2025-12-09 21:14
+
+### Padrão: Sobreposição de Conceitos
+
+**Descrição:** O relatório sugeriu a adição de uma opção 'Nenhum' para 'Exames Trazidos para Avaliação', mas o usuário indicou que a opção existente 'sem exames recentes' já cumpre essa função. Isso sugere que o modelo pode não ter compreendido completamente o contexto ou as opções já existentes no sistema.
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- Adicionar opção 'Nenhum' para Exames Trazidos para Avaliação
+
+---
+
+### Padrão: Interpretação de Contexto de Negócio
+
+**Descrição:** O usuário comentou 'não há necessidade de impor este limite', referindo-se a uma sugestão do relatório (não especificada qual, mas inferida como uma restrição ou padronização). Isso indica que o modelo pode estar sugerindo restrições ou padronizações sem entender completamente as regras de negócio ou a flexibilidade necessária em determinados cenários.
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- Restringir solicitação de Ecocardiograma na Conduta PREVENT
+- Remover solicitação de Exames Laboratoriais de Rotina se já foram trazidos
+
+---
+
+### Padrão: Falta de Compreensão de Cenários Específicos
+
+**Descrição:** O usuário mencionou 'neste caso, não temos playbook para comparação. nesses cenários, avaliar apenas o JSON.' Isso aponta para uma dependência excessiva do modelo em playbooks ou exemplos pré-existentes, e uma dificuldade em analisar e gerar sugestões contextualmente relevantes quando tais referências não estão disponíveis.
+
+**Severidade:** alta
+**Frequência:** 1
+
+**Exemplos:**
+- Todas as sugestões que foram avaliadas como 'irrelevant' ou 'relevant' sem um comentário específico do usuário podem ter caído neste padrão, se o modelo se baseou em playbooks que não se aplicavam perfeitamente.
+
+---
+
+### Padrão: Valorização de Diferenciações Contextuais
+
+**Descrição:** O comentário 'se existe essa diferenciação, é importante' sugere que o modelo pode ter desconsiderado ou minimizado a importância de certas diferenciações ou condições que são cruciais para o usuário. O relatório pode ter sugerido simplificações que, na prática, eliminam nuances importantes.
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- Padronizar a descrição de posologia para medicamentos de uso contínuo
+- Refinar Condição de AAS 100mg na Conduta PREVENT para Risco Hemorrágico
+
+---
+
+
+## Métricas - 2025-12-09 21:14
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_PREVENT
+**Sessão:** fb-20251209-002
+
+### Breakdown de Sugestões
+
+- **Total geradas:** 17
+- **Revisadas:** 17
+- **Relevantes:** 13 (76.5%)
+- **Irrelevantes:** 4 (23.5%)
+
+### Distribuição por Prioridade
+
+- **Alta:** 2
+- **Média:** 12
+- **Baixa:** 3
+
+**Taxa de Rejeição (Baixa Prioridade):** 33.3%
+
+### Tendência de Melhoria
+
+- **Taxa de Rejeição Atual:** 23.5%
+- **Taxa de Rejeição Acumulada:** 32.5%
+- **Mudança vs Sessão Anterior:** [PIORA] 0.0%
+- **Sessões até agora:** 62
+
+### Padrões de Rejeição Detectados
+
+- **Sobreposição de Conceitos:** 1 ocorrências
+- **Interpretação de Contexto de Negócio:** 1 ocorrências
+- **Falta de Compreensão de Cenários Específicos:** 1 ocorrências
+- **Valorização de Diferenciações Contextuais:** 1 ocorrências
+
+**Categoria Dominante:** Sobreposição de Conceitos
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Feedback - 2025-12-11 19:15
+
+**Protocolo:** athena_has_resumido_novo_v1.0.0_11-12-2025-1852
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 11
+- Relevantes: 6
+- Irrelevantes: 5
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_007:** o produto é incompatível com a sugestão.
+- **sug_005:** a sugestão está correta, mas foi implementado de outra forma.
+- **sug_013:** já está implementado na condicional.
+- **sug_011:** esta funcionalidade não existe no spider/daktus studio.
+- **sug_001:** desnecessário.
+
+
+---
+
+## Feedback - 2025-12-11 19:15
+
+**Protocolo:** athena_has_resumido_novo_v1.0.0_11-12-2025-1852
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 11
+- Relevantes: 6
+- Irrelevantes: 5
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_007:** o produto é incompatível com a sugestão.
+- **sug_005:** a sugestão está correta, mas foi implementado de outra forma.
+- **sug_013:** já está implementado na condicional.
+- **sug_011:** esta funcionalidade não existe no spider/daktus studio.
+- **sug_001:** desnecessário.
+
+
+---
+
+## Insight LLM - 2025-12-11 19:15
+
+**Análise:**
+O relatório gerado pelo modelo demonstrou alta precisão na identificação de oportunidades de melhoria clínica e de usabilidade (6/11 sugestões foram consideradas relevantes). No entanto, a principal falha reside na falta de contexto de implementação e nas limitações da plataforma de destino (Spider/Daktus Studio). Quase todas as sugestões marcadas como irrelevantes (5/5) foram devido a fatores externos à qualidade da sugestão em si (incompatibilidade de produto, funcionalidade inexistente ou já implementada). O modelo precisa de um 'filtro de viabilidade' mais robusto, que incorpore o conhecimento das restrições de engenharia do sistema de análise clínica.
+
+**Recomendações:**
+Para análises futuras, é crucial incorporar metadados sobre as limitações da plataforma (ex: 'Funcionalidades de alerta complexas não são suportadas', 'Cálculos devem ser realizados via CKD-EPI, não PREVENT'). Além disso, a análise deve incluir uma etapa de 'Verificação de Redundância' para garantir que a sugestão não esteja 'já implementada na condicional'. Isso pode ser feito através de uma análise mais profunda da lógica de fluxo de trabalho (condicionais) do sistema de destino.
+
+---
+
+## Aprendizados - 2025-12-11 19:16
+
+### Padrão: Contexto de Implementação/Produto
+
+**Descrição:** O modelo gerou sugestões tecnicamente corretas ou clinicamente válidas, mas que são incompatíveis com as limitações da plataforma de destino (Spider/Daktus Studio) ou já foram implementadas de forma diferente (condicional). Isso indica uma falha na compreensão do contexto de engenharia/produto.
+
+**Severidade:** alta
+**Frequência:** 3
+
+**Exemplos:**
+- o produto é incompatível com a sugestão.
+- já está implementado na condicional.
+- esta funcionalidade não existe no spider/daktus studio.
+
+---
+
+### Padrão: Foco em Usabilidade vs. Implementação
+
+**Descrição:** As sugestões de usabilidade (melhorar descrição, ajustar título) tendem a ser mais aceitas (relevantes), enquanto as sugestões que exigem mudanças estruturais ou que esbarram em limitações de plataforma (eficiência/segurança) são frequentemente marcadas como irrelevantes devido a restrições de implementação.
+
+**Severidade:** media
+**Frequência:** 5
+
+**Exemplos:**
+- Melhorar a Descrição da Pergunta de Ciência e Registro (Provavelmente Relevante)
+- Adicionar Alerta de Risco de Hipercalemia (Pode ser Irrelevante devido a incompatibilidade)
+
+---
+
+### Padrão: Ambiguidade na Relevância Clínica vs. Relevância de Produto
+
+**Descrição:** O feedback 'a sugestão está correta, mas foi implementado de outra forma' indica que a análise identificou uma necessidade clínica real, mas falhou em reconhecer a solução já existente no código ou fluxo de trabalho, resultando em uma sugestão redundante (irrelevante para o produto, mas relevante clinicamente).
+
+**Severidade:** media
+**Frequência:** 1
+
+**Exemplos:**
+- a sugestão está correta, mas foi implementado de outra forma.
+
+---
+
+
+## Métricas - 2025-12-11 19:15
+
+**Protocolo:** athena_has_resumido_novo_v1.0.0_11-12-2025-1852
+**Sessão:** fb-20251211-001
+
+### Breakdown de Sugestões
+
+- **Total geradas:** 11
+- **Revisadas:** 11
+- **Relevantes:** 6 (54.5%)
+- **Irrelevantes:** 5 (45.5%)
+
+### Distribuição por Prioridade
+
+- **Alta:** 1
+- **Média:** 6
+- **Baixa:** 4
+
+**Taxa de Rejeição (Baixa Prioridade):** 25.0%
+
+### Tendência de Melhoria
+
+- **Taxa de Rejeição Atual:** 45.5%
+- **Taxa de Rejeição Acumulada:** 32.9%
+- **Mudança vs Sessão Anterior:** [PIORA] 0.0%
+- **Sessões até agora:** 64
+
+### Padrões de Rejeição Detectados
+
+- **Foco em Usabilidade vs. Implementação:** 5 ocorrências
+- **Contexto de Implementação/Produto:** 3 ocorrências
+- **Ambiguidade na Relevância Clínica vs. Relevância de Produto:** 1 ocorrências
+
+**Categoria Dominante:** Foco em Usabilidade vs. Implementação
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Feedback - 2025-12-11 19:31
+
+**Protocolo:** athena_has_resumido_novo_v1.0.0_11-12-2025-1852
+**Modelo:** anthropic/claude-sonnet-4.5
+
+**Estatísticas:**
+- Total revisado: 19
+- Relevantes: 6
+- Irrelevantes: 13
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_008:** alerta sim
+- **sug_015:** essa funcionalidade não existe no daktus studio
+- **sug_016:** haverá outro protocolo. regras de negócio.
+- **sug_020:** adiciona complexidade e impede autonomia médica.
+- **sug_009:** não existe essa funcionalidade no daktus studio.
+- **sug_012:** não existe essa funcionalidade no daktus studio.
+- **sug_017:** não é uma funcionalidade do daktus studio.
+- **sug_014:** adiciona complexidade, com baixo retorno de eficiencia
+- **sug_001:** no momento, não é interessante. complexidade a toa.
+- **sug_002:** na verdade, essa sugestão é relevante. no entanto, sempre que houver uma sugestão semelhante, deve ser indicada a inserção de uma mensagem de alerta, dentro do medicamento, no campo de "mensagem de alerta", que automaticamente será printada ao médico.
+
+### Padrão Identificado
+
+**Sugestões de baixa prioridade sendo rejeitadas:**
+- Focar em sugestões de média/alta/crítica prioridade
+- Evitar gerar muitas sugestões de baixo impacto
+- Qualidade sobre quantidade
+
+
+---
+
+## Feedback - 2025-12-11 19:31
+
+**Protocolo:** athena_has_resumido_novo_v1.0.0_11-12-2025-1852
+**Modelo:** anthropic/claude-sonnet-4.5
+
+**Estatísticas:**
+- Total revisado: 19
+- Relevantes: 6
+- Irrelevantes: 13
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_008:** alerta sim
+- **sug_015:** essa funcionalidade não existe no daktus studio
+- **sug_016:** haverá outro protocolo. regras de negócio.
+- **sug_020:** adiciona complexidade e impede autonomia médica.
+- **sug_009:** não existe essa funcionalidade no daktus studio.
+- **sug_012:** não existe essa funcionalidade no daktus studio.
+- **sug_017:** não é uma funcionalidade do daktus studio.
+- **sug_014:** adiciona complexidade, com baixo retorno de eficiencia
+- **sug_001:** no momento, não é interessante. complexidade a toa.
+- **sug_002:** na verdade, essa sugestão é relevante. no entanto, sempre que houver uma sugestão semelhante, deve ser indicada a inserção de uma mensagem de alerta, dentro do medicamento, no campo de "mensagem de alerta", que automaticamente será printada ao médico.
+
+### Padrão Identificado
+
+**Sugestões de baixa prioridade sendo rejeitadas:**
+- Focar em sugestões de média/alta/crítica prioridade
+- Evitar gerar muitas sugestões de baixo impacto
+- Qualidade sobre quantidade
+
+
+---
+
+## Insight LLM - 2025-12-11 19:32
+
+**Análise:**
+A análise revela um desalinhamento fundamental entre as sugestões geradas e as necessidades práticas do usuário. Os principais problemas são: (1) Desconhecimento das limitações técnicas do Daktus Studio, resultando em sugestões inviáveis; (2) Falta de consideração sobre a arquitetura modular de protocolos e regras de negócio estabelecidas; (3) Viés excessivo para verificações de segurança que comprometem autonomia médica; (4) Taxa de relevância de apenas 31,6%, indicando baixa precisão na geração de sugestões. O sistema parece gerar sugestões teoricamente válidas do ponto de vista clínico, mas desconectadas da realidade de implementação, fluxo de trabalho e filosofia de design do produto (que valoriza autonomia médica sobre controles restritivos).
+
+**Recomendações:**
+1. **Criar Base de Conhecimento da Plataforma**: Documentar funcionalidades disponíveis no Daktus Studio e consultar antes de gerar sugestões. 2. **Mapear Arquitetura de Protocolos**: Entender quais protocolos existem/estão planejados e seus escopos para evitar duplicação e conflitos. 3. **Priorizar Autonomia Médica**: Reformular abordagem de segurança para focar em suporte informativo (alertas não-bloqueantes) em vez de verificações restritivas. 4. **Implementar Filtro de Viabilidade**: Classificar sugestões por viabilidade técnica (implementável agora/requer desenvolvimento/inviável) antes de apresentar. 5. **Reduzir Volume, Aumentar Precisão**: Gerar menos sugestões, mas com maior taxa de relevância - qualidade sobre quantidade. 6. **Validação Contextual**: Incluir perguntas sobre contexto de implementação, recursos disponíveis e prioridades antes de finalizar análise. 7. **Balancear Categorias**: Evitar sobre-representação de segurança; equilibrar com eficiência, usabilidade e economia. 8. **Testar Sugestões com Critério de Valor Real**: Cada sugestão deve responder: 'Isso resolve um problema real frequente?' e 'É implementável com recursos atuais?'
+
+---
+
+## Aprendizados - 2025-12-11 19:32
+
+### Padrão: desconhecimento_limitacoes_plataforma
+
+**Descrição:** O sistema sugeriu funcionalidades que não existem no Daktus Studio, demonstrando falta de conhecimento sobre as capacidades técnicas da plataforma alvo. Comentários como 'não existe essa funcionalidade no daktus studio' aparecem repetidamente.
+
+**Severidade:** alta
+**Frequência:** 3
+
+**Exemplos:**
+- Sugestões que requerem funcionalidades inexistentes no Daktus Studio
+- Propostas de features sem validação prévia de viabilidade técnica
+- Recomendações que ignoram as limitações da infraestrutura atual
+
+---
+
+### Padrão: conflito_regras_negocio
+
+**Descrição:** Sugestões que conflitam com regras de negócio estabelecidas ou que serão tratadas em outros protocolos específicos. O feedback indica 'haverá outro protocolo. regras de negócio', sugerindo que o sistema não considerou a arquitetura modular dos protocolos.
+
+**Severidade:** alta
+**Frequência:** 1
+
+**Exemplos:**
+- Sugestões que duplicam escopo de outros protocolos planejados
+- Recomendações que violam separação de responsabilidades entre protocolos
+
+---
+
+### Padrão: restricao_autonomia_medica
+
+**Descrição:** Sugestões que adicionam complexidade excessiva ou impedem a autonomia médica na tomada de decisões clínicas. O feedback explícito menciona 'adiciona complexidade e impede autonomia médica', indicando que algumas verificações/alertas são percebidas como obstrutivas.
+
+**Severidade:** alta
+**Frequência:** 1
+
+**Exemplos:**
+- Verificações automáticas que bloqueiam ou dificultam decisões médicas
+- Alertas excessivos que podem gerar fadiga de alerta
+- Controles que removem flexibilidade clínica necessária
+
+---
+
+### Padrão: baixa_taxa_relevancia_geral
+
+**Descrição:** Das 19 sugestões avaliadas, apenas 6 foram consideradas relevantes (31,6%), enquanto 13 foram marcadas como irrelevantes (68,4%). Isso indica um desalinhamento significativo entre o que o sistema considera útil e o que o usuário realmente precisa.
+
+**Severidade:** alta
+**Frequência:** 13
+
+**Exemplos:**
+- 68,4% de taxa de irrelevância nas sugestões avaliadas
+- Apenas 1 em cada 3 sugestões foi considerada relevante
+- Maioria das sugestões não atendeu às necessidades práticas do usuário
+
+---
+
+### Padrão: concentracao_irrelevancia_categoria_seguranca
+
+**Descrição:** A categoria 'segurança' possui 11 sugestões (57,9% do total), mas os comentários indicam que várias dessas sugestões foram consideradas irrelevantes por adicionar complexidade ou impedir autonomia. Há uma possível sobre-representação de verificações de segurança sem considerar praticidade.
+
+**Severidade:** media
+**Frequência:** 11
+
+**Exemplos:**
+- 11 sugestões de segurança em 19 totais
+- Comentários sobre complexidade excessiva e restrição de autonomia
+- Possível viés para super-proteção em detrimento da usabilidade
+
+---
+
+### Padrão: falta_validacao_contexto_implementacao
+
+**Descrição:** As sugestões parecem ter sido geradas sem validação adequada do contexto de implementação real: limitações técnicas da plataforma, fluxo de trabalho atual, recursos disponíveis e prioridades do negócio.
+
+**Severidade:** alta
+**Frequência:** 4
+
+**Exemplos:**
+- Sugestões tecnicamente inviáveis na plataforma atual
+- Recomendações sem considerar custo-benefício de implementação
+- Propostas que ignoram o fluxo de trabalho estabelecido
+
+---
+
+
+## Métricas - 2025-12-11 19:31
+
+**Protocolo:** athena_has_resumido_novo_v1.0.0_11-12-2025-1852
+**Sessão:** fb-20251211-002
+
+### Breakdown de Sugestões
+
+- **Total geradas:** 19
+- **Revisadas:** 19
+- **Relevantes:** 6 (31.6%)
+- **Irrelevantes:** 13 (68.4%)
+
+### Distribuição por Prioridade
+
+- **Alta:** 8
+- **Média:** 10
+- **Baixa:** 1
+
+**Taxa de Rejeição (Baixa Prioridade):** 0.0%
+
+### Tendência de Melhoria
+
+- **Taxa de Rejeição Atual:** 68.4%
+- **Taxa de Rejeição Acumulada:** 34.0%
+- **Mudança vs Sessão Anterior:** [PIORA] 0.0%
+- **Sessões até agora:** 66
+
+### Padrões de Rejeição Detectados
+
+- **baixa_taxa_relevancia_geral:** 13 ocorrências
+- **concentracao_irrelevancia_categoria_seguranca:** 11 ocorrências
+- **falta_validacao_contexto_implementacao:** 4 ocorrências
+- **desconhecimento_limitacoes_plataforma:** 3 ocorrências
+- **conflito_regras_negocio:** 1 ocorrências
+- **restricao_autonomia_medica:** 1 ocorrências
+
+**Categoria Dominante:** baixa_taxa_relevancia_geral
+
+---
+
+
+
+## Feedback - 2025-12-12 21:55
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_12-12-2025-1024
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 1
+- Relevantes: 1
+- Irrelevantes: 0
+
+### Sugestões Relevantes (com comentários)
+
+- **sug_011:** Feedback cancelado pelo usuário
+
+
+---
+
+## Feedback - 2025-12-12 21:55
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_12-12-2025-1024
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 1
+- Relevantes: 1
+- Irrelevantes: 0
+
+### Sugestões Relevantes (com comentários)
+
+- **sug_011:** Feedback cancelado pelo usuário
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Feedback - 2025-12-12 22:18
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_12-12-2025-1024
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 19
+- Relevantes: 17
+- Irrelevantes: 2
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_012:** na verdade, quando a condicional se refere a algo oculto, ela quer dizer que a condicional para que esteja oculto é aquela. isto é: a sua sugestão esta correta e a condicional também.
+- **sug_008:** este feedback é semelhante ao anterior. oculto se refere ao ato de desaparecer no protocolo. a condicional é para ocultar. logo, está correto.
+
+
+---
+
+## Feedback - 2025-12-12 22:18
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_12-12-2025-1024
+**Modelo:** google/gemini-2.5-flash-preview-09-2025
+
+**Estatísticas:**
+- Total revisado: 19
+- Relevantes: 17
+- Irrelevantes: 2
+
+### Sugestões Rejeitadas (com comentários)
+
+- **sug_012:** na verdade, quando a condicional se refere a algo oculto, ela quer dizer que a condicional para que esteja oculto é aquela. isto é: a sua sugestão esta correta e a condicional também.
+- **sug_008:** este feedback é semelhante ao anterior. oculto se refere ao ato de desaparecer no protocolo. a condicional é para ocultar. logo, está correto.
+
+
+---
+
+## Insight LLM - 2025-12-12 22:18
+
+**Análise:**
+O relatório demonstrou uma qualidade excepcionalmente alta, com 17 das 19 sugestões sendo consideradas relevantes. A principal área de melhoria reside na interpretação semântica da lógica de programação do protocolo, especificamente em como as condições de visibilidade (ocultar/exibir) são implementadas. O modelo falhou em reconhecer que a condição de ocultação é, por definição, a regra que torna o elemento 'oculto', levando a sugestões irrelevantes que o usuário precisou corrigir explicitamente nos comentários.
+
+**Recomendações:**
+1. **Refinar o Contexto de UI:** Incluir no contexto de análise que, em protocolos de formulário, a lógica condicional para 'ocultar' um campo é uma funcionalidade esperada e correta. A análise deve focar em se essa lógica é *contraditória* ou *ambígua* para o usuário final, e não apenas se ela existe. 2. **Priorização de Categorias:** Continuar a priorizar a profundidade das análises nas categorias 'Segurança' e 'Eficiência', dada a alta relevância percebida pelo especialista clínico.
+
+---
+
+## Aprendizados - 2025-12-12 22:18
+
+### Padrão: Semantic Misinterpretation of UI Control
+
+**Descrição:** O modelo interpretou a lógica condicional de ocultação ('oculto') como potencialmente incorreta ou confusa, quando na verdade ela representava a funcionalidade correta e intencional do protocolo (a condição existe para ocultar o elemento). Isso levou a falsos positivos (as 2 sugestões irrelevantes).
+
+**Severidade:** media
+**Frequência:** 2
+
+**Exemplos:**
+- Ajustar Condição de Exibição do Nó de Resultados de Exames Complementares (provável)
+- Sugestão relacionada à condicional de ocultação (conforme comentários do usuário)
+
+---
+
+### Padrão: High Clinical and Data Integrity Precision
+
+**Descrição:** A taxa de relevância de 89.5% (17/19) demonstra alta precisão na identificação de lacunas críticas, especialmente em áreas de segurança clínica e eficiência de dados (mapeamento de variáveis e rastreamento de doenças).
+
+**Severidade:** baixa
+**Frequência:** 17
+
+**Exemplos:**
+- Adicionar Rastreamento de IC (BNP/NT-proBNP) para DM2 Assintomático
+- Mapeamento de Variáveis para Cálculo PREVENT (Idade, Sexo, PAS, eGFR)
+
+---
+
+
+## Métricas - 2025-12-12 22:18
+
+**Protocolo:** amil_ficha_cardiologia_v2.0.0_12-12-2025-1024
+**Sessão:** fb-20251212-002
+
+### Breakdown de Sugestões
+
+- **Total geradas:** 19
+- **Revisadas:** 19
+- **Relevantes:** 17 (89.5%)
+- **Irrelevantes:** 2 (10.5%)
+
+### Distribuição por Prioridade
+
+- **Alta:** 3
+- **Média:** 12
+- **Baixa:** 4
+
+**Taxa de Rejeição (Baixa Prioridade):** 0.0%
+
+### Tendência de Melhoria
+
+- **Taxa de Rejeição Atual:** 10.5%
+- **Taxa de Rejeição Acumulada:** 32.3%
+- **Mudança vs Sessão Anterior:** [PIORA] 0.0%
+- **Sessões até agora:** 70
+
+### Padrões de Rejeição Detectados
+
+- **High Clinical and Data Integrity Precision:** 17 ocorrências
+- **Semantic Misinterpretation of UI Control:** 2 ocorrências
+
+**Categoria Dominante:** High Clinical and Data Integrity Precision
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

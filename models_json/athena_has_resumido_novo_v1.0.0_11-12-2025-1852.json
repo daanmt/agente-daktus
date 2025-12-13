@@ -1,0 +1,1687 @@
+{
+  "metadata": {
+    "company": "athena",
+    "name": "has_resumido_novo",
+    "version": "1.0.0"
+  },
+  "nodes": [
+    {
+      "id": "node-dados-iniciais",
+      "type": "custom",
+      "position": {
+        "x": 900,
+        "y": 100
+      },
+      "data": {
+        "label": "Dados Iniciais",
+        "condicao": "",
+        "descricao": "<p><strong>Protocolo de Hipertensão Arterial - Daktus</strong></p><p>Este protocolo é baseado na Diretriz Brasileira de Hipertensão Arterial 2025(SBC) e diretrizes internacionais.</p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P-ciencia-registro",
+            "nodeId": "node-dados-iniciais",
+            "uid": "ciencia_registro",
+            "titulo": "<p>**Este protocolo é uma ferramenta institucional de registro junto ao prontuário do paciente. Em concordância com a resolução do CFM nº 1.638/2002, este documento possui valor médico legal.**</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "opt-ciencia",
+                "id": "opcao_ciencia_registro",
+                "label": "Ciente de que as informações preenchidas neste protocolo serão registradas no prontuário",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P-idade",
+            "nodeId": "node-dados-iniciais",
+            "uid": "idade",
+            "titulo": "<p>Idade:</p>",
+            "descricao": "",
+            "condicional": "oculto",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "P-sexo",
+            "nodeId": "node-dados-iniciais",
+            "uid": "sexo",
+            "titulo": "<p>Sexo:</p>",
+            "descricao": "",
+            "condicional": "oculto",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "opt-masculino",
+                "id": "masculino",
+                "label": "Masculino",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "opt-feminino",
+                "id": "feminino",
+                "label": "Feminino",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-tipo-consulta",
+      "type": "custom",
+      "position": {
+        "x": 1800,
+        "y": 100
+      },
+      "data": {
+        "label": "Tipo de Consulta",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P-tipo-consulta",
+            "nodeId": "node-tipo-consulta",
+            "uid": "tipo_consulta",
+            "titulo": "<p>Tipo de consulta atual:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "opt-investigacao",
+                "id": "consulta_investigacao",
+                "label": "Consulta de investigação (paciente ainda sem diagnóstico de HAS)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "opt-rotina",
+                "id": "consulta_rotina",
+                "label": "Consulta de rotina do hipertenso(anual)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "opt-retorno",
+                "id": "consulta_retorno",
+                "label": "Consulta de retorno do hipertenso (checar exames e ajuste medicamentoso)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "P1f4971aa-a59f-4ae7-adbb-20d06b072509",
+            "nodeId": "node-tipo-consulta",
+            "uid": "pas_consultorio",
+            "titulo": "<p>Pressão arterial sistólica no consultório - PAS (mmHg):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "P1abcdd6d-0db7-4ea7-9f40-26ec6c46ec00",
+            "nodeId": "node-tipo-consulta",
+            "uid": "pad_consultorio",
+            "titulo": "<p>Pressão arterial diastólica no consultório - PAD (mmHg):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          },
+          {
+            "id": "Pf8d2f4d7-c11c-4f39-89c1-727b1e752937",
+            "nodeId": "node-tipo-consulta",
+            "uid": "medicamentos_uso",
+            "titulo": "<p>Medicamentos anti-hipertensivos em uso:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "3fc28210-19a0-4af0-abb5-ef3bf3b7c70f",
+                "id": "nenhum_antihas",
+                "label": "Nenhum antihipertensivo em uso no momento",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "d8e95a64-51a2-482a-b561-602c575839b3",
+                "id": "ieca",
+                "label": "IECA (enalapril, ramipril, lisinopril, outros)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b0bba1ed-2aaf-4d2e-a495-ec4b509813c1",
+                "id": "bra",
+                "label": "BRA (losartana, candesartana, outros)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4ea6ae95-59fb-489b-8bbd-5bb058311e75",
+                "id": "bcc",
+                "label": "BCC (anlodipino, nifedipino)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "9b94983d-20f2-4386-9e55-e1d1f7c3bc1a",
+                "id": "diureticos",
+                "label": "Diuréticos tiazídicos (hidroclorotiazida, clortalidona, outros)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "a6370d7b-b1f3-48a2-9c37-587661c14005",
+                "id": "antagonistas_aldosterona",
+                "label": "Antagonistas do receptor aldosterona (espironolactona, finererona)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "a189ee68-478a-45b8-88bf-489c907141e6",
+                "id": "betabloqueador",
+                "label": "Betabloqueadores(atenolol, metoprolol, outros)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "11fcc0e0-13d1-45da-8e97-3dace65427d8",
+                "id": "vasodilatadores",
+                "label": "Vasodilatadores(hidralazina, clonidina, outros)",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pe4be644d-e50a-4573-b043-cfa5fabd54d8",
+            "nodeId": "node-tipo-consulta",
+            "uid": "exames_realizados_1ano",
+            "titulo": "<p>Exames gerais realizados no último ano(12 meses):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "4395551c-56bb-494b-9c93-6153b26809c4",
+                "id": "mapa",
+                "label": "MAPA",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "938ce39c-a68e-468e-959f-fc3f537a27cb",
+                "id": "hemograma",
+                "label": "Hemograma",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4e6c14ce-9d2b-40c5-a62a-00f797796f8f",
+                "id": "eletrolitos",
+                "label": "Eletrólitos",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "81b65849-69c5-4f69-a29f-a54b2a18ee4d",
+                "id": "perfil_lipidico",
+                "label": "Perfil lipídico(colesterol e frações)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d93d8b19-3dbe-4a34-a1dc-7574ca08dafe",
+                "id": "glicemia_glicada",
+                "label": "Glicemia e hemoglobina glicada",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "57de419a-12ac-4182-933e-5b88d7327992",
+                "id": "tsh",
+                "label": "TSH",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "501e7216-3302-49e4-8796-30fcd202cc57",
+                "id": "aldosterona_renina",
+                "label": "Aldosterona e renina",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "b97c5e0d-3234-4ec1-93f5-5200e29fde98",
+                "id": "urina_exames_1ano",
+                "label": "Urina 1 ou albuminúria",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "0c4b603d-2fa4-492c-a30b-9d6ebcb4ff29",
+                "id": "none_exames_1ano",
+                "label": "Exames acima não realizados",
+                "preselected": false,
+                "exclusive": true
+              }
+            ]
+          },
+          {
+            "id": "P1c1f5e6c-19c9-4509-b13d-26761748b522",
+            "nodeId": "node-tipo-consulta",
+            "uid": "exames_imagem_realizados_1ano",
+            "titulo": "<p>Exames de imagem realizados no último ano(12 meses):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "938ce39c-a68e-468e-959f-fc3f537a27cb",
+                "id": "fundoscopia",
+                "label": "Fundoscopia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4395551c-56bb-494b-9c93-6153b26809c4",
+                "id": "ecg",
+                "label": "Eletrocardiograma",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "4e6c14ce-9d2b-40c5-a62a-00f797796f8f",
+                "id": "eco",
+                "label": "Ecocardiograma",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "81b65849-69c5-4f69-a29f-a54b2a18ee4d",
+                "id": "usg_doppler_renal",
+                "label": "Ultrassom doppler de arterias renais",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d93d8b19-3dbe-4a34-a1dc-7574ca08dafe",
+                "id": "polissonografia",
+                "label": "Polissonografia",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "501e7216-3302-49e4-8796-30fcd202cc57",
+                "id": "none_exames_imagem_1ano",
+                "label": "Exames acima não realizados",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-investigacao",
+      "type": "custom",
+      "position": {
+        "x": 2700,
+        "y": 100
+      },
+      "data": {
+        "label": "Investigação Diagnóstica",
+        "condicao": "'consulta_investigacao' in tipo_consulta",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "Pb4ad5da6-522e-4381-b8cb-4a341427c08e",
+            "nodeId": "node-investigacao",
+            "uid": "suspeita_sahos_1",
+            "titulo": "<p>Suspeita clínica de síndrome de apneia e hipopneia do sono(SAHOS)?<br><br>-Pacientes obesos<br>-Pacientes com sonolência diurna<br>-Pacientes com queixa de roncos em alto volume a noite</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P95e365cf-378d-43bc-88a0-cb421b8d0acc",
+            "nodeId": "node-investigacao",
+            "uid": "suspeita_hiperaldo",
+            "titulo": "<p>Suspeita clínica de síndrome de hiperaldosteronismo?<br><br>-Pacientes jovens<br>-Hipocalemia em exame prévio<br>-História precoce de evento cardiovascular</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "Pbf6cc82d-eb20-43e0-b693-91d8216a7073",
+            "nodeId": "node-investigacao",
+            "uid": "suspeita_feocromocitoma",
+            "titulo": "<p>Suspeita clínica de feocromocitoma?<br><br>-Pacientes jovens<br>-Crises de hipertensão, cefaleia, sudorese, irritação e flush<br>-Picos hipertensivos em paroxismos</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-rotina-hipertenso",
+      "type": "custom",
+      "position": {
+        "x": 3600,
+        "y": 100
+      },
+      "data": {
+        "label": "Rotina do Hipertenso",
+        "condicao": "'consulta_rotina' in tipo_consulta",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P-controle-has",
+            "nodeId": "node-rotina-hipertenso",
+            "uid": "controle_has",
+            "titulo": "<p><strong>Paciente se encontra em meta terapêutica definida?</strong><br><br>-No geral, <strong>PAS&lt;130mmHg e PAD&lt;80mmHg</strong><br>-Meta <strong>individualizada</strong> para idosos frágeis e pacientes com risco de queda<br><br>**São preferíveis métodos domiciliares para se definir se está em meta ou não.</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "opt-controlada",
+                "id": "has_controlada",
+                "label": "Paciente em meta terapêutica",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "opt-nao-controlada",
+                "id": "has_nao_controlada",
+                "label": "Paciente fora de meta terapêutica",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pf82ddc80-46c4-4063-ae5b-b4a637af857c",
+            "nodeId": "node-rotina-hipertenso",
+            "uid": "sintomas_ic",
+            "titulo": "<p><strong>Paciente apresenta sintomas relacionados a insuficiência cardíaca?</strong><br><br>-Ortopneia ou dispneia com limitação de atividades<br>-Dispneia paroxística noturna</p><p>-Edema de membros inferiores<br>-Outros sintomas pertinentes<br></p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P8ea96c13-a7e5-41f1-8bdc-0da1c8652810",
+            "nodeId": "node-rotina-hipertenso",
+            "uid": "contraindicacao_mrpa",
+            "titulo": "<p>Paciente possui dificuldades em realizar a medida residencial de pressão arterial(MRPA)?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'consulta_rotina'in tipo_consulta",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "05befbb4-fd22-4ad1-8732-b9d1a72bed97",
+                "id": "sem_ci_mrpa",
+                "label": "Sem dificuldades observadas para realizar MRPA",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "225e0e92-b791-41d9-b6d8-288bfab700cb",
+                "id": "cognicao_dificuldade_mrpa",
+                "label": "Dificuldade cognitiva ou de manusear o aparelho",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "9a7ba5cf-e270-4c1a-8844-fb1cd209e84a",
+                "id": "calibracao_dificuldade_mrpa",
+                "label": "Aparelho desconhecido ou impossibilidade de calibração",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "f6527499-1684-4769-9ce9-6cf986bb722a",
+                "id": "financeiro_dificuldade_mrpa",
+                "label": "Impossibilidade financeira ou social de adquirir um aparelho validado pela anvisa",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pbaec635e-1c17-4e36-a19c-ad4c73bcbe43",
+            "nodeId": "node-rotina-hipertenso",
+            "uid": "desejo_calculo_prevent",
+            "titulo": "<p>Deseja calcular o escore de <strong>risco cardiovascular PREVENT</strong>?<br><br>*Khan, Sadiya S et al. “Development and Validation of the American Heart Association's PREVENT Equations.” <em>Circulation</em> vol. 149,6 (2024): 430-449. doi:10.1161/CIRCULATIONAHA.123.067626</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "'consulta_retorno' in tipo_consulta",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "true"
+          },
+          {
+            "id": "Pbd286700-365a-4861-8279-db3ac899b52f",
+            "nodeId": "node-rotina-hipertenso",
+            "uid": "suspeita_sahos_2",
+            "titulo": "<p>Suspeita clínica de síndrome de apneia e hipopneia do sono(SAHOS)?<br><br>-Pacientes obesos<br>-Pacientes com sonolência diurna<br>-Pacientes com queixa de roncos em alto volume a noite</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "ha_resistente==True",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node-retorno-hipertenso",
+      "type": "custom",
+      "position": {
+        "x": 4500,
+        "y": 100
+      },
+      "data": {
+        "label": "Retorno do Hipertenso - avaliação PREVENT",
+        "condicao": "'consulta_retorno' in tipo_consulta and desejo_calculo_prevent==True",
+        "descricao": "<p>Preencha os exames e dados abaixo, que irão retornar automaticamente para o prontuário e serão usados para cálculo do risco cardiovascular em 10 anos do seu paciente.</p>",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "P-uso-estatinas",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "uso_estatinas",
+            "titulo": "<p>Uso atual de estatinas:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "choice",
+            "options": [
+              {
+                "iid": "opt-sim-estatina",
+                "id": "sim_estatinas",
+                "label": "Sim",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "opt-nao-estatina",
+                "id": "nao_estatinas",
+                "label": "Não",
+                "preselected": false,
+                "exclusive": false
+              }
+            ]
+          },
+          {
+            "id": "Pc912b2a1-8e19-4efe-bd83-6a5e060bc0e3",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "ecg_resultado",
+            "titulo": "<p>Alterações de sobrecarga ou isquêmicas no ECG de rotina realizado?</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "boolean",
+            "options": [],
+            "defaultValue": "false"
+          },
+          {
+            "id": "P-colesterol-total",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "colesterol_total",
+            "titulo": "<p>Colesterol Total (mg/dL):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          },
+          {
+            "id": "P-hdl",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "hdl",
+            "titulo": "<p>HDL (mg/dL):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          },
+          {
+            "id": "P-creatinina",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "creatinina",
+            "titulo": "<p>Creatinina (mg/dL):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          },
+          {
+            "id": "P1ce68736-fa86-4af4-9157-fa84c83e9e92",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "potassio",
+            "titulo": "<p>Potássio (mEq/L ou mmol/L):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          },
+          {
+            "id": "P-albuminuria",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "albuminuria",
+            "titulo": "<p>Relação Albuminúria/Creatininúria (mg/g):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          },
+          {
+            "id": "P-glicemia",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "glicemia",
+            "titulo": "<p>Glicemia de jejum (mg/dL):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          },
+          {
+            "id": "P34b71b34-239a-477b-b07d-8d9e438e193d",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "glicada",
+            "titulo": "<p>Hemoglobina glicada (%):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": [],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bc507d55-a4fa-41eb-899c-49808cd139f4",
+      "type": "custom",
+      "position": {
+        "x": 5400,
+        "y": 100
+      },
+      "data": {
+        "label": "Retorno do Hipertenso - LOA e risco cardiovascular",
+        "condicao": "'consulta_retorno' in tipo_consulta and desejo_calculo_prevent==False",
+        "descricao": "",
+        "condicional": "visivel",
+        "questions": [
+          {
+            "id": "bf504bf7-70a4-49f5-a7ab-b28d617708a0",
+            "nodeId": "node-retorno-hipertenso",
+            "uid": "exames_gerais",
+            "titulo": "<p>Alterações em exames realizados:</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "multiChoice",
+            "options": [
+              {
+                "iid": "fc16785b-dc30-46b9-bb38-527764af5d8d",
+                "id": "sem_alteracoes_exames",
+                "label": "Sem lesões de órgão alvo ou alterações significativas",
+                "preselected": true,
+                "exclusive": true
+              },
+              {
+                "iid": "330ad563-88e7-45d9-ac3d-576e844382f9",
+                "id": "ldl_alteracoes_exames",
+                "label": "LDL fora de meta de acordo com risco CV",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "d71c8b5b-c614-4daf-a3a9-7793d73987c7",
+                "id": "drc_alteracoes_exames",
+                "label": "Disfunção renal(ClCr < 60) ou albuminúria > 30mg/g em exames",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "0e61b5dd-38f5-4e0a-a9bc-39a6ef970da5",
+                "id": "ecg_alteracoes_exames",
+                "label": "ECG com alterações de sobrecarga ou isquêmicas",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "044fcc26-014b-4138-8844-c3a86d2a5d9d",
+                "id": "hiperuricemia_alteracoes_exames",
+                "label": "Hiperuricemia (Ácido úrico)",
+                "preselected": false,
+                "exclusive": false
+              },
+              {
+                "iid": "11fa102b-2436-4840-9cae-223070a8cdd0",
+                "id": "potassio_alteracoes_exames",
+                "label": "Distúrbios do potássio",
+                "preselected": false,
+                "exclusive": false
+              }
+            ],
+            "opcional": true,
+            "naDescricao": "Não disponível"
+          }
+        ]
+      }
+    },
+    {
+      "id": "summary-processamento",
+      "type": "summary",
+      "position": {
+        "x": 6300,
+        "y": 100
+      },
+      "data": {
+        "label": "Processamento Clínico",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "clinicalExpressions": [
+          {
+            "id": "expr-0be6e4f8-fe2f-4f5d-99b0-dfe3cb0a8a9a",
+            "name": "ha_resistente",
+            "formula": "selected_count(medicamentos_uso, 'ieca', 'diureticos', 'bra', 'bcc', 'betabloqueador', 'vasodilatadores', 'antagonistas_aldosterona')>=3 and 'diureticos' in medicamentos_uso and 'has_nao_controlada' in controle_has",
+            "description": "Diagnóstico de HAS baseado nos critérios da diretriz",
+            "template": ""
+          },
+          {
+            "id": "expr-11214c61-b80d-46cd-89ab-0d146145b0c1",
+            "name": "tfge",
+            "formula": "(142 * ((creatinina / (0.7 if 'feminino' in sexo else 0.9)) ** ((-0.241 if creatinina <= 0.7 else -1.2) if 'feminino' in sexo else (-0.302 if creatinina <= 0.9 else -1.2))) * (0.9938 ** idade) * (1.012 if 'feminino' in sexo else 1)) if (creatinina and idade and sexo) else None",
+            "description": "Diagnóstico de HAS baseado nos critérios da diretriz",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-cage",
+            "name": "prevent_cage",
+            "formula": "(idade - 55) / 10",
+            "description": "Variável cage para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-cnhdl",
+            "name": "prevent_cnhdl",
+            "formula": "(0 if (colesterol_total is None or hdl is None) else (colesterol_total - hdl - 3.5)) if ('consulta_retorno' in tipo_consulta) else 0",
+            "description": "Variável cnhdl para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-chdl",
+            "name": "prevent_chdl",
+            "formula": "(0 if (hdl is None) else ((hdl - 1.3) / 0.3)) if ('consulta_retorno' in tipo_consulta) else 0",
+            "description": "Variável chdl para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-csbp",
+            "name": "prevent_csbp",
+            "formula": "(min(pas_atual if pas_atual else 110, 110) - 110) / 20 if ('consulta_retorno' in tipo_consulta) else 0",
+            "description": "Variável csbp para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-csbp2",
+            "name": "prevent_csbp2",
+            "formula": "(max(pas_atual if pas_atual else 130, 110) - 130) / 20 if ('consulta_retorno' in tipo_consulta) else 0",
+            "description": "Variável csbp2 para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-diabetes",
+            "name": "prevent_diabetes",
+            "formula": "1 if ('diabetes' in fatores_risco or (glicemia and glicemia >= 126)) else 0",
+            "description": "Variável diabetes para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-smoking",
+            "name": "prevent_smoking",
+            "formula": "1 if ('tabagismo' in fatores_risco) else 0",
+            "description": "Variável tabagismo para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-cegfr",
+            "name": "prevent_cegfr",
+            "formula": "(min(tfge if tfge else 60, 60) - 60) / -15 if ('consulta_retorno' in tipo_consulta and tfge) else 0",
+            "description": "Variável cegfr para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-cegfr2",
+            "name": "prevent_cegfr2",
+            "formula": "(max(tfge if tfge else 90, 60) - 90) / -15 if ('consulta_retorno' in tipo_consulta and tfge) else 0",
+            "description": "Variável cegfr2 para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-antihtn",
+            "name": "prevent_antihtn",
+            "formula": "(1) if (True) else (1)",
+            "description": "Variável anti-hipertensivos para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-statin",
+            "name": "prevent_statin",
+            "formula": "1 if ('sim_estatinas' in uso_estatinas) else 0",
+            "description": "Variável estatinas para cálculo PREVENT",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-score-feminino",
+            "name": "prevent_score_feminino",
+            "formula": "(0.7939 * prevent_cage + 0.0305 * prevent_cnhdl + (-0.1607) * prevent_chdl + (-0.2394) * prevent_csbp + 0.36 * prevent_csbp2 + 0.8668 * prevent_diabetes + 0.5361 * prevent_smoking + 0.6046 * prevent_cegfr + 0.0434 * prevent_cegfr2 + 0.3152 * prevent_antihtn + (-0.1478) * prevent_statin + (-0.0664) * prevent_csbp2 * prevent_antihtn + 0.1198 * prevent_cnhdl * prevent_statin + (-0.082) * prevent_cage * prevent_cnhdl + 0.0307 * prevent_cage * prevent_chdl + (-0.0946) * prevent_cage * prevent_csbp2 + (-0.2706) * prevent_cage * prevent_diabetes + (-0.0787) * prevent_cage * prevent_smoking + (-0.1638) * prevent_cage * prevent_cegfr + (-3.3077)) if ('feminino' in sexo and 'consulta_retorno' in tipo_consulta) else 0",
+            "description": "Score PREVENT para mulheres",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-score-masculino",
+            "name": "prevent_score_masculino",
+            "formula": "(0.7689 * prevent_cage + 0.0736 * prevent_cnhdl + (-0.0954) * prevent_chdl + (-0.4347) * prevent_csbp + 0.3363 * prevent_csbp2 + 0.7693 * prevent_diabetes + 0.4387 * prevent_smoking + 0.5379 * prevent_cegfr + 0.0165 * prevent_cegfr2 + 0.2889 * prevent_antihtn + (-0.1337) * prevent_statin + (-0.0476) * prevent_csbp2 * prevent_antihtn + 0.1503 * prevent_cnhdl * prevent_statin + (-0.0518) * prevent_cage * prevent_cnhdl + 0.0191 * prevent_cage * prevent_chdl + (-0.1049) * prevent_cage * prevent_csbp2 + (-0.2252) * prevent_cage * prevent_diabetes + (-0.0895) * prevent_cage * prevent_smoking + (-0.1543) * prevent_cage * prevent_cegfr + (-3.0312)) if ('masculino' in sexo and 'consulta_retorno' in tipo_consulta) else 0",
+            "description": "Score PREVENT para homens",
+            "template": ""
+          },
+          {
+            "id": "expr-prevent-risco-final",
+            "name": "prevent_risco_cardiovascular",
+            "formula": "(exp(prevent_score_feminino if 'feminino' in sexo else prevent_score_masculino) / (1 + exp(prevent_score_feminino if 'feminino' in sexo else prevent_score_masculino)) * 100) if ('consulta_retorno' in tipo_consulta) else 0",
+            "description": "Risco cardiovascular PREVENT em 10 anos (%)",
+            "template": ""
+          }
+        ],
+        "templateMarkdown": ""
+      }
+    },
+    {
+      "id": "conduta-principal",
+      "type": "conduct",
+      "position": {
+        "x": 7200,
+        "y": 100
+      },
+      "data": {
+        "label": "Conduta Clínica",
+        "condicao": "",
+        "descricao": "",
+        "condicional": "visivel",
+        "conduta": "conclusao",
+        "condutaDataNode": {
+          "orientacao": [
+            {
+              "id": "orient-mev-geral",
+              "nome": "Mudanças de Estilo de Vida",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<p><strong>ORIENTAÇÕES DE MUDANÇA DE ESTILO DE VIDA</strong></p><p><strong>1. CONTROLE DO PESO:</strong></p><p>• Meta: IMC abaixo de 25 kg/m² para adultos</p><p>• Circunferência abdominal: < 102 cm (homens) e < 88 cm (mulheres)</p><p>• Perda de 1 kg pode reduzir PAS em ~1 mmHg</p><p><strong>2. ALIMENTAÇÃO SAUDÁVEL (Dieta DASH):</strong></p><p>• Consumir frutas, vegetais e grãos integrais</p><p>• Laticínios com baixo teor de gordura</p><p>• Carnes magras e oleaginosas</p><p>• <strong>REDUZIR SAL:</strong> Máximo 5g/dia (1 colher de chá)</p><p>• <strong>AUMENTAR POTÁSSIO:</strong> Mínimo 3,5g/dia (frutas, vegetais)</p><p>• <strong>ÁLCOOL:</strong> Máximo 1 dose/dia (mulheres) ou 2 doses/dia (homens)</p><p><strong>3. ATIVIDADE FÍSICA:</strong></p><p>• Aeróbico: 150 min/semana intensidade moderada ou 75 min/semana vigorosa</p><p>• Resistido: 2-3x/semana, 8-10 exercícios</p><p>• Evitar sedentarismo: levantar a cada 30 minutos</p><p><strong>4. GERENCIAMENTO DO ESTRESSE:</strong></p><p>• Meditação: 2 sessões de 20 min/dia</p><p>• Respiração lenta: 6-10 respirações/min por 15-20 min/dia</p><p>• Yoga e práticas espirituais</p><p><strong>5. PARAR DE FUMAR</strong></p><p><strong>6. SONO ADEQUADO:</strong></p><p>• Horários regulares de sono</p><p>• 7-9 horas por noite</p><p>• Ambiente tranquilo e escuro</p>"
+            },
+            {
+              "id": "orient-mrpa",
+              "nome": "Orientações para MRPA",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_investigacao' in tipo_consulta or 'consulta_rotina' in tipo_consulta",
+              "conteudo": "<p><strong>MEDIDA RESIDENCIAL DA PRESSÃO ARTERIAL (MRPA)</strong></p><p><strong>PREPARAÇÃO (30 minutos antes):</strong></p><p>• Não fumar</p><p>• Não consumir cafeína</p><p>• Não comer ou beber</p><p>• Não fazer exercícios</p><p>• Esvaziar a bexiga</p><p>• Descansar 5 minutos em ambiente calmo</p><p><strong>DURANTE A MEDIÇÃO:</strong></p><p>• Sentar com costas apoiadas</p><p>• Pés no chão, sem cruzar</p><p>• Braço nu e relaxado na altura do coração</p><p>• Manguito 2-3 cm acima do cotovelo</p><p>• Não falar durante a medição</p><p>• 3 medições com 1 minuto de intervalo</p><p><strong>QUANDO MEDIR:</strong></p><p>• Manhã: antes dos medicamentos e café</p><p>• Noite: antes de deitar</p><p>• Frequência: 4-6 dias por semana</p><p><strong>VALORES NORMAIS (MRPA):</strong></p><p>• PAS < 130 mmHg</p><p>• PAD < 80 mmHg</p><p>• Valores ≥ 130/80 mmHg indicam HAS</p>"
+            },
+            {
+              "id": "orient-prevent",
+              "nome": "Resultado PREVENT",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_retorno' in tipo_consulta and prevent_risco_cardiovascular > 0",
+              "conteudo": "<p><strong>CALCULADORA PREVENT - RISCO CARDIOVASCULAR EM 10 ANOS</strong></p><p>Seu risco cardiovascular calculado: <strong>{prevent_risco_cardiovascular:.1f}%</strong></p><p><strong>INTERPRETAÇÃO:</strong></p><p>• <strong>Baixo risco:</strong> < 5%</p><p>• <strong>Risco intermediário:</strong> 5-20%</p><p>• <strong>Alto risco:</strong> > 20%</p><p><strong>RECOMENDAÇÕES BASEADAS NO RISCO:</strong></p><p>• Baixo risco: Manter estilo de vida saudável, controle da PA</p><p>• Risco intermediário: Considerar terapia medicamentosa, intensificar MEV</p><p>• Alto risco: Terapia medicamentosa obrigatória, metas mais rigorosas</p>"
+            },
+            {
+              "id": "orient-pressao-alta-casa",
+              "nome": "O que fazer se a pressão subir em casa",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<p><strong>O QUE FAZER SE SUA PRESSÃO ARTERIAL ESTIVER ALTA EM CASA</strong></p><p><strong>EMERGÊNCIA HIPERTENSIVA (PA ≥ 180/110 mmHg + SINTOMAS):</strong></p><p>Procure IMEDIATAMENTE o pronto-socorro se tiver:</p><p>• Dor no peito ou desconforto</p><p>• Falta de ar intensa</p><p>• Dor de cabeça muito forte e súbita</p><p>• Alterações na visão (visão embaçada, dupla)</p><p>• Confusão mental ou sonolência</p><p>• Dificuldade para falar ou mover um lado do corpo</p><p>• Convulsões</p><p><strong>PRESSÃO ALTA SEM SINTOMAS GRAVES:</strong></p><p>• Mantenha a calma</p><p>• Sente-se em ambiente tranquilo e descanse por 30 minutos</p><p>• Refaça a medição após o repouso</p><p>• NÃO tome doses extras de medicamentos sem orientação médica</p><p>• Entre em contato com seu médico para orientações</p><p>• Marque consulta em 1-7 dias se a pressão continuar elevada</p>"
+            }
+          ],
+          "exame": [
+            {
+              "id": "exam-mapa",
+              "nome": "Monitorização Ambulatorial da Pressão Arterial (MAPA)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_investigacao' in tipo_consulta or not 'sem_ci_mrpa' in contraindicacao_mrpa",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-mapa",
+                  "sistema": "MAPA",
+                  "valor": "40901020"
+                }
+              ],
+              "categoria": "Monitorização",
+              "cid": "R03.0",
+              "indicacao": "Confirmação diagnóstica quando MRPA não é possível",
+              "alerta": "Alternativa ao MRPA",
+              "material": "Equipamento ambulatorial"
+            },
+            {
+              "id": "exam-hemograma",
+              "nome": "Hemograma Completo",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'hemograma' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-hemograma",
+                  "sistema": "Hemograma",
+                  "valor": "40301010"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação inicial de hipertensão",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-potassio",
+              "nome": "Potássio",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'eletrolitos' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-potassio",
+                  "sistema": "Potássio",
+                  "valor": "40302083"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação de eletrólitos em hipertensos",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-calcio",
+              "nome": "Cálcio",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_investigacao' in tipo_consulta and not 'eletrolitos' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-calcio",
+                  "sistema": "Cálcio",
+                  "valor": "40302024"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação inicial de hipertensão",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-creatinina",
+              "nome": "Creatinina",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'creatinina' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-creatinina",
+                  "sistema": "Creatinina",
+                  "valor": "40302040"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação da função renal",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-perfil-lipidico",
+              "nome": "Perfil Lipídico Completo",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'perfil_lipidico' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-lipidico",
+                  "sistema": "Perfil Lipídico",
+                  "valor": "40302059"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação do risco cardiovascular",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-glicemia",
+              "nome": "Glicemia de Jejum",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'glicemia_glicada' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-glicemia",
+                  "sistema": "Glicemia",
+                  "valor": "40302040"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Rastreio de diabetes",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "ehuiudxp",
+              "nome": "Hemoglobina glicada (Fração A1c) - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'glicemia_glicada' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-glicemia",
+                  "sistema": "TUSS",
+                  "valor": "40302733"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Rastreio de diabetes",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-tsh",
+              "nome": "Hormônio Tireoestimulante (TSH)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_investigacao' in tipo_consulta and not 'eletrolitos' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-tsh",
+                  "sistema": "TSH",
+                  "valor": "40316165"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação inicial de hipertensão",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-urina",
+              "nome": "Exame Sumário de Urina",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_investigacao' in tipo_consulta and not 'urina_exames_1ano' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-urina",
+                  "sistema": "Urina I",
+                  "valor": "40304035"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação inicial de hipertensão",
+              "alerta": "",
+              "material": "Urina"
+            },
+            {
+              "id": "exam-rac",
+              "nome": "Relação Albuminúria/Creatininúria",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'urina_exames_1ano' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-rac",
+                  "sistema": "Microalbuminúria",
+                  "valor": "40304043"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação de lesão renal",
+              "alerta": "",
+              "material": "Urina"
+            },
+            {
+              "id": "aomqigd2",
+              "nome": "Metanefrinas plasmáticas",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "'consulta_investigacao' in tipo_consulta and suspeita_feocromocitoma==True",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-rac",
+                  "sistema": "TUSS",
+                  "valor": "40321398"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação de lesão renal",
+              "alerta": "",
+              "material": "Sangue"
+            },
+            {
+              "id": "k26n6au4",
+              "nome": "Aldosterona - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "((selected_any(tipo_consulta, 'consulta_investigacao', 'consulta_rotina') in tipo_consulta and idade < 30 and (pas_consultorio>=140 or pad_consultorio>=90)) or (ha_resistente==True) or ('potassio_alteracoes_exames' in exames_gerais) or (potassio < 3,5)) and not 'aldosterona_renina' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-rac",
+                  "sistema": "TUSS",
+                  "valor": "40316050"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação de lesão renal",
+              "alerta": "Se possível, suspenda espironolactona 4 semanas antes e IECA/BRA 2 semanas antes.",
+              "material": "Sangue"
+            },
+            {
+              "id": "dp99ty6l",
+              "nome": "Renina - pesquisa e/ou dosagem",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "((selected_any(tipo_consulta, 'consulta_investigacao', 'consulta_rotina') in tipo_consulta and idade < 30 and (pas_consultorio>=140 or pad_consultorio>=90)) or (ha_resistente==True) or ('potassio_alteracoes_exames' in exames_gerais) or (potassio < 3,5)) and not 'aldosterona_renina' in exames_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-rac",
+                  "sistema": "TUSS",
+                  "valor": "40316432"
+                }
+              ],
+              "categoria": "Exames Laboratoriais",
+              "cid": "I10",
+              "indicacao": "Avaliação de lesão renal",
+              "alerta": "Se possível, suspenda espironolactona 4 semanas antes e IECA/BRA 2 semanas antes.",
+              "material": "Sangue"
+            },
+            {
+              "id": "exam-ecg",
+              "nome": "Eletrocardiograma",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'consulta_retorno' in tipo_consulta and not 'ecg' in exames_imagem_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-ecg",
+                  "sistema": "ECG",
+                  "valor": "40601021"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "I10",
+              "indicacao": "Avaliação cardíaca em hipertensos",
+              "alerta": "",
+              "material": "Imagem"
+            },
+            {
+              "id": "ojqcs9nk",
+              "nome": "Ecodopplercardiograma transtorácico",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "(('consulta_investigacao' in tipo_consulta and idade < 30 and (pas_consultorio>=140 or pad_consultorio>=90)) or (sintomas_ic==True) or ('ecg_alteracoes_exames' in exames_gerais) or (ecg_resultado==True)) and not 'eco' in exames_imagem_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-ecg",
+                  "sistema": "TUSS",
+                  "valor": "40901106"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "I10",
+              "indicacao": "Avaliação cardíaca em hipertensos",
+              "alerta": "",
+              "material": "Imagem"
+            },
+            {
+              "id": "2ov2w7ft",
+              "nome": "Doppler colorido de aorta e artérias renais",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "(('consulta_investigacao' in tipo_consulta and idade < 30 and (pas_consultorio>=140 or pad_consultorio>=90)) or (ha_resistente==True)) and not 'usg_doppler_renal' in exames_imagem_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-ecg",
+                  "sistema": "TUSS",
+                  "valor": "40901394"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "I10",
+              "indicacao": "Avaliação cardíaca em hipertensos",
+              "alerta": "",
+              "material": "Imagem"
+            },
+            {
+              "id": "bs1x4zb1",
+              "nome": "Polissonografia de noite inteira (PSG) (inclui polissonogramas)",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "(('consulta_investigacao' in tipo_consulta and suspeita_sahos_1==True and (pas_consultorio>=140 or pad_consultorio>=90)) or (ha_resistente==True and suspeita_sahos_2==True)) and not 'polissonografia' in exames_imagem_realizados_1ano",
+              "condicionalExame": "domiciliar",
+              "codigo": [
+                {
+                  "iid": "cod-ecg",
+                  "sistema": "TUSS",
+                  "valor": "40103528"
+                }
+              ],
+              "categoria": "Exames de imagem",
+              "cid": "I10",
+              "indicacao": "Avaliação cardíaca em hipertensos",
+              "alerta": "",
+              "material": "Imagem"
+            }
+          ],
+          "medicamento": [
+            {
+              "id": "med-hidroclorotiazida-25mg",
+              "nome": "Hidroclorotiazida 25mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Diurético Tiazídico",
+              "nomeMed": "Hidroclorotiazida 25mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia pela manhã. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose máxima recomendada. Monitorar eletrólitos.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-clortalidona-12-5mg",
+              "nome": "Clortalidona 12,5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Diurético Tiazídico",
+              "nomeMed": "Clortalidona 12,5mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia pela manhã. Uso contínuo.</p>",
+              "mensagemMedico": "<p></p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-clortalidona-25mg",
+              "nome": "Clortalidona 25mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Diurético Tiazídico",
+              "nomeMed": "Clortalidona 25mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia pela manhã. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose máxima. Monitorar eletrólitos e função renal.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-indapamida-1-5mg",
+              "nome": "Indapamida 1,5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Diurético Tiazídico",
+              "nomeMed": "Indapamida 1,5mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia pela manhã. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-anlodipino-2-5mg",
+              "nome": "Anlodipino 2,5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Bloqueador de Canal de Cálcio",
+              "nomeMed": "Anlodipino 2,5mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial. Pode causar edema de membros inferiores.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-anlodipino-5mg",
+              "nome": "Anlodipino 5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Bloqueador de Canal de Cálcio",
+              "nomeMed": "Anlodipino 5mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose padrão. Monitorar edema de membros inferiores.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-anlodipino-10mg",
+              "nome": "Anlodipino 10mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Bloqueador de Canal de Cálcio",
+              "nomeMed": "Anlodipino 10mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose máxima. Alto risco de edema.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-enalapril-5mg",
+              "nome": "Enalapril 5mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Enalapril 5mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial. Pode causar tosse seca. Contraindicado na gravidez.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-enalapril-10mg",
+              "nome": "Enalapril 10mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Enalapril 10mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Ajuste de dose. Monitorar função renal e potássio.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-enalapril-20mg",
+              "nome": "Enalapril 20mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Enalapril 20mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose próxima ao máximo. Monitorar rigorosamente.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-lisinopril-10mg",
+              "nome": "Lisinopril 10mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [
+                {
+                  "iid": "cod-lisinopril-10",
+                  "sistema": "LISINOPRIL 10mg Comprimido",
+                  "valor": "4521"
+                }
+              ],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Lisinopril 10mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial. Longa duração de ação.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "dv46dgds",
+              "nome": "Ramipril 10mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Lisinopril 10mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial. Longa duração de ação.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-losartana-50mg",
+              "nome": "Losartana 50mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Losartana 50mg",
+              "posologia": "<p>Tomar 1 comprimido de manhã e 1 comprimido a noite. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial. Menor incidência de tosse que IECA.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-valsartana-80mg",
+              "nome": "Valsartana 80mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Valsartana 80mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Dose inicial. Boa tolerabilidade.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "med-valsartana-160mg",
+              "nome": "Valsartana 160mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Valsartana 160mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p></p>",
+              "via": "Oral"
+            },
+            {
+              "id": "0kxsytjz",
+              "nome": "Candesartana 16mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "IECA/BRA",
+              "nomeMed": "Candesartana 16mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p></p>",
+              "via": "Oral"
+            },
+            {
+              "id": "g1ts3wui",
+              "nome": "Espironolactona 25mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Antagonistas de receptor de aldosterona(espironolactona)",
+              "nomeMed": "Espironolactona 25mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia pela manhã. Uso contínuo.</p>",
+              "mensagemMedico": "<p>Risco de hipercalemia.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "5h9h6hs4",
+              "nome": "Atenolol 25mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Betabloqueadores",
+              "nomeMed": "Atenolol 25mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>4º ou 5º escolha de droga como anthipertensivo. Priorizar outras classes.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "qiwt26v0",
+              "nome": "Atenolol 50mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Betabloqueadores",
+              "nomeMed": "Atenolol 25mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>4º ou 5º escolha de droga como anthipertensivo. Priorizar outras classes.</p>",
+              "via": "Oral"
+            },
+            {
+              "id": "8j2nlovx",
+              "nome": "Succinato de Metoprolol 50mg",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "selected_any(tipo_consulta, 'consulta_retorno', 'consulta_rotina') or pas_atual >= 130 or pad_atual >= 80",
+              "condicionalMedicamento": "domiciliar",
+              "quantidade": 1,
+              "codigo": [],
+              "categoria": "Betabloqueadores",
+              "nomeMed": "Succinato de Metoprolol 50mg",
+              "posologia": "<p>Tomar 1 comprimido 1x ao dia. Uso contínuo.</p>",
+              "mensagemMedico": "<p>4º ou 5º escolha de droga como anthipertensivo. Priorizar outras classes.</p>",
+              "via": "Oral"
+            }
+          ],
+          "encaminhamento": [
+            {
+              "id": "fbf0be1f-4145-4099-83d3-fa46f24dc109",
+              "nome": "Oftalmologia / Fundoscopia",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "not 'fundoscopia' in exames_imagem_realizados_1ano",
+              "indicacao": "Paciente com hipertensão / rastreio de lesão de órgão alvo cid i10",
+              "codigo": "",
+              "cid": "i10",
+              "destino": "Oftalmologia"
+            }
+          ],
+          "mensagem": [
+            {
+              "id": "eec1a6ec-9b6d-4761-b08e-9b2bbc74d9d7",
+              "nome": "Risco cardiovascular",
+              "descricao": "",
+              "condicional": "visivel",
+              "condicao": "",
+              "conteudo": "<p><strong>CALCULADORA PREVENT - RISCO CARDIOVASCULAR EM 10 ANOS</strong><br></p><p>Risco cardiovascular calculado: <strong>{prevent_risco_cardiovascular}%</strong><br></p><p><strong>INTERPRETAÇÃO:</strong></p><p>• <strong>Baixo risco:</strong> &lt; 5%</p><p>• <strong>Risco intermediário:</strong> 5-20%</p><p>• <strong>Alto risco:</strong> &gt; 20%<br></p><p><strong>RECOMENDAÇÕES BASEADAS NO RISCO:</strong></p><p>• Baixo risco: Manter estilo de vida saudável, controle da PA</p><p>• Risco intermediário: Considerar terapia medicamentosa, intensificar MEV</p><p>• Alto risco: Terapia medicamentosa obrigatória, metas mais rigorosas</p>",
+              "observacao": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-c4a924ff-6ffd-4192-bfb0-61ef291e2368",
+      "type": "custom",
+      "position": {
+        "x": 8100,
+        "y": 100
+      },
+      "data": {
+        "label": "Etapa de detalhamento dos sintomas [1]",
+        "condicao": "",
+        "descricao": "<p><strong>Este protocolo é uma ferramenta institucional de registro junto ao prontuário do paciente. Em concordância com a resolução do CFM nº 1.638/2002, este documento possui valor&nbsp;médico&nbsp;legal.</strong></p>",
+        "condicional": "oculto",
+        "questions": [
+          {
+            "id": "Pede99ca3-a438-4648-bb87-eab4df6c7685",
+            "nodeId": "node-c4a924ff-6ffd-4192-bfb0-61ef291e2368",
+            "uid": "ha_verifica",
+            "titulo": "<p>Você marcou que o paciente está com **suspeita de HA mascarada ou jaleco branco**. Descrever abaixo quando a suspeita se iniciou e exame físico no momento da consulta. (mínimo 40 caracteres):</p>",
+            "descricao": "",
+            "condicional": "visivel",
+            "expressao": "",
+            "select": "number",
+            "options": []
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-node-dados-iniciais-node-tipo-consulta",
+      "source": "node-dados-iniciais",
+      "target": "node-tipo-consulta",
+      "data": {}
+    },
+    {
+      "id": "e-node-tipo-consulta-node-investigacao",
+      "source": "node-tipo-consulta",
+      "target": "node-investigacao",
+      "data": {}
+    },
+    {
+      "id": "e-node-investigacao-node-rotina-hipertenso",
+      "source": "node-investigacao",
+      "target": "node-rotina-hipertenso",
+      "data": {}
+    },
+    {
+      "id": "e-node-rotina-hipertenso-node-retorno-hipertenso",
+      "source": "node-rotina-hipertenso",
+      "target": "node-retorno-hipertenso",
+      "data": {}
+    },
+    {
+      "id": "e-node-retorno-hipertenso-bc507d55-a4fa-41eb-899c-49808cd139f4",
+      "source": "node-retorno-hipertenso",
+      "target": "bc507d55-a4fa-41eb-899c-49808cd139f4",
+      "data": {}
+    },
+    {
+      "id": "e-bc507d55-a4fa-41eb-899c-49808cd139f4-summary-processamento",
+      "source": "bc507d55-a4fa-41eb-899c-49808cd139f4",
+      "target": "summary-processamento",
+      "data": {}
+    },
+    {
+      "id": "e-summary-processamento-conduta-principal",
+      "source": "summary-processamento",
+      "target": "conduta-principal",
+      "data": {}
+    },
+    {
+      "id": "e-conduta-principal-node-c4a924ff-6ffd-4192-bfb0-61ef291e2368",
+      "source": "conduta-principal",
+      "target": "node-c4a924ff-6ffd-4192-bfb0-61ef291e2368",
+      "data": {}
+    }
+  ]
+};

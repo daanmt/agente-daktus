@@ -1,0 +1,181 @@
+{
+    "description": "Exemplos de sugestões bem estruturadas para few-shot learning",
+    "version": "1.0.0",
+    "updated_at": "2025-12-12",
+    "examples": [
+        {
+            "title": "Exemplo 1: Mensagem ao Médico para Síncope de Esforço",
+            "category": "seguranca",
+            "explanation": "Este é um exemplo de sugestão de alerta bem estruturada. Note que especifica o tipo (mensagem ao médico), localização JSON exata, condição lógica e HTML completo.",
+            "suggestion": {
+                "id": "sug_example_001",
+                "category": "seguranca",
+                "priority": "alta",
+                "title": "Adicionar MENSAGEM AO MÉDICO para Síncope de Esforço",
+                "description": "Implementar mensagem ao médico no nó de conduta alertando sobre risco de morte súbita quando síncope de esforço for detectada. A mensagem deve orientar investigação cardiológica obrigatória.",
+                "rationale": "ESC Guidelines on Syncope 2018 - Classe I, Evidência B. Síncope durante exercício tem risco de morte súbita de 5-30% se não investigada adequadamente.",
+                "implementation_effort": {
+                    "effort": "baixo",
+                    "estimated_time": "1h",
+                    "complexity": "simples"
+                },
+                "specific_location": {
+                    "node_id": "conduta-1754085461792",
+                    "field": "mensagem",
+                    "path": "nodes[14].data.condutaDataNode.mensagem"
+                },
+                "implementation_path": {
+                    "json_path": "nodes[14].data.condutaDataNode.mensagem",
+                    "modification_type": "add_message",
+                    "proposed_value": {
+                        "id": "msg-medico-sincope-esforco",
+                        "nome": "RED FLAG: Síncope de Esforço",
+                        "condicional": "visivel",
+                        "condicao": "sincope_contexto == 'contexto_esforco'",
+                        "conteudo": "<div style='background: #ffebee; border-left: 4px solid #d32f2f; padding: 15px; margin: 10px 0;'><h3 style='color: #d32f2f; margin-top: 0;'>🚨 RED FLAG CRÍTICA: Síncope de Esforço</h3><p><strong>Risco de morte súbita: 5-30% se não investigado</strong></p><h4>Investigação OBRIGATÓRIA:</h4><ul><li>✓ ECG 12 derivações</li><li>✓ Ecocardiograma Transtorácico</li><li>✓ Teste Ergométrico ou Cintilografia</li><li>✓ Avaliação cardiologista</li></ul><p><strong>❌ BLOQUEIO:</strong> NÃO liberar para atividade física até investigação completa</p></div>",
+                        "observacao": "ESC Guidelines on Syncope 2018 - Classe I, Evidência B"
+                    }
+                }
+            }
+        },
+        {
+            "title": "Exemplo 2: Automação de Solicitação de Exame",
+            "category": "eficiencia",
+            "explanation": "Este exemplo mostra como sugerir automação de exames. Note a condição lógica completa e a justificativa clínica com referência.",
+            "suggestion": {
+                "id": "sug_example_002",
+                "category": "eficiencia",
+                "priority": "media",
+                "title": "Automatizar solicitação de Holter em Palpitações",
+                "description": "Automatizar a solicitação de Holter 24h quando o paciente relatar palpitações ou quando ECG mostrar arritmias, para agilizar diagnóstico e evitar omissões.",
+                "rationale": "ACC/AHA Guidelines 2017, Classe I. Holter é indicado para investigação de arritmias sintomáticas. Automatização melhora adesão às diretrizes.",
+                "implementation_effort": {
+                    "effort": "baixo",
+                    "estimated_time": "2h",
+                    "complexity": "simples"
+                },
+                "specific_location": {
+                    "node_id": "exam-holter-24h",
+                    "field": "condicao",
+                    "path": "nodes[14].data.condutaDataNode.exame[Y].condicao"
+                },
+                "implementation_path": {
+                    "json_path": "nodes[14].data.condutaDataNode.exame[Y]",
+                    "modification_type": "modify_condition",
+                    "proposed_value": {
+                        "id": "exam-holter-24h",
+                        "nome": "Holter de 24 horas",
+                        "codigo": "40309010",
+                        "condicional": "visivel",
+                        "condicao": "'palpitacao' in main or selected_any(ecg_pergunta, 'fa_ecg', 'esv_ecg', 'essv_ecg', 'bav_ecg', 'outras_arritmias_ecg')",
+                        "observacao": "Indicado para investigação de arritmias em pacientes com palpitações ou alterações no ECG. ACC/AHA Guidelines 2017."
+                    }
+                }
+            }
+        },
+        {
+            "title": "Exemplo 3: Orientação ao Paciente sobre DM2 e IC",
+            "category": "educacao",
+            "explanation": "Exemplo de orientação ao paciente bem estruturada. Note o conteúdo em HTML com linguagem acessível.",
+            "suggestion": {
+                "id": "sug_example_003",
+                "category": "educacao",
+                "priority": "media",
+                "title": "Adicionar ORIENTAÇÃO AO PACIENTE sobre rastreamento de IC em DM2",
+                "description": "Orientar pacientes diabéticos sobre a importância do rastreamento de insuficiência cardíaca silenciosa através do exame BNP/NT-proBNP.",
+                "rationale": "ADA Standards of Care 2025. Pacientes com DM2 têm risco 2-4x maior de IC. Educação melhora adesão ao rastreamento.",
+                "implementation_effort": {
+                    "effort": "baixo",
+                    "estimated_time": "1h",
+                    "complexity": "simples"
+                },
+                "specific_location": {
+                    "node_id": "conduta-1754085461792",
+                    "field": "orientacao",
+                    "path": "nodes[14].data.condutaDataNode.orientacao"
+                },
+                "implementation_path": {
+                    "json_path": "nodes[14].data.condutaDataNode.orientacao",
+                    "modification_type": "add_orientation",
+                    "proposed_value": {
+                        "id": "orientacao-dm2-bnp-rastreamento",
+                        "nome": "Rastreamento de IC em Diabetes",
+                        "condicional": "visivel",
+                        "condicao": "('dm2_nid' in comorbidades or 'dm2_id' in comorbidades)",
+                        "conteudo": "<h3>Por que estou solicitando o exame BNP/NT-proBNP?</h3><p>Pessoas com diabetes têm maior risco de desenvolver problemas cardíacos, muitas vezes sem apresentar sintomas no início.</p><p>Este exame de sangue ajuda a detectar essas alterações precocemente, permitindo tratamento preventivo.</p><h4>O que você precisa saber:</h4><ul><li>É um exame de sangue simples</li><li>Não precisa de jejum</li><li>O resultado ajuda a prevenir problemas cardíacos futuros</li></ul><p><em>Recomendação baseada em diretrizes médicas atualizadas (ADA 2025)</em></p>"
+                    }
+                }
+            }
+        },
+        {
+            "title": "Exemplo 4: Alerta em Medicamento - Estatina Obrigatória",
+            "category": "seguranca",
+            "explanation": "Exemplo de alerta associado a um medicamento específico.",
+            "suggestion": {
+                "id": "sug_example_004",
+                "category": "seguranca",
+                "priority": "alta",
+                "title": "Adicionar ALERTA EM MEDICAMENTO sobre estatina obrigatória em DAC",
+                "description": "Alertar sobre obrigatoriedade de estatina de alta intensidade em pacientes com DAC documentada, indicando meta de LDL.",
+                "rationale": "ESC/EAS 2019, ACC/AHA 2018 - Classe I, Evidência A. Estatina de alta intensidade reduz mortalidade em 25-35% em DAC.",
+                "implementation_effort": {
+                    "effort": "baixo",
+                    "estimated_time": "1h",
+                    "complexity": "simples"
+                },
+                "specific_location": {
+                    "node_id": "estatina-atorvastatina-80mg",
+                    "field": "mensagem",
+                    "path": "nodes[14].data.condutaDataNode.medicamentos[X].mensagem"
+                },
+                "implementation_path": {
+                    "json_path": "nodes[14].data.condutaDataNode.medicamentos[X]",
+                    "modification_type": "add_medication_alert",
+                    "proposed_value": {
+                        "id": "estatina-atorvastatina-80mg",
+                        "nome": "Atorvastatina 80mg",
+                        "mensagem": "⚠️ ESTATINA DE ALTA INTENSIDADE OBRIGATÓRIA EM DAC. Meta LDL <70 mg/dL (ideal <55 mg/dL). Evidência 1A para redução de mortalidade cardiovascular em 25-35%.",
+                        "condicao": "'dac' in comorbidades and 'estatinas' not in muc"
+                    }
+                }
+            }
+        }
+    ],
+    "antipatterns": [
+        {
+            "title": "Antipadrão 1: Alerta Genérico",
+            "explanation": "Este é um exemplo de sugestão MAL estruturada. Note que não especifica o tipo de alerta nem fornece JSON.",
+            "bad_suggestion": {
+                "id": "sug_bad_001",
+                "category": "seguranca",
+                "priority": "alta",
+                "title": "Adicionar alerta visual para síncope de esforço",
+                "description": "Implementar alerta crítico que bloqueie a conduta quando síncope de esforço for detectada."
+            },
+            "problems": [
+                "Usa termo genérico 'alerta visual'",
+                "Não especifica tipo de alerta (mensagem, orientação, etc)",
+                "Não fornece localização JSON",
+                "Não fornece HTML do conteúdo",
+                "Não tem implementation_path"
+            ]
+        },
+        {
+            "title": "Antipadrão 2: Bloqueio de Conduta Vago",
+            "explanation": "Outro exemplo de sugestão mal estruturada.",
+            "bad_suggestion": {
+                "id": "sug_bad_002",
+                "category": "seguranca",
+                "priority": "alta",
+                "title": "Criar bloqueio de conduta para pacientes com red flags",
+                "description": "Garantir bloqueio até investigação completa quando red flags forem detectadas."
+            },
+            "problems": [
+                "Termo 'bloqueio de conduta' é genérico",
+                "Não especifica quais red flags",
+                "Não fornece condição lógica",
+                "Não menciona como implementar o bloqueio no Daktus"
+            ]
+        }
+    ]
+}

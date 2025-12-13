@@ -1,7 +1,7 @@
 # 🗺️ Roadmap - Agente Daktus | QA
 
-**Última Atualização**: 2025-12-11
-**Status Atual**: ✅ FASES 1-6 Completas | ✅ WAVES 1-3 Completas | ✅ TODOS OS BUGS CORRIGIDOS (Production Ready)
+**Última Atualização**: 2025-12-13
+**Status Atual**: ✅ FASES 1-6 Completas | ✅ WAVES 1-4.1 Completas | ✅ BUG FIXES CRÍTICOS
 
 ---
 
@@ -44,6 +44,12 @@
 - **Reconstruction Fixes**: Respeita feedback, versioning correto
 - **Learning System**: Threshold=1 para ativação imediata de padrões
 - **Irrelevant Handling**: Sugestões irrelevantes removidas da reconstrução
+
+### Bug Fixes Críticos (2025-12-13) ✅
+- **JSON Parsing**: Estratégias robustas para JSONs grandes com escape complexo
+- **Pydantic Schema Flexível**: Aceita UUIDs, tipos custom/summary/conduct
+- **NoneType Fix**: Tratamento correto de `None` em questions/options
+- **Validação Cross-Reference**: Robustez em protocolos com estruturas variadas
 
 ---
 
@@ -166,6 +172,36 @@ Localização: `src/agent/cli/`
 - **Accuracy**: Estimativas vs custos reais rastreados
 - **Compliance**: Audit trail completo de mudanças
 - **Implementation**: Sugestões prontas para aplicação direta
+
+---
+
+## ✅ Wave 4.1: Melhorias de Inteligência do Agente (COMPLETA)
+
+**Status**: 100% Implementada (2025-12-12)
+
+**Objetivo**: Melhorar a qualidade das sugestões geradas, reduzindo taxa de rejeição de alertas genéricos de 71.4% para <30%.
+
+**Problema Resolvido**:
+- Antipadrão #1: Alertas genéricos ("adicionar alerta visual", "bloqueio de conduta") sem especificação
+- 71.4% das rejeições eram por sugestões mal estruturadas
+
+**Implementado** ✅:
+- ✅ **Alert Rules Module** - Regras de implementação de alertas com templates
+- ✅ **Suggestion Validator** - Filtragem de antipadrões e duplicatas antes de apresentar
+- ✅ **Protocol Analyzer** - Ferramentas de análise estrutural (busca, validação, duplicatas)
+- ✅ **Good Alert Examples** - Exemplos para few-shot learning no prompt
+- ✅ **Enhanced Prompt Rules** - Regras de alertas integradas no system prompt
+
+**Arquivos Criados**:
+- `src/agent/analysis/alert_rules.py` - Regras e templates para alertas
+- `src/agent/validators/suggestion_validator.py` - Validador de sugestões
+- `src/agent/core/protocol_analyzer.py` - Analisador de protocolo
+- `src/agent/analysis/examples/good_alert_examples.json` - Exemplos de referência
+
+**Impacto Esperado**:
+- **Quality**: Meta de >70% taxa de aceitação de sugestões de segurança (vs 41.2% anterior)
+- **Specificity**: 100% das sugestões de alerta com JSON pronto para implementar
+- **Duplicates**: <5% de sugestões duplicadas
 
 ---
 

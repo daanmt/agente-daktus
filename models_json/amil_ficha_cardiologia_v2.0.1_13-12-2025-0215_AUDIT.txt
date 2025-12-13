@@ -1,0 +1,145 @@
+======================================================================
+📋 RELATÓRIO DE AUDITORIA - RECONSTRUÇÃO DE PROTOCOLO
+======================================================================
+Data: 2025-12-13 02:15:37
+Protocolo: Unknown
+Sugestões Aplicadas: 34
+
+======================================================================
+MUDANÇAS DETECTADAS (COMPARAÇÃO)
+======================================================================
+
+🔹 Nodo: Identificação - inicial (node-219cf8a0-e2da-4754-8195-91f05e215523)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Anamnese - inicial (node-1754054008885)
+   • condicional pergunta 'sincope_contexto': MODIFICADA
+     Nova: 'sincope' in main
+   • condicional pergunta 'sincope_frequencia': MODIFICADA
+     Nova: 'sincope' in main
+   • condicional pergunta 'sincope_prodromos': MODIFICADA
+     Nova: 'sincope' in main
+   • descrição: MODIFICADA
+
+🔹 Nodo: Anamnese - inicial (node-1754058668684)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Resultados de exames complementares - inicial (node-1754075093485)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Exame físico - inicial (node-1754076722505)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Resumo atendimento - enfermagem - reavaliação (fdf74edc-8049-4d16-9e31-a0666dcf6733)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Conduta(enfermagem) - avaliação (conduta-1754077048525)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Exames cardiológicos - reavaliação (node-1754085865415)
+   • condicional pergunta 'ecg_resultado_aberto': MODIFICADA
+     Nova: 'ecg' in exames_avaliacao and not(ecg_normal)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Pré-operatório - reavaliação (node-1754077407613)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Dor torácica - reavaliação (node-1754083708410)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Anamnese cardiológica - reavaliação (node-a2135151-3599-4efb-a605-fc2782c56736)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Calculadoras - reavaliação (summary-b6a21578-f1ca-4b0b-bae6-8146d5f38ed7)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Dados Clínicos para Cálculo PREVENT (node-prevent-dados-clinicos)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Cálculo de Risco PREVENT (AHA 2024) (summary-prevent-calculo)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Conduta médica - reavaliação (conduta-1754085461792)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Impressão e conduta médica - reavaliação (node-de010b49-ebeb-424b-bd21-c2e326417faf)
+   • descrição: MODIFICADA
+
+🔹 Nodo: Resumo atendimento - médico - reavaliação (14917447-7630-4715-8407-ff890c40facc)
+   • descrição: MODIFICADA
+
+======================================================================
+SUGESTÕES APLICADAS
+======================================================================
+1. [sug_011] Simplificar condição de exibição do nó 'Exames cardiológicos - reavaliação'
+   Categoria: eficiencia
+2. [sug_024] Simplificar condição de exibição do nó 'Exames cardiológicos - reavaliação'
+   Categoria: usabilidade
+3. [sug_005] Reforçar indicação de Teste Ergométrico em Dor Torácica de Risco Moderado
+   Categoria: seguranca
+4. [sug_008] Automatizar cálculo de Risco PREVENT com base nos dados coletados
+   Categoria: eficiencia
+5. [sug_009] Adicionar condição para exibição de Orientações para Diabéticos
+   Categoria: seguranca
+6. [sug_023] Adicionar BNP/NT-proBNP para rastreamento de IC em DM2
+   Categoria: usabilidade
+7. [sug_006] Otimizar condição de exibição do nó de Exames Laboratoriais
+   Categoria: eficiencia
+8. [sug_007] Clarificar a pergunta sobre 'Risco do procedimento a ser realizado'
+   Categoria: usabilidade
+9. [sug_010] Adicionar opção 'Outras arritmias' ao ECG
+   Categoria: usabilidade
+10. [sug_013] Melhorar clareza da pergunta sobre 'Características da dor torácica'
+   Categoria: usabilidade
+11. [sug_017] Adicionar campo aberto para 'Outras alterações no ECG'
+   Categoria: usabilidade
+12. [sug_019] Melhorar clareza da pergunta sobre 'Frequência dos episódios de síncope'
+   Categoria: usabilidade
+13. [sug_029] Melhorar clareza da pergunta sobre 'Frequência dos episódios de síncope'
+   Categoria: usabilidade
+14. [sug_032] Melhorar clareza da pergunta sobre 'Frequência dos episódios de síncope'
+   Categoria: usabilidade
+15. [sug_035] Melhorar clareza da pergunta sobre 'Frequência dos episódios de síncope'
+   Categoria: usabilidade
+16. [sug_014] Evitar solicitação redundante de exames laboratoriais
+   Categoria: economia
+17. [sug_001] Adicionar alerta para Síncope de Esforço
+   Categoria: seguranca
+18. [sug_003] Garantir prescrição de estatina em DAC
+   Categoria: seguranca
+19. [sug_020] Adicionar alerta para Síncope de Esforço na Anamnese
+   Categoria: seguranca
+20. [sug_022] Garantir prescrição de estatina em DAC
+   Categoria: seguranca
+21. [sug_025] Adicionar alerta para Síncope de Esforço na Anamnese
+   Categoria: seguranca
+22. [sug_027] Adicionar alerta para Síncope de Esforço na Anamnese
+   Categoria: seguranca
+23. [sug_030] Adicionar alerta para Síncope de Esforço na Anamnese
+   Categoria: seguranca
+24. [sug_033] Adicionar alerta para Síncope de Esforço na Anamnese
+   Categoria: seguranca
+25. [sug_002] Reforçar indicação de ECOTT em FA + Dispneia
+   Categoria: seguranca
+26. [sug_004] Adicionar BNP/NT-proBNP para rastreamento de IC em DM2
+   Categoria: seguranca
+27. [sug_012] Adicionar alerta para Síncope sem pródromo
+   Categoria: seguranca
+28. [sug_016] Adicionar alerta para DAC sem estatina na mensagem de resumo
+   Categoria: seguranca
+29. [sug_018] Adicionar alerta para Síncope sem pródromos na Anamnese
+   Categoria: seguranca
+30. [sug_021] Reforçar indicação de ECOTT em FA + Dispneia
+   Categoria: seguranca
+31. [sug_026] Adicionar alerta para Síncope sem pródromos na Anamnese
+   Categoria: seguranca
+32. [sug_028] Adicionar alerta para Síncope sem pródromos na Anamnese
+   Categoria: seguranca
+33. [sug_031] Adicionar alerta para Síncope sem pródromos na Anamnese
+   Categoria: seguranca
+34. [sug_034] Adicionar alerta para Síncope sem pródromos na Anamnese
+   Categoria: seguranca
+
+======================================================================
+RESUMO: 34 sugestões | 2025-12-13 02:15:37
+======================================================================

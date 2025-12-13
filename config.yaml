@@ -1,0 +1,171 @@
+# =============================================================================
+# Agente Daktus QA - Configuração Externa
+# =============================================================================
+# Este arquivo contém todas as configurações externalizáveis do sistema.
+# Modifique aqui para customizar comportamento sem alterar código.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# LLM Settings
+# -----------------------------------------------------------------------------
+llm:
+  # Modelo padrão para análise (custo-benefício)
+  analysis_model: "google/gemini-2.5-flash-lite"
+  
+  # Modelo para reconstrução (precisa de contexto maior)
+  reconstruction_model: "google/gemini-2.5-flash-lite"
+  
+  # Temperatura para análise (0.0 = determinístico, 1.0 = criativo)
+  analysis_temperature: 0.3
+  
+  # Temperatura para reconstrução (deve ser mais determinístico)
+  reconstruction_temperature: 0.1
+  
+  # Máximo de tokens para resposta
+  max_tokens: 8192
+  
+  # Timeout em segundos para chamadas API
+  api_timeout: 120
+
+# -----------------------------------------------------------------------------
+# Cost Control
+# -----------------------------------------------------------------------------
+cost_control:
+  # Alerta de custo por sessão (USD)
+  session_warning_threshold: 0.50
+  
+  # Limite máximo por sessão (USD) - 0 = sem limite
+  session_max_cost: 0
+  
+  # Exibir custo estimado antes de operações
+  show_cost_estimates: true
+  
+  # Exibir custo real em tempo real
+  show_realtime_cost: true
+
+# -----------------------------------------------------------------------------
+# Analysis Settings
+# -----------------------------------------------------------------------------
+analysis:
+  # Mínimo de sugestões esperadas
+  min_suggestions: 5
+  
+  # Máximo de sugestões por análise
+  max_suggestions: 60
+  
+  # Threshold para ativar filtros aprendidos (1 = ativação imediata)
+  learned_filter_threshold: 1
+  
+  # Validar referências ao playbook
+  validate_playbook_references: true
+  
+  # Bloquear sugestões genéricas (sem evidência específica)
+  block_generic_suggestions: true
+
+# -----------------------------------------------------------------------------
+# Reconstruction Settings
+# -----------------------------------------------------------------------------
+reconstruction:
+  # Usar chunking para protocolos grandes
+  use_chunking: true
+  
+  # Tamanho máximo por chunk (em KB)
+  chunk_size_kb: 30
+  
+  # Número máximo de retries por seção
+  max_section_retries: 3
+  
+  # Gerar relatório de auditoria
+  generate_audit_report: true
+  
+  # Adicionar changelog em nós modificados
+  add_changelog_to_nodes: true
+
+# -----------------------------------------------------------------------------
+# Feedback & Learning
+# -----------------------------------------------------------------------------
+feedback:
+  # Arquivo de memória do sistema
+  memory_file: "memory_qa.md"
+  
+  # Máximo de padrões aprendidos ativos
+  max_active_patterns: 100
+  
+  # Dias para expirar padrões não usados
+  pattern_expiry_days: 90
+  
+  # Backup automático de sessões de feedback
+  auto_backup_sessions: true
+
+# -----------------------------------------------------------------------------
+# Paths
+# -----------------------------------------------------------------------------
+paths:
+  # Diretório de protocolos JSON
+  protocols_dir: "models_json"
+  
+  # Diretório de playbooks
+  playbooks_dir: "biblioteca_clinica/playbooks"
+  
+  # Diretório de relatórios gerados
+  reports_dir: "reports"
+  
+  # Diretório de logs
+  logs_dir: "logs"
+  
+  # Diretório de sessões de feedback
+  feedback_sessions_dir: "feedback_sessions"
+
+# -----------------------------------------------------------------------------
+# CLI Settings
+# -----------------------------------------------------------------------------
+cli:
+  # Usar cores na saída (pode desativar para logs)
+  colorize_output: true
+  
+  # Exibir progress bars
+  show_progress_bars: true
+  
+  # Exibir thinking messages durante processamento
+  show_thinking_messages: true
+  
+  # Timeout para input do usuário (segundos, 0 = sem timeout)
+  input_timeout: 0
+  
+  # Número de sugestões por página na visualização
+  suggestions_per_page: 10
+
+# -----------------------------------------------------------------------------
+# Session Recovery
+# -----------------------------------------------------------------------------
+session:
+  # Habilitar checkpoints automáticos
+  enable_checkpoints: true
+  
+  # Diretório para checkpoints
+  checkpoint_dir: ".session_checkpoints"
+  
+  # Intervalo entre checkpoints (segundos)
+  checkpoint_interval: 60
+  
+  # Máximo de checkpoints mantidos
+  max_checkpoints: 5
+  
+  # Perguntar sobre recovery ao iniciar
+  prompt_for_recovery: true
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+logging:
+  # Nível de log: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+  
+  # Formato do timestamp nos logs
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+  
+  # Rotação de logs (dias)
+  rotation_days: 7
+  
+  # Tamanho máximo por arquivo de log (MB)
+  max_log_size_mb: 10

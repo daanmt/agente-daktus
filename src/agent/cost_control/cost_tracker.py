@@ -77,13 +77,13 @@ class CostTracker:
     
     # Model pricing (USD per 1M tokens)
     MODEL_PRICING = {
-        "google/gemini-2.5-flash-lite": {"input": 0.075, "output": 0.30},
+        "google/gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
         "google/gemini-2.5-flash": {"input": 0.30, "output": 2.50},
         "google/gemini-2.5-flash-preview-09-2025": {"input": 0.30, "output": 2.50},
         "google/gemini-2.5-pro": {"input": 1.25, "output": 10.0},
         "anthropic/claude-sonnet-4.5": {"input": 3.0, "output": 15.0},
         "anthropic/claude-sonnet-4": {"input": 3.0, "output": 15.0},
-        "anthropic/claude-opus-4": {"input": 15.0, "output": 75.0},
+        "anthropic/claude-opus-4.5": {"input": 5.0, "output": 25.0},
         "x-ai/grok-4.1-fast": {"input": 0.20, "output": 0.50},
     }
     

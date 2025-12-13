@@ -71,7 +71,24 @@ class LLMClient:
         """
         # Get API key from parameter first, then environment
         # .env is already loaded at module import time
+        # Force reload .env to ensure we have the latest key
+        if env_file.exists():
+            load_dotenv(env_file, override=True)
+        else:
+            cwd_env = Path.cwd() / ".env"
+            if cwd_env.exists():
+                load_dotenv(cwd_env, override=True)
+            else:
+                load_dotenv(override=True)
+        
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
+        
+        # Log API key status (without exposing the full key)
+        if self.api_key:
+            key_preview = self.api_key[:20] + "..." if len(self.api_key) > 20 else self.api_key
+            logger.debug(f"API key loaded: {key_preview} (length: {len(self.api_key)})")
+        else:
+            logger.warning("API key not found in environment")
         
         # Validate API key with helpful error message
         if not self.api_key:
@@ -123,7 +140,7 @@ class LLMClient:
             self.model = model_id
             self.model_name = model_id
         
-        self.base_url = "https://openrouter.ai/api/v1/chat/completions"
+        self.base_url = "https://openrouter.ai/api/v1"
         self.available = bool(self.api_key)
         
         if not self.api_key:
@@ -312,15 +329,25 @@ class LLMClient:
                     raise Exception(f"LLM API timeout after {max_retries} attempts")
             
             except requests.exceptions.HTTPError as e:
-                if hasattr(e, 'response') and e.response.status_code == 429:
-                    logger.warning(f"Rate limited (attempt {attempt + 1}/{max_retries})")
-                    if attempt < max_retries - 1:
-                        wait_time = 5 * (attempt + 1)
-                        time.sleep(wait_time)
+                # Verificar se a exceção tem o atributo response e se não é None
+                if hasattr(e, 'response') and e.response is not None:
+                    if e.response.status_code == 429:
+                        logger.warning(f"Rate limited (attempt {attempt + 1}/{max_retries})")
+                        if attempt < max_retries - 1:
+                            wait_time = 5 * (attempt + 1)
+                            time.sleep(wait_time)
+                        else:
+                            raise Exception(f"Rate limited after {max_retries} attempts")
+                    elif e.response.status_code == 402:
+                        # Erro 402 (Payment Required) - não fazer retry, apenas relançar
+                        logger.error(f"Payment required (402) - insufficient credits. Error: {e}")
+                        raise
                     else:
-                        raise Exception(f"Rate limited after {max_retries} attempts")
+                        logger.error(f"LLM API error: {e}")
+                        raise
                 else:
-                    logger.error(f"LLM API error: {e}")
+                    # Exceção HTTPError sem response - relançar como está
+                    logger.error(f"LLM API error (no response object): {e}")
                     raise
             
             except (json.JSONDecodeError, ValueError) as e:
@@ -475,6 +502,19 @@ class LLMClient:
                 # Combinar system e messages em um único prompt string
                 prompt_str = "\n\n".join(system_parts + messages_parts)
                 logger.debug(f"Converted structured prompt to string for Grok compatibility")
+            elif isinstance(prompt, dict) and "messages" in prompt:
+                # CRITICAL FIX: Handle dict with 'messages' but without 'system' (continuation case)
+                # Extract content from messages and combine into prompt_str
+                messages_parts = []
+                for msg in prompt.get("messages", []):
+                    if isinstance(msg, dict) and "content" in msg:
+                        messages_parts.append(str(msg["content"]))
+                    elif isinstance(msg, str):
+                        messages_parts.append(msg)
+                prompt_str = "\n\n".join(messages_parts) if messages_parts else ""
+                if not prompt_str:
+                    logger.error("Empty messages array in prompt dict!")
+                logger.debug(f"Extracted prompt from messages dict (continuation mode)")
             else:
                 prompt_str = prompt if isinstance(prompt, str) else prompt.get("prompt", "")
             
@@ -491,11 +531,37 @@ class LLMClient:
             logger.debug(f"Using string prompt (no caching, attempt {attempt + 1}, free_model={is_free_model}, grok={is_grok_model}, max_tokens={'N/A' if is_grok_model else payload.get('max_tokens', 'N/A')})")
         
         response = requests.post(
-            self.base_url,
+            f"{self.base_url}/chat/completions",
             headers=headers,
             json=payload,
             timeout=120  # Increased timeout for large responses
         )
+        
+        # Tratamento de erro 402 (Payment Required)
+        if response.status_code == 402:
+            try:
+                error_detail = response.json()
+                error_message = error_detail.get('error', {}).get('message', 'Unknown error')
+                logger.error(f"API 402 Error (Payment Required): {error_message}")
+                logger.error(f"Full error details: {json.dumps(error_detail, indent=2)}")
+                
+                # Log API key status (without exposing the full key)
+                key_preview = self.api_key[:20] + "..." if len(self.api_key) > 20 else self.api_key
+                logger.error(f"API key being used: {key_preview} (length: {len(self.api_key)})")
+                logger.error("This error usually means:")
+                logger.error("  1. The API key has no credits or has expired")
+                logger.error("  2. The API key is invalid or incorrect")
+                logger.error("  3. Check your OpenRouter account balance at https://openrouter.ai/keys")
+                logger.error("  4. Verify the API key in your .env file matches the one in OpenRouter")
+            except Exception as e:
+                logger.error(f"API 402 Error Response: {response.text[:500]}")
+            # Criar exceção HTTPError corretamente com a resposta
+            http_error = requests.exceptions.HTTPError(
+                f"402 Payment Required: Your OpenRouter API key has no credits or is invalid. "
+                f"Please check your account balance at https://openrouter.ai/keys and verify your API key in .env"
+            )
+            http_error.response = response
+            raise http_error
         
         # Melhor tratamento de erro 400
         if response.status_code == 400:
@@ -552,14 +618,42 @@ class LLMClient:
         Simple JSON extraction - NO medical validation.
         Attempts multiple strategies to find JSON in response.
         """
-        # Clean response first - remove any leading/trailing whitespace
+        # Clean response first - remove any leading/trailing whitespace and invisible characters
         response = response.strip()
+        
+        # Remove BOM and other invisible characters that can break JSON parsing
+        response = response.lstrip('\ufeff\u200b\u200c\u200d\ufffe')
         
         # Strategy 1: Direct JSON parsing
         try:
             return json.loads(response)
-        except json.JSONDecodeError:
-            pass
+        except json.JSONDecodeError as e:
+            logger.debug(f"Direct JSON parse failed: {e}")
+        
+        # Strategy 1.5: Try with .encode().decode() to normalize encoding
+        try:
+            normalized = response.encode('utf-8', errors='ignore').decode('utf-8')
+            return json.loads(normalized)
+        except json.JSONDecodeError as e:
+            logger.debug(f"Normalized JSON parse failed: {e}")
+        
+        # Strategy 1.6: Try fixing common escape issues in nested strings
+        # JSON with nested escaped strings like \" inside \" can fail
+        try:
+            # Replace double-escaped backslashes that might cause issues
+            fixed = response.replace('\\\\\\\"', '\\\\u0022')  # Escaped quotes
+            return json.loads(fixed)
+        except json.JSONDecodeError as e:
+            logger.debug(f"Fixed escapes JSON parse failed: {e}")
+        
+        # Strategy 1.7: For responses that look like complete JSON, try direct slice
+        if response.strip().startswith('{') and response.strip().endswith('}'):
+            try:
+                # Try parsing after removing any invisible control chars
+                clean = ''.join(c for c in response if ord(c) >= 32 or c in '\n\r\t')
+                return json.loads(clean)
+            except json.JSONDecodeError as e:
+                logger.debug(f"Clean control chars JSON parse failed: {e}")
         
         # Strategy 2: Extract from markdown code blocks
         # Find content after ```json or ``` and extract JSON using brace counting
@@ -602,6 +696,16 @@ class LLMClient:
             return json.loads(cleaned)
         except json.JSONDecodeError:
             pass
+        
+        # Strategy 5: Most aggressive - just take everything between first { and last }
+        first_brace_idx = response.find('{')
+        last_brace_idx = response.rfind('}')
+        if first_brace_idx != -1 and last_brace_idx != -1 and last_brace_idx > first_brace_idx:
+            try:
+                json_str = response[first_brace_idx:last_brace_idx + 1]
+                return json.loads(json_str)
+            except json.JSONDecodeError as e:
+                logger.debug(f"Strategy 5 (simple slice) failed: {e}")
         
         # All strategies failed - provide detailed error with diagnostic info
         # Check if JSON appears incomplete (no closing brace found)
@@ -660,24 +764,20 @@ class LLMClient:
         brace_count = 0
         start_pos = first_brace
         in_string = False
-        escape_next = False
+        i = start_pos
         
-        for i in range(start_pos, len(text)):
+        while i < len(text):
             char = text[i]
             
-            if escape_next:
-                escape_next = False
+            # Handle escape sequences inside strings
+            if in_string and char == '\\' and i + 1 < len(text):
+                # Skip the next character (escaped)
+                i += 2
                 continue
             
-            if char == '\\':
-                escape_next = True
-                continue
-            
-            if char == '"' and not escape_next:
+            if char == '"':
                 in_string = not in_string
-                continue
-            
-            if not in_string:
+            elif not in_string:
                 if char == '{':
                     brace_count += 1
                 elif char == '}':
@@ -685,6 +785,8 @@ class LLMClient:
                     if brace_count == 0:
                         # Found matching closing brace
                         return text[start_pos:i+1]
+            
+            i += 1
         
         # No matching closing brace found - JSON may be incomplete
         return None

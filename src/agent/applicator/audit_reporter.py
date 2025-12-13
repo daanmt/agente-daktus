@@ -141,9 +141,11 @@ class AuditReporter:
         old_data = old_node.get('data', {})
         new_data = new_node.get('data', {})
         
-        # Check questions
-        old_questions = {q.get('uid', q.get('id', i)): q for i, q in enumerate(old_data.get('questions', []))}
-        new_questions = {q.get('uid', q.get('id', i)): q for i, q in enumerate(new_data.get('questions', []))}
+        # Check questions - Handle None as empty list
+        old_q_list = old_data.get('questions') or []
+        new_q_list = new_data.get('questions') or []
+        old_questions = {q.get('uid', q.get('id', i)): q for i, q in enumerate(old_q_list)}
+        new_questions = {q.get('uid', q.get('id', i)): q for i, q in enumerate(new_q_list)}
         
         for qid, new_q in new_questions.items():
             if qid not in old_questions:

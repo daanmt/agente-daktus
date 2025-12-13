@@ -35,6 +35,17 @@ from config.prompts.enhanced_analysis_prompt import (
 from ..feedback.memory_qa import MemoryQA
 from ..feedback.memory_engine import MemoryEngine
 
+# Import alert rules and suggestion validator (Wave 4.1 - Intelligence improvements)
+from .alert_rules import (
+    get_alert_rules_for_prompt,
+    get_alert_examples_for_prompt,
+    ALERT_IMPLEMENTATION_RULES
+)
+from ..validators.suggestion_validator import (
+    SuggestionValidator,
+    filter_suggestions_before_presentation
+)
+
 
 @dataclass
 class Suggestion:
@@ -326,13 +337,48 @@ class EnhancedAnalyzer:
         except Exception as e:
             logger.warning(f"Rules engine error (continuing): {e}")
 
-        # Step 5: Categorize and prioritize
-        logger.info("Step 5: Categorizing and prioritizing suggestions...")
+        # Step 5: Validate suggestions with SuggestionValidator (Wave 4.1)
+        logger.info("Step 5: Validating suggestions for antipatterns and duplicates...")
+        try:
+            validator = SuggestionValidator(strict_mode=False)
+            suggestions_dicts = [s.to_dict() for s in suggestions]
+            valid_dicts, rejected_dicts = validator.validate_and_filter(suggestions_dicts)
+            
+            # Log validation stats
+            stats = validator.get_stats()
+            if stats['failed_antipattern'] > 0 or stats['duplicates_removed'] > 0:
+                logger.info(
+                    f"🛡️ Suggestion validation: {stats['passed']} passed, "
+                    f"{stats['failed_antipattern']} antipatterns blocked, "
+                    f"{stats['duplicates_removed']} duplicates removed"
+                )
+            
+            # Rebuild Suggestion objects from validated dicts
+            suggestions = [
+                Suggestion(
+                    id=d.get('id', ''),
+                    category=d.get('category', 'usabilidade'),
+                    priority=d.get('priority', 'baixa'),
+                    title=d.get('title', ''),
+                    description=d.get('description', ''),
+                    rationale=d.get('rationale', ''),
+                    evidence=d.get('evidence', {}),
+                    implementation_effort=d.get('implementation_effort', {}),
+                    auto_apply_cost_estimate=d.get('auto_apply_cost_estimate', {}),
+                    specific_location=d.get('specific_location')
+                )
+                for d in valid_dicts
+            ]
+        except Exception as e:
+            logger.warning(f"Suggestion validation error (continuing): {e}")
+        
+        # Step 6: Categorize and prioritize
+        logger.info("Step 6: Categorizing and prioritizing suggestions...")
         categorized = self._categorize_suggestions(suggestions)
         prioritized = self._prioritize_suggestions(categorized)
         
-        # Step 6: Build result
-        logger.info("Step 6: Building expanded analysis result...")
+        # Step 7: Build result
+        logger.info("Step 7: Building expanded analysis result...")
         
         # Calculate aggregate impact scores
         impact_scores = self._calculate_aggregate_scores(prioritized)
@@ -402,6 +448,11 @@ class EnhancedAnalyzer:
             from rich import box
             
             console = Console()
+            
+            # CRITICAL FIX: Print blank line BEFORE panel to properly separate from any active spinner
+            # This ensures the spinner line is cleared before the panel is rendered
+            console.print("")  # Clear spinner line
+            
             content = f"""[bold cyan]{cost_estimate.model}[/bold cyan]
 
 [dim]Tokens:[/dim] {total_tokens:,} ({input_tokens:,} in + {output_tokens:,} out)
@@ -416,6 +467,7 @@ class EnhancedAnalyzer:
                 padding=(1, 2)
             )
             console.print(panel)
+            console.print()  # Quebra de linha explícita após o painel
         except ImportError:
             # Fallback simples
             print(f"\n💰 Estimativa de Custo: {cost_estimate.model}")
@@ -612,6 +664,33 @@ CRITICAL REQUIREMENTS:
    - Specific: Exact location in protocol (node_id, field, etc.)
    - Measurable: How to verify the improvement
    - Evidence-based: Linked to playbook content
+
+8. ALERT IMPLEMENTATION RULES (🚨 CRITICAL - NO GENERIC ALERTS):
+
+   When suggesting alerts or warnings, you MUST specify one of these types:
+   
+   A. MENSAGEM AO MÉDICO (condutaDataNode.mensagem)
+      - Use for critical information the doctor needs to SEE
+      - Include complete JSON with id, nome, condicional, condicao, conteudo
+   
+   B. ORIENTAÇÃO AO PACIENTE (condutaDataNode.orientacao)
+      - Use for educational information for the patient
+      - Include complete HTML content in conteudo field
+   
+   C. ALERTA EM MEDICAMENTO (medicamentos[id].mensagem)
+      - Use for prescription/contraindication warnings
+      - Specify exact medication and condition
+   
+   ❌ NEVER USE GENERIC TERMS WITHOUT SPECIFICATION:
+   - "adicionar alerta visual"
+   - "criar bloqueio de conduta"
+   - "implementar aviso crítico"
+   - "alerta de alta prioridade"
+   
+   ✅ ALWAYS INCLUDE FOR ALERT SUGGESTIONS:
+   - specific_location: { node_id, field, path }
+   - implementation_path: { json_path, modification_type, proposed_value }
+   - proposed_value MUST include complete HTML content for alerts
 
 ANALYSIS DEPTH:
 

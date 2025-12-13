@@ -1299,11 +1299,8 @@ Responda em JSON com este formato:
         """
         Edita o relatório incorporando feedbacks do usuário.
         
-        Usa LLM para:
-        - Remover sugestões marcadas como irrelevantes
-        - Melhorar descrições de sugestões com comentários do usuário
-        - Ajustar prioridades baseado em feedback
-        - Incorporar insights do LLM
+        IMPORTANTE: Usa segregação DETERMINÍSTICA baseada no feedback do usuário.
+        Não depende do LLM para separar sugestões - isso causava bugs.
         
         Args:
             feedback_sessions: Sessões de feedback
@@ -1314,244 +1311,84 @@ Responda em JSON com este formato:
             Relatório editado ou None em caso de erro
         """
         try:
-            from ..core.llm_client import LLMClient
+            # ===================================================================
+            # ETAPA 1: Segregação Manual Determinística
+            # ===================================================================
+            # Não confiamos no LLM para separar sugestões - fazemos manualmente
+            # baseado no feedback explícito do usuário
             
-            # Preparar dados para edição
-            feedback_summary = self._prepare_feedback_summary(feedback_sessions)
-            report_json = json.dumps(analysis_report, indent=2, ensure_ascii=False)
-            insights = llm_analysis_result.get("insights", "")
-            recommendations = llm_analysis_result.get("recommendations", "")
-            
-            # Prompt para edição do relatório
-            edit_prompt = f"""Você é um especialista em edição de relatórios de análise clínica.
-
-TAREFA: Edite o relatório JSON abaixo incorporando os feedbacks do usuário e os insights identificados.
-
-RELATÓRIO ORIGINAL (JSON):
-{report_json}
-
-FEEDBACK DO USUÁRIO:
-{feedback_summary}
-
-INSIGHTS IDENTIFICADOS:
-{insights}
-
-RECOMENDAÇÕES:
-{recommendations}
-
-INSTRUÇÕES CRÍTICAS:
-1. REMOVER COMPLETAMENTE do array "improvement_suggestions" todas as sugestões marcadas como "irrelevant" pelo usuário
-2. ADICIONAR essas sugestões removidas na seção "rejected_suggestions" (com estrutura completa)
-3. MANTER APENAS sugestões marcadas como "relevant" no array "improvement_suggestions"
-4. MELHORAR descrições de sugestões que receberam comentários do usuário
-5. AJUSTAR prioridades baseado no feedback (se o usuário indicou que algo é mais/menos importante)
-6. INCORPORAR insights e recomendações identificados
-7. MANTER a estrutura JSON original
-8. ADICIONAR campo "feedback_incorporated": true nas sugestões que foram editadas
-
-ESTRUTURA DO JSON EDITADO:
-{{
-  "improvement_suggestions": [...],  // APENAS sugestões marcadas como "relevant" - REMOVER todas as "irrelevant"
-  "rejected_suggestions": [          // NOVA SEÇÃO - sugestões rejeitadas
-    {{
-      "id": "sug_xxx",
-      "original_suggestion": {{...}},  // Sugestão completa original
-      "rejection_reason": "comentário do usuário explicando por que foi rejeitada",
-      "rejection_category": "tipo de padrão (ex: low_priority, redundant, etc.)",
-      "rejected_at": "2025-12-04T..."
-    }}
-  ],
-  "metadata": {{...}}
-}}
-
-REGRA CRÍTICA - REMOÇÃO DE SUGESTÕES IRRELEVANTES:
-- Para CADA sugestão marcada como "irrelevant" no feedback:
-  1. REMOVA-A COMPLETAMENTE do array "improvement_suggestions"
-  2. Crie uma entrada em "rejected_suggestions" com:
-     - "id": ID da sugestão original
-     - "original_suggestion": A sugestão COMPLETA original (copie todo o objeto)
-     - "rejection_reason": O comentário do usuário explicando por que foi rejeitada
-     - "rejection_category": Tipo de rejeição (low_priority_rejection, redundant_suggestion, missing_context, category_rejection, etc.)
-     - "rejected_at": Timestamp atual (formato ISO)
-- O array "improvement_suggestions" DEVE conter APENAS sugestões marcadas como "relevant"
-- NUNCA mantenha uma sugestão marcada como "irrelevant" no array "improvement_suggestions"
-
-IMPORTANTE:
-- Retorne APENAS o JSON editado, sem markdown, sem explicações
-- Mantenha a estrutura exata do JSON original
-- Não remova campos obrigatórios
-- CRIE a seção "rejected_suggestions" mesmo que esteja vazia (use array vazio [])
-
-Responda com APENAS o JSON editado:"""
-
-            # Usar modelo GRATUITO/BARATO para edição do relatório (economia de 50% do custo)
-            # Esta é uma tarefa de formatação/estruturação, não requer modelo premium
-            # Prioridade: modelos gratuitos/baratos, com fallback para modelos estáveis
-            models_to_try = [
-                "google/gemini-2.5-flash-lite",  # Modelo barato e estável (prioridade)
-                "google/gemini-2.5-flash-preview-09-2025",  # Fallback estável
-            ]
-            
-            response = None
-            last_error = None
-            
-            for model in models_to_try:
-                try:
-                    llm_client = LLMClient(model=model)
-                    response = llm_client.analyze(edit_prompt)
-                    logger.info(f"Report editing successful with model: {model}")
-                    break
-                except Exception as e:
-                    last_error = e
-                    logger.warning(f"Failed to use model {model} for report editing: {e}. Trying next model...")
-                    continue
-            
-            if response is None:
-                raise Exception(f"All models failed. Last error: {last_error}")
-            
-            # Parsear resposta
-            if isinstance(response, dict):
-                edited_report = response
-            else:
-                # Tentar extrair JSON da resposta
-                import re
-                json_match = re.search(r'\{.*\}', response, re.DOTALL)
-                if json_match:
-                    edited_report = json.loads(json_match.group())
-                else:
-                    edited_report = json.loads(response)
-            
-            # Validar estrutura básica
-            if not isinstance(edited_report, dict):
-                raise ValueError("Edited report is not a dictionary")
-
-            if "improvement_suggestions" not in edited_report:
-                logger.warning("Edited report missing 'improvement_suggestions', using original")
-                return analysis_report
-
-            # Validar seção rejected_suggestions (NOVA)
-            if "rejected_suggestions" not in edited_report:
-                logger.warning("LLM didn't create rejected_suggestions section, using manual segregation fallback")
-                edited_report["rejected_suggestions"] = self._manual_segregation(
-                    feedback_sessions, analysis_report
-                )
-            else:
-                # Validar estrutura de cada rejected suggestion
-                for rej in edited_report["rejected_suggestions"]:
-                    required_keys = ["id", "original_suggestion", "rejection_reason"]
-                    for key in required_keys:
-                        if key not in rej:
-                            logger.warning(f"Rejected suggestion missing key: {key} (ID: {rej.get('id', 'unknown')})")
-
-                    # Validar que original_suggestion tem estrutura mínima
-                    orig = rej.get("original_suggestion", {})
-                    if not isinstance(orig, dict) or "id" not in orig:
-                        logger.error(f"Invalid original_suggestion structure in rejected: {rej.get('id', 'unknown')}")
-
-            # Validação de contagem (sanity check)
-            original_count = len(analysis_report.get("improvement_suggestions", []))
-            edited_count = len(edited_report.get("improvement_suggestions", []))
-            rejected_count = len(edited_report.get("rejected_suggestions", []))
-
-            if abs((edited_count + rejected_count) - original_count) > 2:
-                logger.warning(
-                    f"Suggestion count mismatch: original={original_count}, "
-                    f"edited={edited_count}, rejected={rejected_count}. "
-                    f"Expected edited + rejected ≈ original"
-                )
-
-            # CRITICAL VALIDATION: Garantir que sugestões irrelevantes não estão no array principal
-            # Mapear verdicts de feedback para identificar sugestões irrelevantes
-            irrelevant_ids = set()
+            # Mapear verdicts do usuário: suggestion_id -> {verdict, comment}
+            verdict_map = {}
             for session in feedback_sessions:
                 for sf in session.get("suggestions_feedback", []):
-                    if sf.get("user_verdict") == "irrelevant":
-                        irrelevant_ids.add(sf.get("suggestion_id"))
+                    sug_id = sf.get("suggestion_id")
+                    verdict = sf.get("user_verdict")
+                    comment = sf.get("user_comment", "")
+                    if sug_id and verdict:
+                        verdict_map[sug_id] = {
+                            "verdict": verdict,
+                            "comment": comment
+                        }
             
-            # Verificar e remover sugestões irrelevantes do array principal (fallback de segurança)
-            suggestions_to_keep = []
-            suggestions_moved_to_rejected = []
+            # Separar sugestões em duas listas
+            relevant_suggestions = []
+            rejected_suggestions = []
             
-            for sug in edited_report.get("improvement_suggestions", []):
+            original_suggestions = analysis_report.get("improvement_suggestions", [])
+            
+            for sug in original_suggestions:
                 sug_id = sug.get("id")
-                if sug_id in irrelevant_ids:
-                    # Esta sugestão foi marcada como irrelevante mas ainda está no array principal
-                    logger.warning(f"CRITICAL: Suggestion {sug_id} marked as irrelevant but still in improvement_suggestions. Moving to rejected.")
-                    
-                    # Verificar se já não está em rejected_suggestions
-                    already_rejected = any(
-                        r.get("id") == sug_id 
-                        for r in edited_report.get("rejected_suggestions", [])
-                    )
-                    
-                    if not already_rejected:
-                        # Adicionar à seção rejected_suggestions
-                        if "rejected_suggestions" not in edited_report:
-                            edited_report["rejected_suggestions"] = []
-                        
-                        # Encontrar comentário do usuário
-                        user_comment = "No reason provided"
-                        for session in feedback_sessions:
-                            for sf in session.get("suggestions_feedback", []):
-                                if sf.get("suggestion_id") == sug_id and sf.get("user_verdict") == "irrelevant":
-                                    user_comment = sf.get("user_comment", "No reason provided")
-                                    break
-                        
-                        edited_report["rejected_suggestions"].append({
-                            "id": sug_id,
-                            "original_suggestion": sug,
-                            "rejection_reason": user_comment,
-                            "rejection_category": self._classify_rejection(
-                                user_comment,
-                                sug.get("priority", "baixa")
-                            ),
-                            "rejected_at": datetime.now().isoformat()
-                        })
-                        suggestions_moved_to_rejected.append(sug_id)
+                feedback = verdict_map.get(sug_id)
+                
+                if feedback and feedback["verdict"] == "irrelevant":
+                    # Sugestão marcada como irrelevante pelo usuário
+                    rejected_suggestions.append({
+                        "id": sug_id,
+                        "original_suggestion": sug,
+                        "rejection_reason": feedback["comment"] or "Marcada como irrelevante pelo usuário",
+                        "rejection_category": self._classify_rejection(
+                            feedback["comment"],
+                            sug.get("priority", "baixa")
+                        ),
+                        "rejected_at": datetime.now().isoformat()
+                    })
                 else:
-                    # Manter sugestão no array principal
-                    suggestions_to_keep.append(sug)
+                    # Sugestão relevante ou não avaliada (mantemos)
+                    relevant_suggestions.append(sug)
             
-            # Atualizar array principal apenas com sugestões relevantes
-            if suggestions_moved_to_rejected:
-                edited_report["improvement_suggestions"] = suggestions_to_keep
-                logger.warning(
-                    f"CRITICAL FIX: Removed {len(suggestions_moved_to_rejected)} irrelevant suggestions "
-                    f"from improvement_suggestions: {suggestions_moved_to_rejected}"
-                )
+            # ===================================================================
+            # ETAPA 2: Construir Relatório Editado
+            # ===================================================================
+            edited_report = {
+                "improvement_suggestions": relevant_suggestions,
+                "rejected_suggestions": rejected_suggestions,
+                "metadata": analysis_report.get("metadata", {}).copy()
+            }
             
-            # Validar que não há IDs duplicados entre edited e rejected
-            edited_ids = {s.get("id") for s in edited_report["improvement_suggestions"]}
-            rejected_ids = {r.get("id") for r in edited_report.get("rejected_suggestions", [])}
-            overlap = edited_ids & rejected_ids
-            if overlap:
-                logger.error(f"Suggestions appear in both edited and rejected lists: {overlap}")
-                logger.warning("Removing duplicates from improvement_suggestions")
-                # Remover duplicatas do array principal (prioridade: rejected)
-                edited_report["improvement_suggestions"] = [
-                    s for s in edited_report["improvement_suggestions"]
-                    if s.get("id") not in overlap
-                ]
-
-            # Atualizar contagens após validação e remoção automática
-            final_edited_count = len(edited_report.get("improvement_suggestions", []))
-            final_rejected_count = len(edited_report.get("rejected_suggestions", []))
-
             # Adicionar metadados de edição
-            if "metadata" not in edited_report:
-                edited_report["metadata"] = {}
-
             edited_report["metadata"]["feedback_incorporated"] = True
             edited_report["metadata"]["edited_at"] = datetime.now().isoformat()
-            edited_report["metadata"]["original_suggestions_count"] = original_count
-            edited_report["metadata"]["edited_suggestions_count"] = final_edited_count
-            edited_report["metadata"]["rejected_suggestions_count"] = final_rejected_count
+            edited_report["metadata"]["original_suggestions_count"] = len(original_suggestions)
+            edited_report["metadata"]["edited_suggestions_count"] = len(relevant_suggestions)
+            edited_report["metadata"]["rejected_suggestions_count"] = len(rejected_suggestions)
             
+            # Log summary
             logger.info(
-                f"Report edited: {edited_report['metadata']['original_suggestions_count']} → "
-                f"{edited_report['metadata']['edited_suggestions_count']} suggestions "
-                f"({edited_report['metadata']['rejected_suggestions_count']} rejected)"
+                f"Report edited (deterministic): {len(original_suggestions)} original → "
+                f"{len(relevant_suggestions)} kept, {len(rejected_suggestions)} rejected"
             )
+            
+            # Validação final: garantir que não há overlap
+            edited_ids = {s.get("id") for s in relevant_suggestions}
+            rejected_ids = {r.get("id") for r in rejected_suggestions}
+            overlap = edited_ids & rejected_ids
+            
+            if overlap:
+                logger.error(f"BUG: Overlap detected after deterministic segregation: {overlap}")
+                # Isso não deveria acontecer, mas se acontecer, removemos do edited
+                edited_report["improvement_suggestions"] = [
+                    s for s in relevant_suggestions if s.get("id") not in overlap
+                ]
             
             return edited_report
             

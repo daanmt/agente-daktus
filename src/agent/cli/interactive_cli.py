@@ -32,7 +32,10 @@ if env_file.exists():
 
 # Import CLI components (from same package)
 from .display_manager import DisplayManager
-from .task_manager import TaskManager, TaskStatus
+from .task_manager import TaskManager
+from ..core.error_recovery import ErrorRecovery, get_error_recovery
+from ..core.config_loader import get_config
+from ..core.session_state import get_session_state, SessionState as SessionStateCheckpoint
 
 # Import questionary for interactive prompts
 try:
@@ -113,6 +116,18 @@ class InteractiveCLI:
         self.display = DisplayManager()
         self.tasks = TaskManager(console=self.display.console if self.display.rich_available else None)
         self.project_root = self.session_state.project_root
+        self.error_recovery = get_error_recovery(display_manager=self.display)
+        
+        # Load external config
+        self.config = get_config()
+        
+        # Initialize session state for checkpoints
+        self.checkpoint_state = get_session_state()
+        
+        # Check for session recovery
+        if self.config.session.enable_checkpoints:
+            if self.checkpoint_state.prompt_for_recovery():
+                self.display.show_success("Sessão anterior recuperada!")
 
     def run(self) -> None:
         """
@@ -153,12 +168,12 @@ class InteractiveCLI:
 
         except KeyboardInterrupt:
             self.display.show_warning("\nOperação cancelada pelo usuário.")
-            sys.exit(0)
+            self.error_recovery.graceful_exit(message="Operação cancelada pelo usuário", exit_code=0)
         except Exception as e:
             self.display.show_error(f"Erro inesperado: {e}")
             if logger:
                 logger.error(f"CLI error: {e}", exc_info=True)
-            sys.exit(1)
+            self.error_recovery.graceful_exit(message=f"Erro inesperado: {e}", exit_code=1)
 
     def _run_welcome(self) -> None:
         """Exibe mensagem de boas-vindas."""
@@ -180,7 +195,7 @@ class InteractiveCLI:
         self.session_state.protocol_path = self._select_protocol_interactive()
         if not self.session_state.protocol_path:
             self.display.show_error("Seleção de protocolo é obrigatória.")
-            sys.exit(1)
+            self.error_recovery.graceful_exit(message="Seleção de protocolo é obrigatória", exit_code=1)
 
         # 3. Playbook selection (optional)
         self.session_state.playbook_path = self._select_playbook_interactive()
@@ -225,9 +240,12 @@ class InteractiveCLI:
                         break
                     else:
                         print("Número inválido")
-                except (ValueError, KeyboardInterrupt):
-                    print("Entrada inválida")
-                    sys.exit(0)
+                except ValueError:
+                    print("❌ Entrada inválida. Por favor, digite um número válido.")
+                    continue
+                except KeyboardInterrupt:
+                    print("\n⚠️  Seleção cancelada.")
+                    self.error_recovery.graceful_exit(message="Seleção cancelada pelo usuário", exit_code=0)
 
         self.display.show_success(f"Versão selecionada: Agent {selected}")
         return selected
@@ -264,9 +282,12 @@ class InteractiveCLI:
                         break
                     else:
                         print("Número inválido")
-                except (ValueError, KeyboardInterrupt):
-                    print("Entrada inválida")
-                    sys.exit(0)
+                except ValueError:
+                    print("❌ Entrada inválida. Por favor, digite um número válido.")
+                    continue
+                except KeyboardInterrupt:
+                    print("\n⚠️  Seleção cancelada.")
+                    self.error_recovery.graceful_exit(message="Seleção cancelada pelo usuário", exit_code=0)
 
         if selected:
             self.display.show_success(f"Protocolo selecionado: {Path(selected).name}")
@@ -315,9 +336,12 @@ class InteractiveCLI:
                         break
                     else:
                         print("Número inválido")
-                except (ValueError, KeyboardInterrupt):
-                    print("Entrada inválida")
-                    sys.exit(0)
+                except ValueError:
+                    print("❌ Entrada inválida. Por favor, digite um número válido.")
+                    continue
+                except KeyboardInterrupt:
+                    print("\n⚠️  Seleção cancelada.")
+                    self.error_recovery.graceful_exit(message="Seleção cancelada pelo usuário", exit_code=0)
 
         if selected:
             self.display.show_success(f"Playbook selecionado: {Path(selected).name}")
@@ -328,14 +352,14 @@ class InteractiveCLI:
     def _select_model_interactive(self) -> str:
         """Seleção interativa de modelo LLM."""
         models = [
-            ("google/gemini-2.5-flash-lite", "Gemini 2.5 Flash Lite - Recomendado", "$0.075/$0.30 por MTok"),
+            ("google/gemini-2.5-flash-lite", "Gemini 2.5 Flash Lite - Recomendado", "$0.10/$0.40 por MTok"),
             ("x-ai/grok-4.1-fast", "Grok 4.1 Fast", "$0.20/$0.50 por MTok"),
             ("x-ai/grok-code-fast-1", "Grok Code Fast 1", "$0.20/$1.50 por MTok"),
             ("google/gemini-2.5-flash-preview-09-2025", "Gemini 2.5 Flash Preview", "$0.30/$2.50 por MTok"),
             ("google/gemini-2.5-flash", "Gemini 2.5 Flash", "$0.30/$2.50 por MTok"),
             ("google/gemini-2.5-pro", "Gemini 2.5 Pro", "$1.25/$10.00 por MTok"),
             ("anthropic/claude-sonnet-4.5", "Claude Sonnet 4.5", "$3.00/$15.00 por MTok"),
-            ("anthropic/claude-opus-4", "Claude Opus 4", "$15.00/$75.00 por MTok"),
+            ("anthropic/claude-opus-4.5", "Claude Opus 4.5", "$5.00/$25.00 por MTok"),
         ]
 
         if QUESTIONARY_AVAILABLE:
@@ -367,9 +391,12 @@ class InteractiveCLI:
                         break
                     else:
                         print("Número inválido")
-                except (ValueError, KeyboardInterrupt):
-                    print("Entrada inválida")
-                    sys.exit(0)
+                except ValueError:
+                    print("❌ Entrada inválida. Por favor, digite um número válido.")
+                    continue
+                except KeyboardInterrupt:
+                    print("\n⚠️  Seleção cancelada.")
+                    self.error_recovery.graceful_exit(message="Seleção cancelada pelo usuário", exit_code=0)
 
         self.display.show_success(f"Modelo selecionado: {selected}")
         return selected
@@ -396,7 +423,7 @@ class InteractiveCLI:
 
         if not proceed:
             self.display.show_info("Análise cancelada pelo usuário.")
-            sys.exit(0)
+            self.error_recovery.graceful_exit(message="Análise cancelada pelo usuário", exit_code=0)
 
     def _list_files(self, directory: str, extension: str) -> List[Path]:
         """Lista arquivos em um diretório com extensão específica."""
@@ -444,6 +471,9 @@ class InteractiveCLI:
                     playbook_content = load_playbook(self.session_state.playbook_path)
 
             # Run analysis
+            # Quebra de linha explícita antes do spinner para separar do painel de custo
+            if self.display.rich_available and self.display.console:
+                self.display.console.print("\n")  # Quebra de linha explícita
             with self.display.spinner("Executando análise LLM..."):
                     if self.session_state.version == "V3" and V3_AVAILABLE and EnhancedAnalyzer:
                         analyzer = EnhancedAnalyzer(model=self.session_state.model)
@@ -454,6 +484,21 @@ class InteractiveCLI:
                         )
 
                         # Converter para formato dict (enxuto)
+                        def convert_specific_location(loc):
+                            """Convert SpecificLocation (Pydantic or dict) to dict safely."""
+                            if loc is None:
+                                return {}
+                            if isinstance(loc, dict):
+                                return loc
+                            # Pydantic v2: model_dump(), v1: dict()
+                            if hasattr(loc, 'model_dump'):
+                                return loc.model_dump(exclude_none=True)
+                            elif hasattr(loc, 'dict'):
+                                return loc.dict(exclude_none=True)
+                            elif hasattr(loc, '__dict__'):
+                                return {k: v for k, v in loc.__dict__.items() if v is not None}
+                            return {}
+                        
                         suggestions_dict = [
                             {
                                 "id": s.id,
@@ -467,7 +512,9 @@ class InteractiveCLI:
                                     "eficiencia": s.impact_scores.eficiencia if hasattr(s.impact_scores, 'eficiencia') else "N/A",
                                     "usabilidade": s.impact_scores.usabilidade if hasattr(s.impact_scores, 'usabilidade') else 0,
                                 },
-                                "location": s.specific_location or {},
+                                # CRITICAL FIX: Convert Pydantic object to dict AND preserve both keys
+                                "location": convert_specific_location(s.specific_location),
+                                "specific_location": convert_specific_location(s.specific_location),
                                 "action": s.description[:150] if s.description else s.title
                             }
                             for s in enhanced_result.improvement_suggestions

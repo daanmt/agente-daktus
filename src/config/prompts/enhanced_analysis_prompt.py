@@ -136,7 +136,13 @@ CRITICAL REQUIREMENTS:
    - Measurable: How to verify the improvement
    - Evidence-based: Linked to playbook content
 
-
+9. DESCRIPTION FORMAT (CRITICAL - DO NOT TRUNCATE):
+   Each \"description\" field MUST be COMPLETE and include:
+   - COMPLETE field name and question ID (e.g., \"O campo 'X' (ID: Pxxxxx)\")
+   - The PROBLEM explained in full detail
+   - SPECIFIC solution path with JSON example when adding options
+   - Minimum 100 chars, maximum 500 chars
+   - NEVER truncate with \"...\"
 
 ANALYSIS DEPTH:
 

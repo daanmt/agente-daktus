@@ -230,6 +230,7 @@ class DisplayManager:
                 padding=(1, 2)
             )
             self.console.print(panel)
+            self.console.print()  # Adiciona quebra de linha após o painel
         else:
             # Fallback simples
             print("\n💰 ESTIMATIVA DE CUSTO")

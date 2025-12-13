@@ -682,6 +682,12 @@ IMPORTANT: Return ONLY valid JSON. No markdown, no explanations, no code blocks.
         idx = 1
         for i in range(0, len(nodes), nodes_per_section):
             node_group = nodes[i:i + nodes_per_section]
+            
+            # CRITICAL FIX: Skip empty sections (prevents empty payload error)
+            if not node_group:
+                logger.warning(f"Skipping empty section at index {i} (no nodes in slice)")
+                continue
+            
             node_ids = set(n["id"] for n in node_group)
 
             section_edges = [
@@ -689,11 +695,69 @@ IMPORTANT: Return ONLY valid JSON. No markdown, no explanations, no code blocks.
                 if e.get("source") in node_ids or e.get("target") in node_ids
             ]
 
-            # Filter suggestions relevant to this section
+            # CRITICAL FIX: Filter suggestions relevant to this section
+            # Handle multiple sources for node_id since specific_location.node_id is often NULL
+            def get_suggestion_node_id(sug: Dict) -> Optional[str]:
+                """Extract node_id from suggestion using multiple fallback strategies."""
+                # Strategy 1: specific_location.node_id (original)
+                spec_loc = sug.get("specific_location", {})
+                if spec_loc:
+                    # Handle both dict and Pydantic object
+                    if hasattr(spec_loc, 'node_id'):
+                        node_id = spec_loc.node_id
+                    elif isinstance(spec_loc, dict):
+                        node_id = spec_loc.get("node_id")
+                    else:
+                        node_id = None
+                    if node_id:
+                        return node_id
+                
+                # Strategy 2: location.node_id (CLI conversion)
+                location = sug.get("location", {})
+                if location:
+                    if hasattr(location, 'node_id'):
+                        node_id = location.node_id
+                    elif isinstance(location, dict):
+                        node_id = location.get("node_id")
+                    else:
+                        node_id = None
+                    if node_id:
+                        return node_id
+                
+                # Strategy 3: implementation_strategy.node_id (Wave 2)
+                impl_strategy = sug.get("implementation_strategy", {})
+                if impl_strategy and isinstance(impl_strategy, dict):
+                    node_id = impl_strategy.get("node_id")
+                    if node_id:
+                        return node_id
+                
+                # Strategy 4: implementation_path.json_path parsing
+                impl_path = sug.get("implementation_path", {})
+                if impl_path and isinstance(impl_path, dict):
+                    json_path = impl_path.get("json_path", "")
+                    # Try to extract node_id from json_path like "nodes[2].data.questions[0]"
+                    import re
+                    node_match = re.search(r'nodes\[(\d+)\]', json_path)
+                    if node_match:
+                        # Can't directly map index to node_id, skip
+                        pass
+                
+                return None
+            
             section_suggestions = [
                 sug for sug in suggestions
-                if sug.get("specific_location", {}).get("node_id") in node_ids
+                if get_suggestion_node_id(sug) in node_ids
             ]
+            
+            # CRITICAL FIX: If no suggestions matched by node_id, assign ALL suggestions
+            # to at least the first section to ensure they get processed
+            if not section_suggestions and idx == 1 and suggestions:
+                # First node section gets all unassigned suggestions
+                logger.warning(
+                    f"No suggestions have node_id matching section nodes. "
+                    f"Assigning all {len(suggestions)} suggestions to first node section."
+                )
+                section_suggestions = suggestions
 
             sections.append({
                 "section_id": f"section_{idx}",
@@ -939,6 +1003,21 @@ CRITICAL REQUIREMENTS:
         # Build prompt
         prompt = self._build_section_reconstruction_prompt(section, new_version)
 
+        # CRITICAL FIX: Validate prompt is not empty before calling LLM
+        if not prompt or not prompt.strip():
+            section_type = section.get("type", "unknown")
+            nodes_count = len(section.get("nodes", []))
+            edges_count = len(section.get("edges", []))
+            logger.error(
+                f"Empty prompt generated for {section_id}! "
+                f"type={section_type}, nodes={nodes_count}, edges={edges_count}"
+            )
+            raise ValueError(
+                f"Empty prompt generated for section {section_id}. "
+                f"Section has {nodes_count} nodes. "
+                f"This may indicate a malformed section structure."
+            )
+
         # Call LLM (auto-continue enabled)
         response = self.llm_client.analyze(prompt)
 
@@ -1076,7 +1155,20 @@ CRITICAL REQUIREMENTS:
                     f"Section {section_id} not completed: {status.error_message}"
                 )
 
-            all_nodes.extend(status.reconstructed_data)
+            # CRITICAL FIX: Check for None before extending
+            if status.reconstructed_data is None:
+                logger.warning(f"Section {section_id} has None reconstructed_data, skipping")
+                continue
+            
+            # Handle both list and single node cases
+            if isinstance(status.reconstructed_data, list):
+                all_nodes.extend(status.reconstructed_data)
+            elif isinstance(status.reconstructed_data, dict):
+                # Single node case (shouldn't happen but handle gracefully)
+                all_nodes.append(status.reconstructed_data)
+            else:
+                logger.warning(f"Section {section_id} has unexpected data type: {type(status.reconstructed_data)}")
+                continue
 
         # Step 3: Sort nodes by position.x (maintain visual flow)
         all_nodes.sort(key=lambda n: n.get("position", {}).get("x", 0))
@@ -1173,7 +1265,8 @@ CRITICAL REQUIREMENTS:
         all_uids = set()
         uid_to_question = {}  # Map UID -> question for context
         for node in nodes:
-            for question in node.get("data", {}).get("questions", []):
+            questions = node.get("data", {}).get("questions") or []
+            for question in questions:
                 uid = question.get("uid")
                 if uid:
                     if uid in all_uids:
@@ -1185,11 +1278,13 @@ CRITICAL REQUIREMENTS:
         # This allows us to validate option references in conditional expressions
         all_option_ids = set()
         for node in nodes:
-            for question in node.get("data", {}).get("questions", []):
+            questions = node.get("data", {}).get("questions") or []
+            for question in questions:
                 uid = question.get("uid")
                 if not uid:
                     continue
-                for option in question.get("options", []):
+                options = question.get("options") or []
+                for option in options:
                     option_id = option.get("id")
                     if option_id:
                         all_option_ids.add(option_id)
